@@ -1,11 +1,22 @@
+// Package imports
 import 'package:flutter/material.dart';
 
+//Project imports
+import 'package:my_online_doctor/core/injection_manager.dart';
+import 'package:my_online_doctor/core/flavor_manager.dart';
+
+
 void main() {
-  runApp(const MyApp());
+
+  InjectionManager.setupInjections(); //Here we setup the injections.
+
+  FlavorManager.make(Flavor.PRODUCTION); //Here we set the flavor that we want to use.
+
+  runApp(const MyOnlineDoctorApp()); //Here we run the app.
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyOnlineDoctorApp extends StatelessWidget {
+  const MyOnlineDoctorApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
