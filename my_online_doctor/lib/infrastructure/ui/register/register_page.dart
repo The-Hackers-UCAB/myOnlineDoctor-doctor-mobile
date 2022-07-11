@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 //Prokect imports:
 import 'package:my_online_doctor/application/bloc/register/register_bloc.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
-import 'package:my_online_doctor/infrastructure/ui/components/image_view_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/reusable_widgets.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
 
@@ -26,7 +25,7 @@ class RegisterPage extends StatelessWidget {
         builder: (context, state) {
           return BaseUIComponent(
             appBar: _renderAppBar(),
-            body: renderImageView(context),
+            body: renderLogoImageView(context),
             bottomNavigationBar: _renderBottomNavigationBar(),
           );
         },
