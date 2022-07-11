@@ -41,6 +41,12 @@ dependencies:
   # ICONS
   flutter_launcher_icons: ^0.9.3
 
+  # CONNECTIVITY
+  connectivity_plus: ^2.3.5
+
+
+  device_info_plus: ^4.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,10 +1,10 @@
-
-import 'dart:ui';
-
+//Package imports
 import 'package:flutter/material.dart';
 
-
-enum Flavor {PRODUCTION} //Here we add the flavors that we have
+//Here we add the flavors that we have (Preferly in mayus, but only in this enum)
+enum Flavor {
+  PRODUCTION
+  } 
 
 extension FlavorEnum on Flavor {
 
