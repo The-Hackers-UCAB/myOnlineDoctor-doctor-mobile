@@ -7,6 +7,7 @@ import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/flavor_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/routes_manager.dart';
+import 'package:my_online_doctor/infrastructure/ui/register/register_page.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/theme.dart';
 import 'package:my_online_doctor/infrastructure/utils/device_util.dart';
 
@@ -49,7 +50,7 @@ class MyOnlineDoctorApp extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data!) {
-            return const CircularProgressIndicator(color: Colors.amber);
+            return const RegisterPage();
             //TO DO: Add the home page.
             // return HomePage();
           } else {
