@@ -1,3 +1,12 @@
+import 'package:flutter/material.dart';
+
+
+const double marginLat = 16.0;
+const double marginTop = 8.0;
+const EdgeInsets generalMarginView = EdgeInsets.only(left: marginLat, right: marginLat, top: marginTop, bottom: marginTop);
+
+
+
 /// ImagesConstant: Enum for images.
 enum ImagesConstant {
   logo,

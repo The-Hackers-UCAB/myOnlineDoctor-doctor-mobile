@@ -5,8 +5,10 @@ part of 'register_bloc.dart';
 abstract class RegisterEvent {}
 
 
-//The events are like the ViewModels.
+class RegisterEventFetchBasicData extends RegisterEvent {}
 
-// class RegisterEventLoadMovies extends RegisterEvent {}
+class RegisterEventRegisterPatient extends RegisterEvent {
+  final SignUpPatientDomainModel signUpPatientDomainModel;
 
-// class MoviesRatedEventLoadMovies extends RegisterEvent {}
+  RegisterEventRegisterPatient(this.signUpPatientDomainModel);
+}

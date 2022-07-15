@@ -11,10 +11,10 @@ class RoutesManager {
     switch (settings.name) {
       
       case RegisterPage.routeName:
-        return MaterialPageRoute(builder: (context) => const RegisterPage());
+        return MaterialPageRoute(builder: (context) => RegisterPage());
 
       default:
-        return MaterialPageRoute(builder: (context) => const RegisterPage());
+        return MaterialPageRoute(builder: (context) => RegisterPage());
       }
   }
 

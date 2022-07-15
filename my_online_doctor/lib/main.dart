@@ -50,7 +50,7 @@ class MyOnlineDoctorApp extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data!) {
-            return const RegisterPage();
+            return RegisterPage();
             //TO DO: Add the home page.
             // return HomePage();
           } else {
