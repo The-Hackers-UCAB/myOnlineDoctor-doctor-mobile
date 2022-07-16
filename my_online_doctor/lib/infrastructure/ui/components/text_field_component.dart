@@ -8,6 +8,7 @@ class TextFieldBaseComponent extends StatefulWidget {
   final int maxLength;
   final TextEditingController textEditingController;
   final TextInputType keyboardType;
+  final bool obscureText;
 
 
   const TextFieldBaseComponent({Key? key, 
@@ -17,6 +18,7 @@ class TextFieldBaseComponent extends StatefulWidget {
     required this.maxLength,
     required this.textEditingController,
     required this.keyboardType,
+    this.obscureText = false,
 
   }) : super(key: key);
 
@@ -43,6 +45,7 @@ class _TextFieldBaseComponentState extends State<TextFieldBaseComponent> {
           maxLength: widget.maxLength, 
           textEditingController: widget.textEditingController,
           keyboardType: widget.keyboardType,
+          isPassword: widget.obscureText,
         )
       ],
     );

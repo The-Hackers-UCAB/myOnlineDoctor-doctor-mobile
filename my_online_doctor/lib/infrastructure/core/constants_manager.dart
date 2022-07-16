@@ -12,6 +12,8 @@ enum MinMaxConstant {
   maxLengthEmail,
   minLengthName,
   maxLengthName,
+  minLengthPassword,
+  maxLengthPassword,
 }
 
 extension MinMaxConstantExtension on MinMaxConstant {
@@ -30,6 +32,13 @@ extension MinMaxConstantExtension on MinMaxConstant {
 
       case MinMaxConstant.maxLengthName:
         return 20;
+
+      case MinMaxConstant.minLengthPassword:
+        return 6;
+
+      case MinMaxConstant.maxLengthPassword:
+        return 12;
+      
     }
   }
 

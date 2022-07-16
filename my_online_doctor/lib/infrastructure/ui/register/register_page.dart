@@ -29,6 +29,10 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController _textEmailController = TextEditingController();
   final TextEditingController _textFirstNameController = TextEditingController();
   final TextEditingController _textSecondNameController = TextEditingController();
+  final TextEditingController _textSecondLastNameController = TextEditingController();
+  final TextEditingController _textFirstLastNameController = TextEditingController();
+  final TextEditingController _textPasswordController = TextEditingController();
+  final TextEditingController _textConfirmPasswordController = TextEditingController();
 
 
   @override
@@ -132,10 +136,19 @@ class RegisterPage extends StatelessWidget {
       heightSeparator(context, 0.045),
       _renderPatientFirstNameTextField(),
       heightSeparator(context, 0.045),
-      _renderRegisterButton(context),
+      _renderPatientSecondNameTextField(),
       heightSeparator(context, 0.045),
-      // _renderPatientSecondNameTextField(),
+      _renderPatientFirstLastNameTextField(),
+      heightSeparator(context, 0.045),
+      _renderPatientSecondLastNameTextField(),
+      heightSeparator(context, 0.045),
+      _renderPatientPasswordTextField(),
+      heightSeparator(context, 0.045),
+      _renderPatientConfirmPasswordTextField(),
+      heightSeparator(context, 0.045),
+      
 
+      _renderRegisterButton(context),
     ],
   );
 
@@ -158,6 +171,60 @@ class RegisterPage extends StatelessWidget {
     textEditingController: _textFirstNameController, 
     keyboardType: TextInputType.text,
   );
+
+
+  Widget _renderPatientSecondNameTextField() => TextFieldBaseComponent(
+    hintText: 'Segundo Nombre', 
+    errorMessage: 'Ingrese el nombre', 
+    minLength: MinMaxConstant.minLengthName.value, 
+    maxLength: MinMaxConstant.maxLengthName.value, 
+    textEditingController: _textSecondNameController, 
+    keyboardType: TextInputType.text,
+  );
+
+
+  Widget _renderPatientFirstLastNameTextField() => TextFieldBaseComponent(
+    hintText: 'Primer Apellido', 
+    errorMessage: 'Ingrese el apellido', 
+    minLength: MinMaxConstant.minLengthName.value, 
+    maxLength: MinMaxConstant.maxLengthName.value, 
+    textEditingController: _textFirstLastNameController, 
+    keyboardType: TextInputType.text,
+  );
+
+
+  Widget _renderPatientSecondLastNameTextField() => TextFieldBaseComponent(
+    hintText: 'Segundo Apellido', 
+    errorMessage: 'Ingrese el apellido', 
+    minLength: MinMaxConstant.minLengthName.value, 
+    maxLength: MinMaxConstant.maxLengthName.value, 
+    textEditingController: _textSecondLastNameController, 
+    keyboardType: TextInputType.text,
+  );
+
+
+  Widget _renderPatientPasswordTextField() => TextFieldBaseComponent(
+    hintText: 'Contraseña', 
+    errorMessage: 'Ingrese la contraseña', 
+    minLength: MinMaxConstant.minLengthPassword.value, 
+    maxLength: MinMaxConstant.maxLengthPassword.value, 
+    textEditingController: _textPasswordController, 
+    obscureText: true,
+    keyboardType: TextInputType.text,
+  );
+
+
+  Widget _renderPatientConfirmPasswordTextField() => TextFieldBaseComponent(
+    hintText: 'Confirmar Contraseña', 
+    errorMessage: 'Ingrese la contraseña', 
+    minLength: MinMaxConstant.minLengthPassword.value, 
+    maxLength: MinMaxConstant.maxLengthPassword.value, 
+    textEditingController: _textConfirmPasswordController, 
+    obscureText: true,
+    keyboardType: TextInputType.text,
+  );
+
+
 
 
 
