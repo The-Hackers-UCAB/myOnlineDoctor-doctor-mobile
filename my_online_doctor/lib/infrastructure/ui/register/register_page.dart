@@ -8,6 +8,7 @@ import 'package:my_online_doctor/domain/models/sign_up_patient_domain_model.dart
 import 'package:my_online_doctor/infrastructure/core/constants_manager.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/button_component.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/dropdown_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/reusable_widgets.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/text_field_component.dart';
@@ -33,6 +34,7 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController _textFirstLastNameController = TextEditingController();
   final TextEditingController _textPasswordController = TextEditingController();
   final TextEditingController _textConfirmPasswordController = TextEditingController();
+  final TextEditingController _textPhoneController = TextEditingController();
 
 
   @override
@@ -142,6 +144,8 @@ class RegisterPage extends StatelessWidget {
       heightSeparator(context, 0.045),
       _renderPatientSecondLastNameTextField(),
       heightSeparator(context, 0.045),
+      _renderPatientPhoneTextField(context),
+      heightSeparator(context, 0.045),
       _renderPatientPasswordTextField(),
       heightSeparator(context, 0.045),
       _renderPatientConfirmPasswordTextField(),
@@ -223,6 +227,45 @@ class RegisterPage extends StatelessWidget {
     obscureText: true,
     keyboardType: TextInputType.text,
   );
+
+
+    Widget _renderPatientPhoneTextField(BuildContext context){
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Expanded(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: DropdownComponent(
+              model: DropdownComponentModel(
+                dropDownLists: context.read<RegisterBloc>().phonesList.map((e) => e).toList(),
+                itemDropdownSelected: context.read<RegisterBloc>().phoneSelected!,
+                ),
+              didChangeValue: (newValue) => context.read<RegisterBloc>().add(RegisterEventPhoneChanged(newValue)),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: TextFormFieldBaseComponent(
+            errorMessage: 'Ingrese teléfono',
+            hintText: 'Teléfono',
+            maxLength: MinMaxConstant.minLengthPhone.value,
+            minLength: MinMaxConstant.maxLengthPhone.value,
+            textEditingController: _textPhoneController,
+            keyboardType: TextInputType.number,
+            validateSpaces: true,
+          ),
+        ),
+      ],
+    );
+  }
+
+
 
 
 
