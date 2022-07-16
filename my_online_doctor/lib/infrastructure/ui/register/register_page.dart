@@ -10,6 +10,7 @@ import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.
 import 'package:my_online_doctor/infrastructure/ui/components/button_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/reusable_widgets.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/text_field_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/text_form_field_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
 
@@ -38,7 +39,7 @@ class RegisterPage extends StatelessWidget {
       child: BlocBuilder<RegisterBloc, RegisterState>(
         builder: (context, state) {
           return BaseUIComponent(
-            appBar: _renderAppBar(),
+            appBar: _renderAppBar(context),
             body: _body(context, state),
             bottomNavigationBar: _renderBottomNavigationBar(),
           );
@@ -49,10 +50,19 @@ class RegisterPage extends StatelessWidget {
 
 
   ///Widget AppBar
-  PreferredSizeWidget _renderAppBar() => 
+  PreferredSizeWidget _renderAppBar(BuildContext context) => 
     AppBar(
       backgroundColor: colorPrimary,
-      title: const Center(child:  Text('Registro de Paciente'))
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () => {},
+        // onPressed: () => Navigator.of(context).pop(),
+      ),
+      // leading: renderLogoImageView(context),
+      title: const Padding(
+        padding: EdgeInsets.only(left: 20),
+        child: Text('Registro de Paciente'),
+      )
     );
 
 
@@ -83,25 +93,11 @@ class RegisterPage extends StatelessWidget {
 
       if(snapshot.hasData) {
         return _registerRenderView(context);
-        // return _manageRegisterStates(snapshot.data! ,builderContext);
       } 
 
       return const LoadingComponent();
     }
   );
-
-
-  //Widget to manage the states of the Bloc
-  // Widget _manageRegisterStates(RegisterState state, BuildContext context ) {
-
-  //   if(state is RegisterStateDataFetched) {
-  //     return _registerRenderView(context);
-
-  //   } else {
-
-  //     return const LoadingComponent();
-  //   }
-  // }
 
 
   //Widget to create the stack of fields
@@ -137,44 +133,32 @@ class RegisterPage extends StatelessWidget {
       _renderPatientFirstNameTextField(),
       heightSeparator(context, 0.045),
       _renderRegisterButton(context),
+      heightSeparator(context, 0.045),
+      // _renderPatientSecondNameTextField(),
 
     ],
   );
 
 
-
-    Widget _renderPatientEmailTextField() => Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TextFormFieldBaseComponent(
-          hintText: 'Correo Electrónico',
-          errorMessage: 'Ingrese el correo',
-          minLength: MinMaxConstant.minLengthEmail.value, 
-          maxLength: MinMaxConstant.maxLengthEmail.value, 
-          textEditingController: _textEmailController,
-          keyboardType: TextInputType.emailAddress,
-        )
-      ],
-    );
+  Widget _renderPatientEmailTextField() => TextFieldBaseComponent(
+    hintText: 'Correo Electrónico', 
+    errorMessage: 'Ingrese el correo', 
+    minLength: MinMaxConstant.minLengthEmail.value, 
+    maxLength: MinMaxConstant.maxLengthEmail.value, 
+    textEditingController: _textEmailController, 
+    keyboardType: TextInputType.emailAddress,
+  );
 
 
-  Widget _renderPatientFirstNameTextField() => Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TextFormFieldBaseComponent(
-          hintText: 'Primer Nombre',
-          errorMessage: 'Ingrese el nombre',
-          minLength: MinMaxConstant.minLengthName.value, 
-          maxLength: MinMaxConstant.maxLengthName.value, 
-          textEditingController: _textFirstNameController,
-          keyboardType: TextInputType.text,
-        )
-      ],
-    );
+  Widget _renderPatientFirstNameTextField() => TextFieldBaseComponent(
+    hintText: 'Primer Nombre', 
+    errorMessage: 'Ingrese el nombre', 
+    minLength: MinMaxConstant.minLengthName.value, 
+    maxLength: MinMaxConstant.maxLengthName.value, 
+    textEditingController: _textFirstNameController, 
+    keyboardType: TextInputType.text,
+  );
+
 
 
 
