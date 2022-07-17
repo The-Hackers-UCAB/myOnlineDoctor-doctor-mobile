@@ -42,7 +42,7 @@ extension RepositoryPathConstantExtension on RepositoryPathConstant {
         return 'api/auth/user/register';
 
       case RepositoryPathConstant.login:
-        return '';
+        return 'api/auth/login';
     }
   }
 }

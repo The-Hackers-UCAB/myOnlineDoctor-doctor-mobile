@@ -11,14 +11,15 @@ import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/button_component.dart';
-import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/dropdown_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/reusable_widgets.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/text_field_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/text_form_field_component.dart';
+import 'package:my_online_doctor/infrastructure/ui/login/login_page.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/theme.dart';
+import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
 
 
 
@@ -53,7 +54,7 @@ class RegisterPage extends StatelessWidget {
           return BaseUIComponent(
             appBar: _renderAppBar(context),
             body: _body(context, state),
-            bottomNavigationBar: _renderBottomNavigationBar(),
+            bottomNavigationBar: _renderBottomNavigationBar(context),
           );
         },
       ),
@@ -68,6 +69,7 @@ class RegisterPage extends StatelessWidget {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () => {},
+        //TODO: Add back button functionality
         // onPressed: () => Navigator.of(context).pop(),
       ),
       // leading: renderLogoImageView(context),
@@ -79,8 +81,8 @@ class RegisterPage extends StatelessWidget {
 
 
   //Widget Bottom Navigation Bar
-  Widget _renderBottomNavigationBar() =>
-    Container(width: double.infinity, height: 30, color: colorSecondary);
+  Widget _renderBottomNavigationBar(BuildContext context) => 
+    Container(width: double.infinity, height: MediaQuery.of(context).size.height * 0.05, color: colorSecondary);
 
   //Widget Body
   Widget _body(BuildContext context, RegisterState state) {
@@ -91,9 +93,9 @@ class RegisterPage extends StatelessWidget {
 
     return Stack(
       children: [
-        if(state is! RegisterStateInitial) _registerStreamBuilder(context),
+        if(state is RegisterStateDataFetched) _registerStreamBuilder(context),
         if(state is RegisterStateInitial || state is RegisterStateLoading) const LoadingComponent(),
-        //TODO: RegisterStateSuccess going to main page.
+        if(state is RegisterStateSuccess) const LoginPage(),
       ],
     );
   }
