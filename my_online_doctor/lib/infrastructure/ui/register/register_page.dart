@@ -15,6 +15,7 @@ import 'package:my_online_doctor/infrastructure/ui/components/reusable_widgets.d
 import 'package:my_online_doctor/infrastructure/ui/components/text_field_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/text_form_field_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
+import 'package:my_online_doctor/infrastructure/ui/styles/theme.dart';
 
 
 
@@ -145,6 +146,7 @@ class RegisterPage extends StatelessWidget {
       _renderPatientSecondLastNameTextField(),
       heightSeparator(context, 0.045),
       _renderPatientGenreDropdown(context),
+      heightSeparator(context, 0.045),
       _renderPatientEmailTextField(),
       heightSeparator(context, 0.045),
       _renderPatientBirthDateFields(context),
@@ -154,6 +156,8 @@ class RegisterPage extends StatelessWidget {
       _renderPatientPasswordTextField(),
       heightSeparator(context, 0.045),
       _renderPatientConfirmPasswordTextField(),
+      heightSeparator(context, 0.045),
+      _renderPatientTermsAndConditionsCheckbox(context),
       heightSeparator(context, 0.045),
       
 
@@ -361,6 +365,38 @@ class RegisterPage extends StatelessWidget {
   }
 
 
+  Widget _renderPatientTermsAndConditionsCheckbox(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Checkbox(
+          checkColor: Colors.white,
+          value: context.read<RegisterBloc>().termsAndConditionsSelected,
+          onChanged: (value) => context.read<RegisterBloc>().termsAndConditionsSelected = value!,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start, 
+          children: [
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'He leído y estoy de acuerdo con los',
+                    style: textStyleFormField(false),
+                  ),
+              ]),
+            ),
+            RichText(
+              text: TextSpan(
+                text: 'Términos y Condiciones',
+                style: textStyleFormField(true),
+                // recognizer: TapGestureRecognizer()..onTap = _launchURL,
+              ),
+            )
+        ])
+      ],
+    );
+  }
 
 
 

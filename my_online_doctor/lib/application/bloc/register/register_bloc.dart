@@ -28,6 +28,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   List<String> _genresList = [];
   String? _genreSelected; 
   DateTime _birthDate = DateTime.now();
+  bool _termsAndConditionsSelected = false;
 
 
   
@@ -46,6 +47,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   List<String> get genresList => _genresList;
   String? get genreSelected => _genreSelected;
   DateTime get birthDate => _birthDate;
+  bool get termsAndConditionsSelected => _termsAndConditionsSelected;
 
 
   //Setters
@@ -61,6 +63,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   set birthDate(DateTime value) {
     _birthDate = value;
+    _loadView();
+  }
+
+  set termsAndConditionsSelected(bool value) {
+    _termsAndConditionsSelected = value;
     _loadView();
   }
 
