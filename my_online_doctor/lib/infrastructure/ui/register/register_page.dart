@@ -421,13 +421,15 @@ class RegisterPage extends StatelessWidget {
       email: _textEmailController.text.trim(),
       password: _textPasswordController.text.trim(),
       role: 'Paciente',
-      confirmPassword: _textConfirmPasswordController.text.trim(),
-      // birthDate: context.read<RegisterBloc>().birthDate.toString(),
     );
 
     getIt<ContextManager>().context = context;
 
-    context.read<RegisterBloc>().add(RegisterEventRegisterPatient(signUpPatientDomainModel, _formKey.currentState?.validate() ?? false));
+    context.read<RegisterBloc>().add(RegisterEventRegisterPatient(
+      signUpPatientDomainModel, 
+      _textConfirmPasswordController.text.trim(),
+     _formKey.currentState?.validate() ?? false)
+    );
   }
 
 

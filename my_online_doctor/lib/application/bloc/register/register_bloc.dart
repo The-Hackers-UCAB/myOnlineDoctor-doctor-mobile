@@ -1,18 +1,16 @@
 //Package imports:
 import 'dart:async';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 //Project imports:
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_online_doctor/application/use_cases/getters/get_genres_list_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/getters/get_phones_list_use_case.dart';
+import 'package:my_online_doctor/application/use_cases/register_patient/register_patient_use_case.dart';
 import 'package:my_online_doctor/domain/models/sign_up_patient_domain_model.dart';
-import 'package:my_online_doctor/infrastructure/core/constants/repository_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
-import 'package:my_online_doctor/infrastructure/core/repository_manager.dart';
-import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
+import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
 part 'register_event.dart';
 part 'register_state.dart';
 
@@ -27,6 +25,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   //Instances of use cases:
   final GetPhonesUseCaseContract _phonesUseCase = GetPhonesUseCaseContract.get(); 
   final GetGenreUseCaseContract _genreUseCase = GetGenreUseCaseContract.get();
+  final RegisterPatientUseCaseContract _registerPatientUseCase = RegisterPatientUseCaseContract.get();
 
 
   //Variables:
@@ -107,21 +106,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     emit(RegisterStateLoading());
 
-    if( !_registerPatientValidation(event.signUpPatientDomainModel, event.isFormValidated)) {
+    if( !_registerPatientValidation(event) ) {
       emit(RegisterStateHideLoading());
       return;
     }
 
-
-    final response = await getIt<RepositoryManager>()
-    .request(operation: RepositoryConstant.operationPost.key, endpoint: RepositoryPathConstant.register.path,
-      body: event.signUpPatientDomainModel.toJson())
-    .catchError((onError) {
-
-      return null;
-
-    });
-
+    
+    final response =  await _registerPatientUseCase.run(event.signUpPatientDomainModel);
+    
     if (response != null) {
 
       _showDialog(TextConstant.successTitle.text, TextConstant.successRegister.text);
@@ -143,9 +135,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   ///This method is called when the event is [RegisterEventRegisterPatient]
   ///It validates the patient data.
-  bool _registerPatientValidation(SignUpPatientDomainModel patient, bool isFormValidated)  {
+  bool _registerPatientValidation(RegisterEventRegisterPatient event)  {
 
-    if(!isFormValidated) {
+    if(!event.isFormValidated) {
       _showDialog(TextConstant.errorTitle.text, TextConstant.errorFormValidation.text);
       return false;
     }
@@ -157,7 +149,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     }
 
 
-    if(patient.password != patient.confirmPassword){
+    if(event.signUpPatientDomainModel.password != event.confirmPassword){
       _showDialog(TextConstant.errorTitle.text, TextConstant.passwordNotMatch.text);
       return false;
     }
@@ -186,14 +178,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   //To show the dialog:
   void _showDialog(String textTitle, String textQuestion) async {
-    return await showDialog(
-      context: getIt<ContextManager>().context,
-      builder: (BuildContext context) => DialogComponent(
-        textTitle: textTitle,
-        textQuestion: textQuestion,
-      ),
-    );
-  }
+    return await AppUtil.showDialogUtil(
+      context: getIt<ContextManager>().context, 
+      title: textTitle, 
+      message: textQuestion);
 
+  }
 
 }
