@@ -1,6 +1,7 @@
 //Package imports:
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 //Prokect imports:
 import 'package:my_online_doctor/application/bloc/register/register_bloc.dart';
@@ -35,6 +36,7 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController _textPasswordController = TextEditingController();
   final TextEditingController _textConfirmPasswordController = TextEditingController();
   final TextEditingController _textPhoneController = TextEditingController();
+  final TextEditingController _textBirthdayController = TextEditingController();
 
 
   @override
@@ -134,8 +136,6 @@ class RegisterPage extends StatelessWidget {
     mainAxisSize: MainAxisSize.max,
     children: [
       renderLogoImageView(context),
-      _renderPatientEmailTextField(),
-      heightSeparator(context, 0.045),
       _renderPatientFirstNameTextField(),
       heightSeparator(context, 0.045),
       _renderPatientSecondNameTextField(),
@@ -143,6 +143,11 @@ class RegisterPage extends StatelessWidget {
       _renderPatientFirstLastNameTextField(),
       heightSeparator(context, 0.045),
       _renderPatientSecondLastNameTextField(),
+      heightSeparator(context, 0.045),
+      _renderPatientGenreDropdown(context),
+      _renderPatientEmailTextField(),
+      heightSeparator(context, 0.045),
+      _renderPatientBirthDateFields(context),
       heightSeparator(context, 0.045),
       _renderPatientPhoneTextField(context),
       heightSeparator(context, 0.045),
@@ -207,6 +212,31 @@ class RegisterPage extends StatelessWidget {
   );
 
 
+  Widget _renderPatientGenreDropdown(BuildContext context){
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: DropdownComponent(
+              model: DropdownComponentModel(
+                dropDownLists: context.read<RegisterBloc>().genresList.map((e) => e).toList(),
+                itemDropdownSelected: context.read<RegisterBloc>().genreSelected!,
+                ),
+              didChangeValue: (newValue) => context.read<RegisterBloc>().genreSelected = newValue,
+            ),
+          )
+        )
+      ],
+    );
+  }
+
+
   Widget _renderPatientPasswordTextField() => TextFieldBaseComponent(
     hintText: 'Contraseña', 
     errorMessage: 'Ingrese la contraseña', 
@@ -229,7 +259,7 @@ class RegisterPage extends StatelessWidget {
   );
 
 
-    Widget _renderPatientPhoneTextField(BuildContext context){
+  Widget _renderPatientPhoneTextField(BuildContext context){
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -245,15 +275,15 @@ class RegisterPage extends StatelessWidget {
                 dropDownLists: context.read<RegisterBloc>().phonesList.map((e) => e).toList(),
                 itemDropdownSelected: context.read<RegisterBloc>().phoneSelected!,
                 ),
-              didChangeValue: (newValue) => context.read<RegisterBloc>().add(RegisterEventPhoneChanged(newValue)),
+              didChangeValue: (newValue) => context.read<RegisterBloc>().phoneSelected = newValue,
             ),
           ),
         ),
         Expanded(
           flex: 3,
           child: TextFormFieldBaseComponent(
-            errorMessage: 'Ingrese teléfono',
             hintText: 'Teléfono',
+            errorMessage: 'Ingrese teléfono',
             maxLength: MinMaxConstant.minLengthPhone.value,
             minLength: MinMaxConstant.maxLengthPhone.value,
             textEditingController: _textPhoneController,
@@ -266,6 +296,69 @@ class RegisterPage extends StatelessWidget {
   }
 
 
+  Widget _renderPatientBirthDateFields(BuildContext context){
+
+    double width = MediaQuery.of(context).size.width * 0.8;
+    String spaces = '';
+
+    for(int i =  0; i < width~/20; i++){
+      spaces += ' ';
+    }
+
+    _textBirthdayController.text = spaces + DateFormat('dd/MM/yyyy').format(context.read<RegisterBloc>().birthDate);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+         Expanded(
+          flex: 3,
+           child: TextFormFieldBaseComponent(
+              errorMessage: null,
+              minLength: 0,
+              maxLength: 1,
+              textEditingController: _textBirthdayController,
+              enabled: false,
+              keyboardType: TextInputType.number
+              ),
+         ),
+        Expanded(
+          flex: 1,
+          child: IconButton(
+            icon: const Icon( Icons.calendar_month, size: 32),
+            color: colorPrimary,
+            onPressed: () async{
+              final DateTime? newDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime.now(),
+                builder: (BuildContext context, child) {
+                  return Theme(
+                    data: ThemeData.light().copyWith(
+                        primaryColor: colorPrimary,
+                        colorScheme: const ColorScheme.light(primary:  colorPrimary),
+                        buttonTheme: const ButtonThemeData(
+                          textTheme: ButtonTextTheme.primary
+                        ),
+                    ),
+                    child: child!,
+                  );
+                },
+              );
+
+              // ignore: use_build_context_synchronously
+              if(newDate != null) context.read<RegisterBloc>().birthDate = newDate;
+              
+            },
+          ),
+          ),
+      ],
+
+    );
+    
+  }
 
 
 
