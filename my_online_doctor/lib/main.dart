@@ -1,6 +1,7 @@
 // Package imports
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 
 //Project imports
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
@@ -32,6 +33,8 @@ class MyOnlineDoctorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+    getIt<ContextManager>().context = context;
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

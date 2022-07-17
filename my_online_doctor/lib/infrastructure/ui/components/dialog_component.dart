@@ -21,6 +21,7 @@ class DialogComponent extends StatelessWidget {
     return Dialog(
       elevation: 8,
       child: _dialogContent(context),
+      backgroundColor: colorSecondary,
     );
   }
 
@@ -47,8 +48,9 @@ class DialogComponent extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(top: topMargin, right: latMargin, left: latMargin, bottom: topMargin),
       child: Text(
-        textQuestion!,
-        style: title ? Theme.of(context).dialogTheme.titleTextStyle : Theme.of(context).dialogTheme.contentTextStyle,
+        title ? textTitle! : textQuestion!,
+        style: title ? TextStyle(fontSize: 18, fontWeight: FontWeight.bold) : TextStyle(fontSize: 14),
+        // style: title ? Theme.of(context).dialogTheme.titleTextStyle : Theme.of(context).dialogTheme.contentTextStyle,
         textAlign: TextAlign.center,
       ),
     );
@@ -80,16 +82,16 @@ class DialogComponent extends StatelessWidget {
   Widget _buttonSingle(bool cancel, String title) {
     return Container(
       decoration: BoxDecoration(
-          color: cancel ? Colors.white : colorActive,
+          color: cancel ? Colors.white : colorPrimary,
           border: Border.all(
-            color: colorActive,
+            color: colorPrimary,
           ),
           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(cancel ? 5 : cancelButton ? 0:5), bottomRight: Radius.circular(cancel ? 0 : 5))),
       height: 40,
       child: Center(
         child: Text(
           title,
-          style: TextStyle(fontSize: 14.0, color: cancel ? colorActive : Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 14.0, color: cancel ? colorPrimary : Colors.white, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
       ),

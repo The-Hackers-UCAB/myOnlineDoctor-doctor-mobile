@@ -2,13 +2,16 @@
 import 'dart:async';
 
 //Project imports:
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_online_doctor/application/use_cases/getters/get_genres_list_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/getters/get_phones_list_use_case.dart';
 import 'package:my_online_doctor/domain/models/sign_up_patient_domain_model.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/repository_constants.dart';
+import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/repository_manager.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
 part 'register_event.dart';
 part 'register_state.dart';
 
@@ -110,19 +113,30 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       body: event.signUpPatientDomainModel.toJson())
     .catchError((onError) {
 
-      // showDialog(
-      //   context: getIt<ContextManager>().context,
-      //   builder: (BuildContext context) => const DialogComponent(
-      //     textTitle: 'Troste',
-      //     textQuestion: 'NOOOO',
-      //   ));
       return null;
 
     });
 
     if (response != null) {
+
+     await showDialog(
+        context: getIt<ContextManager>().context,
+        builder: (BuildContext context) => const DialogComponent(
+          textTitle: 'Feliz',
+          textQuestion: 'SIII',
+        ));
+
       emit(RegisterStateSuccess());
-    } 
+    } else {
+
+      await showDialog(
+        context: getIt<ContextManager>().context,
+        builder: (BuildContext context) => const DialogComponent(
+          textTitle: 'Error',
+          textQuestion: 'No se ha logrado registrar al paciente',
+        ));
+
+    }
 
 
     emit(RegisterStateDataFetched());
