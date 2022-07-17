@@ -8,6 +8,7 @@ import 'package:my_online_doctor/application/use_cases/getters/get_genres_list_u
 import 'package:my_online_doctor/application/use_cases/getters/get_phones_list_use_case.dart';
 import 'package:my_online_doctor/domain/models/sign_up_patient_domain_model.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/repository_constants.dart';
+import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/repository_manager.dart';
@@ -106,7 +107,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     emit(RegisterStateLoading());
 
-    //TODO: VALIDACIONES
+    if( !_registerPatientValidation(event.signUpPatientDomainModel, event.isFormValidated)) {
+      emit(RegisterStateHideLoading());
+      return;
+    }
+
 
     final response = await getIt<RepositoryManager>()
     .request(operation: RepositoryConstant.operationPost.key, endpoint: RepositoryPathConstant.register.path,
@@ -119,33 +124,54 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     if (response != null) {
 
-     await showDialog(
-        context: getIt<ContextManager>().context,
-        builder: (BuildContext context) => const DialogComponent(
-          textTitle: 'Feliz',
-          textQuestion: 'SIII',
-        ));
+      _showDialog(TextConstant.successTitle.text, TextConstant.successRegister.text);
 
       emit(RegisterStateSuccess());
-    } else {
 
-      await showDialog(
-        context: getIt<ContextManager>().context,
-        builder: (BuildContext context) => const DialogComponent(
-          textTitle: 'Error',
-          textQuestion: 'No se ha logrado registrar al paciente',
-        ));
-
+      return;
     }
 
+    emit(RegisterStateHideLoading());
 
-    emit(RegisterStateDataFetched());
 
   }
 
 
 
   //Private methods:
+
+
+  ///This method is called when the event is [RegisterEventRegisterPatient]
+  ///It validates the patient data.
+  bool _registerPatientValidation(SignUpPatientDomainModel patient, bool isFormValidated)  {
+
+    if(!isFormValidated) {
+      _showDialog(TextConstant.errorTitle.text, TextConstant.errorFormValidation.text);
+      return false;
+    }
+
+
+    if(!_termsAndConditionsSelected) {
+      _showDialog(TextConstant.errorTitle.text, TextConstant.termsAndConditionsNotSelected.text);
+      return false;
+    }
+
+
+    if(patient.password != patient.confirmPassword){
+      _showDialog(TextConstant.errorTitle.text, TextConstant.passwordNotMatch.text);
+      return false;
+    }
+
+
+    if(_birthDate.isAfter(DateTime.now().subtract(const Duration(days: 365 *18))) ) {
+      _showDialog(TextConstant.errorTitle.text, TextConstant.birthDateInvalid.text);
+      return false;
+    }
+
+
+    return true;
+  }
+
 
   ///This method is called when the event is [RegisterEventFetchBasicData]
   ///It sets the initial data of the register page.
@@ -156,6 +182,18 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   //To load the view:
   void _loadView() => _registerStreamController.sink.add(true);
+
+
+  //To show the dialog:
+  void _showDialog(String textTitle, String textQuestion) async {
+    return await showDialog(
+      context: getIt<ContextManager>().context,
+      builder: (BuildContext context) => DialogComponent(
+        textTitle: textTitle,
+        textQuestion: textQuestion,
+      ),
+    );
+  }
 
 
 }

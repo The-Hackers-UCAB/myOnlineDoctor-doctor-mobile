@@ -4,11 +4,18 @@ enum TextConstant {
   errorTimeoutConnection,
   errorInternetConnection,
   errorServer,
-  errorLogin,
   errorUnauthorized,
   retry,
   acceptButton,
   cancelButton,
+  successTitle,
+  errorTitle,
+  failedRegister,
+  successRegister,
+  termsAndConditionsNotSelected,
+  passwordNotMatch,
+  birthDateInvalid,
+  errorFormValidation,
 }
 
 extension TextConstantExtension on TextConstant {
@@ -37,8 +44,30 @@ extension TextConstantExtension on TextConstant {
       case TextConstant.cancelButton:
         return 'Cancelar';
 
-      default:
-        return '';
+      case TextConstant.successTitle:
+        return 'Éxito';
+
+      case TextConstant.errorTitle:
+        return 'Error';
+
+      case TextConstant.failedRegister:
+        return 'No se ha podido registrar al paciente';
+
+      case TextConstant.successRegister:
+        return 'Se ha registrado al paciente';
+
+      case TextConstant.termsAndConditionsNotSelected:
+        return 'Debe aceptar los términos y condiciones';
+
+      case TextConstant.passwordNotMatch:
+        return 'Las contraseñas no coinciden';
+
+      case TextConstant.birthDateInvalid:
+        return 'El paciente debe tener al menos 18 años de edad';
+
+      case TextConstant.errorFormValidation:
+        return 'Por favor, ingrese todos los datos requeridos';
+
     }
   }
 }

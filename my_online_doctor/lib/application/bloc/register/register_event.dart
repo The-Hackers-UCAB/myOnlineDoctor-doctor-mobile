@@ -9,6 +9,7 @@ class RegisterEventFetchBasicData extends RegisterEvent {}
 
 class RegisterEventRegisterPatient extends RegisterEvent {
   final SignUpPatientDomainModel signUpPatientDomainModel;
+  final bool isFormValidated;
 
-  RegisterEventRegisterPatient(this.signUpPatientDomainModel);
+  RegisterEventRegisterPatient(this.signUpPatientDomainModel, this.isFormValidated);
 }

@@ -11,6 +11,7 @@ import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/button_component.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/dropdown_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/reusable_widgets.dart';
@@ -92,6 +93,7 @@ class RegisterPage extends StatelessWidget {
       children: [
         if(state is! RegisterStateInitial) _registerStreamBuilder(context),
         if(state is RegisterStateInitial || state is RegisterStateLoading) const LoadingComponent(),
+        //TODO: RegisterStateSuccess going to main page.
       ],
     );
   }
@@ -141,19 +143,19 @@ class RegisterPage extends StatelessWidget {
       renderLogoImageView(context),
       _renderPatientEmailTextField(),
       heightSeparator(context, 0.045),
-      // _renderPatientFirstNameTextField(),
-      // heightSeparator(context, 0.045),
-      // _renderPatientSecondNameTextField(),
-      // heightSeparator(context, 0.045),
-      // _renderPatientFirstLastNameTextField(),
-      // heightSeparator(context, 0.045),
-      // _renderPatientSecondLastNameTextField(),
-      // heightSeparator(context, 0.045),
-      // _renderPatientGenreDropdown(context),
-      // heightSeparator(context, 0.045),
-      // _renderPatientBirthDateFields(context),
-      // heightSeparator(context, 0.045),
-      // _renderPatientPhoneTextField(context),
+      _renderPatientFirstNameTextField(),
+      heightSeparator(context, 0.045),
+      _renderPatientSecondNameTextField(),
+      heightSeparator(context, 0.045),
+      _renderPatientFirstLastNameTextField(),
+      heightSeparator(context, 0.045),
+      _renderPatientSecondLastNameTextField(),
+      heightSeparator(context, 0.045),
+      _renderPatientGenreDropdown(context),
+      heightSeparator(context, 0.045),
+      _renderPatientBirthDateFields(context),
+      heightSeparator(context, 0.045),
+      _renderPatientPhoneTextField(context),
       heightSeparator(context, 0.045),
       _renderPatientPasswordTextField(),
       heightSeparator(context, 0.045),
@@ -416,14 +418,16 @@ class RegisterPage extends StatelessWidget {
   void _registerPatient(BuildContext context){
 
     var signUpPatientDomainModel = SignUpPatientDomainModel(
-      email: _textEmailController.text,
-      password: _textPasswordController.text,
+      email: _textEmailController.text.trim(),
+      password: _textPasswordController.text.trim(),
       role: 'Paciente',
+      confirmPassword: _textConfirmPasswordController.text.trim(),
+      // birthDate: context.read<RegisterBloc>().birthDate.toString(),
     );
 
     getIt<ContextManager>().context = context;
 
-    context.read<RegisterBloc>().add(RegisterEventRegisterPatient(signUpPatientDomainModel));
+    context.read<RegisterBloc>().add(RegisterEventRegisterPatient(signUpPatientDomainModel, _formKey.currentState?.validate() ?? false));
   }
 
 

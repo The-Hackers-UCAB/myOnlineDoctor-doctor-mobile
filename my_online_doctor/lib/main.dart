@@ -64,8 +64,6 @@ class MyOnlineDoctorApp extends StatelessWidget {
           }
         } else {
           return const LoadingComponent();
-          //TO DO: Add the loading page.
-          // return _loadingPage();
         }
         
       },

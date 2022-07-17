@@ -82,26 +82,28 @@ class RepositoryManager {
   }
 
   void _errorRequest(DioError e) {
+    var error = requestResponseModelFromJson(e.response!.data);
+    
     if (DioErrorType.receiveTimeout == e.type || DioErrorType.connectTimeout == e.type) {
-      AppUtil.showDialogUtil(context: getIt<ContextManager>().context, message:TextConstant.errorTimeoutConnection.text);
+      AppUtil.showDialogUtil(context: getIt<ContextManager>().context, title: TextConstant.errorTitle.text, message:error.message ?? TextConstant.errorTimeoutConnection.text);
       throw 600;
     } else if (e.message.contains('SocketException')) {
-      AppUtil.showDialogUtil(context: getIt<ContextManager>().context, message:TextConstant.errorInternetConnection.text);
+      AppUtil.showDialogUtil(context: getIt<ContextManager>().context, title: TextConstant.errorTitle.text, message:error.message ?? TextConstant.errorInternetConnection.text);
       throw 600;
     } else {
       switch (e.response!.statusCode!) {
         case 401:
-          AppUtil.showDialogUtil(context: getIt<ContextManager>().context, message:TextConstant.errorUnauthorized.text);
+          AppUtil.showDialogUtil(context: getIt<ContextManager>().context, title: TextConstant.errorTitle.text, message:error.message ?? TextConstant.errorUnauthorized.text);
           throw 401;
         case 404:
-          AppUtil.showDialogUtil(context: getIt<ContextManager>().context, message:TextConstant.errorServer.text);
+          AppUtil.showDialogUtil(context: getIt<ContextManager>().context, title: TextConstant.errorTitle.text, message:error.message ?? TextConstant.errorServer.text);
           throw 404;
         case 500:
-          AppUtil.showDialogUtil(context: getIt<ContextManager>().context, message: TextConstant.errorServer.text);
+        
+          AppUtil.showDialogUtil(context: getIt<ContextManager>().context, title: TextConstant.errorTitle.text, message: error.message ?? TextConstant.errorServer.text);
           throw 500;
         default:
-          var error = requestResponseModelFromJson(e.response!.data);
-          AppUtil.showDialogUtil(context: getIt<ContextManager>().context, message: error.message ?? TextConstant.errorServer.text);
+          AppUtil.showDialogUtil(context: getIt<ContextManager>().context, title: TextConstant.errorTitle.text, message: error.message ?? TextConstant.errorServer.text);
           throw e.response!.statusCode!;
       }
     }
