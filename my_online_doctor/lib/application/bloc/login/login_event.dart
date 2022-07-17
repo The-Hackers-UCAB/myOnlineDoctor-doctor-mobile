@@ -7,9 +7,15 @@ abstract class LoginEvent {}
 
 class LoginEventFetchBasicData extends LoginEvent {}
 
+class LoginEventNavigateTo extends LoginEvent {
+  final String routeName;
+  LoginEventNavigateTo(this.routeName);
+}
+
+
 class LoginEventLoginPatient extends LoginEvent {
-  final SignInPatientDomainModel signUpPatientDomainModel;
+  final SignInPatientDomainModel signInPatientDomainModel;
   final bool isFormValidated;
 
-  LoginEventLoginPatient(this.signUpPatientDomainModel, this.isFormValidated);
+  LoginEventLoginPatient(this.signInPatientDomainModel, this.isFormValidated);
 }

@@ -16,10 +16,8 @@ import 'package:my_online_doctor/infrastructure/ui/components/loading_component.
 import 'package:my_online_doctor/infrastructure/ui/components/reusable_widgets.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/text_field_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/text_form_field_component.dart';
-import 'package:my_online_doctor/infrastructure/ui/login/login_page.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/theme.dart';
-import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
 
 
 
@@ -68,9 +66,7 @@ class RegisterPage extends StatelessWidget {
       backgroundColor: colorPrimary,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
-        onPressed: () => {},
-        //TODO: Add back button functionality
-        // onPressed: () => Navigator.of(context).pop(),
+        onPressed: () => context.read<RegisterBloc>().add(RegisterEventNavigateTo('/login'))
       ),
       // leading: renderLogoImageView(context),
       title: const Padding(
@@ -95,7 +91,7 @@ class RegisterPage extends StatelessWidget {
       children: [
         if(state is RegisterStateDataFetched) _registerStreamBuilder(context),
         if(state is RegisterStateInitial || state is RegisterStateLoading) const LoadingComponent(),
-        if(state is RegisterStateSuccess) const LoginPage(),
+        // if(state is RegisterStateSuccess) LoginPage(),
       ],
     );
   }

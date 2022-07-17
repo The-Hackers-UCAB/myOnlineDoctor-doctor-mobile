@@ -10,6 +10,7 @@ import 'package:my_online_doctor/domain/models/sign_up_patient_domain_model.dart
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
+import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
 part 'register_event.dart';
 part 'register_state.dart';
@@ -26,6 +27,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final GetPhonesUseCaseContract _phonesUseCase = GetPhonesUseCaseContract.get(); 
   final GetGenreUseCaseContract _genreUseCase = GetGenreUseCaseContract.get();
   final RegisterPatientUseCaseContract _registerPatientUseCase = RegisterPatientUseCaseContract.get();
+  final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
 
 
   //Variables:
@@ -42,6 +44,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   //You have to declare the StateInitial as the first state
   RegisterBloc() : super(RegisterStateInitial()) {
     on<RegisterEventFetchBasicData>(_fetchBasicRegisterDataEventToState);
+    on<RegisterEventNavigateTo>(_navigateToEventToState);
     on<RegisterEventRegisterPatient>(_registerPatientEventToState);
 
   }
@@ -97,6 +100,20 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     emit(RegisterStateDataFetched());
   }
+
+
+  ///This method is called when the event is [RegisterEventNavigateTo]
+  ///It navigates to the specified page.
+  void _navigateToEventToState(RegisterEventNavigateTo event, Emitter<RegisterState> emit) {
+
+    if(event.routeName == '/login') {
+      _navigatorManager.pop(null);
+
+    } else {
+      _navigatorManager.navigateTo(event.routeName);
+    }
+  }
+
 
 
 

@@ -10,7 +10,6 @@ import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/routes_manager.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/login/login_page.dart';
-import 'package:my_online_doctor/infrastructure/ui/register/register_page.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/theme.dart';
 import 'package:my_online_doctor/infrastructure/utils/device_util.dart';
 
@@ -55,7 +54,7 @@ class MyOnlineDoctorApp extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data!) {
-            return RegisterPage();
+            return LoginPage();
             //TO DO: Add the home page.
             // return HomePage();
           } else {

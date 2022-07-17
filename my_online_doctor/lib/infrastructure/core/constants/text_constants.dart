@@ -16,6 +16,11 @@ enum TextConstant {
   passwordNotMatch,
   birthDateInvalid,
   errorFormValidation,
+  signIn,
+  signUp,
+  forgotMyPassword,
+  toBeContinued,
+  pageInConstruction,
 }
 
 extension TextConstantExtension on TextConstant {
@@ -67,6 +72,21 @@ extension TextConstantExtension on TextConstant {
 
       case TextConstant.errorFormValidation:
         return 'Por favor, ingrese todos los datos requeridos';
+
+      case TextConstant.signIn:
+        return 'Iniciar sesión';
+      
+      case TextConstant.signUp:
+        return 'Registrarse';
+
+      case TextConstant.forgotMyPassword:
+        return 'Olvidé mi contraseña';
+
+      case TextConstant.toBeContinued:
+        return 'Próximamente';
+
+      case TextConstant.pageInConstruction:
+        return 'Página en construcción';
 
     }
   }
