@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 //Prokect imports:
 import 'package:my_online_doctor/application/bloc/register/register_bloc.dart';
 import 'package:my_online_doctor/domain/models/sign_up_patient_domain_model.dart';
-import 'package:my_online_doctor/infrastructure/core/constants_manager.dart';
+import 'package:my_online_doctor/infrastructure/core/constants/min_max_constants.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/button_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/dropdown_component.dart';
@@ -136,17 +136,17 @@ class RegisterPage extends StatelessWidget {
     crossAxisAlignment:  CrossAxisAlignment.center,
     mainAxisSize: MainAxisSize.max,
     children: [
-      renderLogoImageView(context),
-      _renderPatientFirstNameTextField(),
-      heightSeparator(context, 0.045),
-      _renderPatientSecondNameTextField(),
-      heightSeparator(context, 0.045),
-      _renderPatientFirstLastNameTextField(),
-      heightSeparator(context, 0.045),
-      _renderPatientSecondLastNameTextField(),
-      heightSeparator(context, 0.045),
-      _renderPatientGenreDropdown(context),
-      heightSeparator(context, 0.045),
+      // renderLogoImageView(context),
+      // _renderPatientFirstNameTextField(),
+      // heightSeparator(context, 0.045),
+      // _renderPatientSecondNameTextField(),
+      // heightSeparator(context, 0.045),
+      // _renderPatientFirstLastNameTextField(),
+      // heightSeparator(context, 0.045),
+      // _renderPatientSecondLastNameTextField(),
+      // heightSeparator(context, 0.045),
+      // _renderPatientGenreDropdown(context),
+      // heightSeparator(context, 0.045),
       _renderPatientEmailTextField(),
       heightSeparator(context, 0.045),
       _renderPatientBirthDateFields(context),
@@ -403,16 +403,25 @@ class RegisterPage extends StatelessWidget {
 
   Widget _renderRegisterButton(BuildContext context) => Container(
     width: double.infinity,
-    child: const ButtonComponent(
+    child: ButtonComponent(
       title: 'Registrar',
       style: ButtonComponentStyle.primary,
-      // actionButton: () => presenter.didTapRegisterButton(
-      //   _formKey.currentState?.validate() ?? false, 
-      //   _textPasswordController.text,
-      //   _textConfirmPasswordController.text,
-      // ).then((state) => _manageDidTapRegisterButtonState(state, context)),
+      actionButton: () => _registerPatient(context),
     )
   );
+
+
+  void _registerPatient(BuildContext context){
+
+    var signUpPatientDomainModel = SignUpPatientDomainModel(
+      email: _textEmailController.text,
+      password: _textPasswordController.text,
+      role: 'Paciente',
+    );
+
+    context.read<RegisterBloc>().add(RegisterEventRegisterPatient(signUpPatientDomainModel));
+  }
+
 
 
 

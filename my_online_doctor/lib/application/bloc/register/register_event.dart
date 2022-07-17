@@ -12,9 +12,3 @@ class RegisterEventRegisterPatient extends RegisterEvent {
 
   RegisterEventRegisterPatient(this.signUpPatientDomainModel);
 }
-
-class RegisterEventPhoneChanged extends RegisterEvent {
-  final String phonePrefix;
-
-  RegisterEventPhoneChanged(this.phonePrefix);
-}

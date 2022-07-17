@@ -6,6 +6,7 @@ import 'package:my_online_doctor/application/use_cases/getters/get_phones_list_u
 // Project imports:
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
+import 'package:my_online_doctor/infrastructure/core/repository_manager.dart';
 
 final getIt = GetIt.instance;
 
@@ -16,6 +17,7 @@ class InjectionManager {
   static void setupInjections() {
 
     getIt.registerSingleton<ContextManager>(ContextManager());
+    getIt.registerSingleton<RepositoryManager>(RepositoryManager());
 
     NavigatorServiceContract.inject();
 

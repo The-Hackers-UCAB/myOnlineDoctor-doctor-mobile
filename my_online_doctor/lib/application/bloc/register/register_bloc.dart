@@ -6,6 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_online_doctor/application/use_cases/getters/get_genres_list_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/getters/get_phones_list_use_case.dart';
 import 'package:my_online_doctor/domain/models/sign_up_patient_domain_model.dart';
+import 'package:my_online_doctor/infrastructure/core/constants/repository_constants.dart';
+import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
+import 'package:my_online_doctor/infrastructure/core/repository_manager.dart';
 part 'register_event.dart';
 part 'register_state.dart';
 
@@ -36,6 +39,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   //You have to declare the StateInitial as the first state
   RegisterBloc() : super(RegisterStateInitial()) {
     on<RegisterEventFetchBasicData>(_fetchBasicRegisterDataEventToState);
+    on<RegisterEventRegisterPatient>(_registerPatientEventToState);
 
   }
 
@@ -89,6 +93,40 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     _loadView();
 
     emit(RegisterStateDataFetched());
+  }
+
+
+
+  ///This method is called when the event is [RegisterEventRegisterPatient]
+  ///It registers the patient.
+  void _registerPatientEventToState(RegisterEventRegisterPatient event, Emitter<RegisterState> emit) async{
+
+    emit(RegisterStateLoading());
+
+    //TODO: VALIDACIONES
+
+    final response = await getIt<RepositoryManager>()
+    .request(operation: RepositoryConstant.operationPost.key, endpoint: RepositoryPathConstant.register.path,
+      body: event.signUpPatientDomainModel.toJson())
+    .catchError((onError) {
+
+      // showDialog(
+      //   context: getIt<ContextManager>().context,
+      //   builder: (BuildContext context) => const DialogComponent(
+      //     textTitle: 'Troste',
+      //     textQuestion: 'NOOOO',
+      //   ));
+      return null;
+
+    });
+
+    if (response != null) {
+      emit(RegisterStateSuccess());
+    } 
+
+
+    emit(RegisterStateDataFetched());
+
   }
 
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_online_doctor/infrastructure/core/constants_manager.dart';
+import 'package:my_online_doctor/infrastructure/core/constants/image_constants.dart';
 
 import 'image_view_component.dart';
 
