@@ -7,10 +7,19 @@ abstract class RegisterEvent {}
 
 class RegisterEventFetchBasicData extends RegisterEvent {}
 
+class RegisterEventNavigateTo extends RegisterEvent {
+  final String routeName;
+  RegisterEventNavigateTo(this.routeName);
+}
+
 class RegisterEventRegisterPatient extends RegisterEvent {
   final SignUpPatientDomainModel signUpPatientDomainModel;
   final String confirmPassword;
   final bool isFormValidated;
 
-  RegisterEventRegisterPatient(this.signUpPatientDomainModel,this.confirmPassword, this.isFormValidated);
+  RegisterEventRegisterPatient(
+    this.signUpPatientDomainModel,
+    this.confirmPassword, 
+    this.isFormValidated,
+  );
 }

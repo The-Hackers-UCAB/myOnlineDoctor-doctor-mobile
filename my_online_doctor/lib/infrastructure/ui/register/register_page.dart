@@ -11,7 +11,6 @@ import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/button_component.dart';
-import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/dropdown_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/reusable_widgets.dart';
@@ -32,6 +31,7 @@ class RegisterPage extends StatelessWidget {
   //Controllers
 
   final GlobalKey<FormState> _formKey = GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _textEmailController = TextEditingController();
   final TextEditingController _textFirstNameController = TextEditingController();
   final TextEditingController _textSecondNameController = TextEditingController();
@@ -53,7 +53,7 @@ class RegisterPage extends StatelessWidget {
           return BaseUIComponent(
             appBar: _renderAppBar(context),
             body: _body(context, state),
-            bottomNavigationBar: _renderBottomNavigationBar(),
+            bottomNavigationBar: _renderBottomNavigationBar(context),
           );
         },
       ),
@@ -67,8 +67,7 @@ class RegisterPage extends StatelessWidget {
       backgroundColor: colorPrimary,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
-        onPressed: () => {},
-        // onPressed: () => Navigator.of(context).pop(),
+        onPressed: () => context.read<RegisterBloc>().add(RegisterEventNavigateTo('/login'))
       ),
       // leading: renderLogoImageView(context),
       title: const Padding(
@@ -79,8 +78,8 @@ class RegisterPage extends StatelessWidget {
 
 
   //Widget Bottom Navigation Bar
-  Widget _renderBottomNavigationBar() =>
-    Container(width: double.infinity, height: 30, color: colorSecondary);
+  Widget _renderBottomNavigationBar(BuildContext context) => 
+    Container(width: double.infinity, height: MediaQuery.of(context).size.height * 0.05, color: colorSecondary);
 
   //Widget Body
   Widget _body(BuildContext context, RegisterState state) {
@@ -93,7 +92,7 @@ class RegisterPage extends StatelessWidget {
       children: [
         if(state is! RegisterStateInitial) _registerStreamBuilder(context),
         if(state is RegisterStateInitial || state is RegisterStateLoading) const LoadingComponent(),
-        //TODO: RegisterStateSuccess going to main page.
+        // if(state is RegisterStateSuccess) LoginPage(),
       ],
     );
   }
@@ -116,20 +115,20 @@ class RegisterPage extends StatelessWidget {
   //Widget to create the stack of fields
   Widget _registerRenderView(BuildContext context) {
 
-    return Stack(
-      children: [
-        Form(
-          key: _formKey,
-          child: Center(
-            child: SingleChildScrollView(
-              padding: generalMarginView,
-              child: Container(
-                child: _createRegisterFields(context)
+    return  Stack(
+        children: [
+          Form(
+            key: _formKey,
+            child: Center(
+              child: SingleChildScrollView(
+                padding: generalMarginView,
+                child: Container(
+                  child: _createRegisterFields(context)
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
     );
   }
 
@@ -313,7 +312,7 @@ class RegisterPage extends StatelessWidget {
       spaces += ' ';
     }
 
-    _textBirthdayController.text = spaces + DateFormat('dd/MM/yyyy').format(context.read<RegisterBloc>().birthDate);
+    _textBirthdayController.text = spaces + DateFormat('yyyy-MM-dd').format(context.read<RegisterBloc>().birthDate);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -328,7 +327,8 @@ class RegisterPage extends StatelessWidget {
               maxLength: 1,
               textEditingController: _textBirthdayController,
               enabled: false,
-              keyboardType: TextInputType.number
+              keyboardType: TextInputType.number,
+              isDate: true,
               ),
          ),
         Expanded(
@@ -417,10 +417,30 @@ class RegisterPage extends StatelessWidget {
 
   void _registerPatient(BuildContext context){
 
+    getIt<ContextManager>().context = context;
+
     var signUpPatientDomainModel = SignUpPatientDomainModel(
-      email: _textEmailController.text.trim(),
-      password: _textPasswordController.text.trim(),
-      role: 'Paciente',
+      registerPatientApplicationServiceRequest: RegisterPatientApplicationServiceRequest(
+        firstName: _textFirstNameController.text.trim(),
+        middleName: _textSecondNameController.text.trim(),
+        firstSurname: _textFirstLastNameController.text.trim(),
+        secondSurname: _textSecondLastNameController.text.trim(),
+        allergies: 'A la vida',
+        background: 'Falta de sueño por desarrollo',
+        birthdate: DateFormat('yyyy-MM-dd').format(context.read<RegisterBloc>().birthDate),
+        height: '1.85',
+        phoneNumber: '424123',
+        // phoneNumber: context.read<RegisterBloc>().phoneSelected! + _textPhoneController.text,
+        weight: '85',
+        status: 'Activo',
+        surgeries: '3 cirugías',
+        gender: context.read<RegisterBloc>().genreSelected == 'Hombre' ? 'M' : 'F',
+      ),
+      createUserDto: CreateUserDto(
+        email: _textEmailController.text.trim(),
+        password: _textPasswordController.text.trim(),
+      )
+      
     );
 
     getIt<ContextManager>().context = context;
@@ -428,8 +448,8 @@ class RegisterPage extends StatelessWidget {
     context.read<RegisterBloc>().add(RegisterEventRegisterPatient(
       signUpPatientDomainModel, 
       _textConfirmPasswordController.text.trim(),
-     _formKey.currentState?.validate() ?? false)
-    );
+     _formKey.currentState?.validate() ?? false,
+     ));
   }
 
 

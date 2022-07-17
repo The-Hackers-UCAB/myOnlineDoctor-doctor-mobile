@@ -23,8 +23,8 @@ class RepositoryManager {
     var url=FlavorManager.baseURL();
     var options = BaseOptions(
         baseUrl: url,
-        connectTimeout: const Duration(minutes: 1).inMilliseconds,
-        receiveTimeout: const Duration(minutes: 1).inMilliseconds,
+        connectTimeout: const Duration(seconds: 30).inMilliseconds,
+        receiveTimeout: const Duration(seconds: 30).inMilliseconds,
         responseType: ResponseType.plain,
         headers: repositoryHeader,
         contentType: RepositoryConstant.contentType.key);
@@ -83,7 +83,7 @@ class RepositoryManager {
 
   void _errorRequest(DioError e) {
     var error = requestResponseModelFromJson(e.response!.data);
-    
+
     if (DioErrorType.receiveTimeout == e.type || DioErrorType.connectTimeout == e.type) {
       AppUtil.showDialogUtil(context: getIt<ContextManager>().context, title: TextConstant.errorTitle.text, message:error.message ?? TextConstant.errorTimeoutConnection.text);
       throw 600;

@@ -1,5 +1,7 @@
 //Package imports:
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 //Project imports:
@@ -10,6 +12,8 @@ import 'package:my_online_doctor/domain/models/sign_up_patient_domain_model.dart
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
+import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
 import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
 part 'register_event.dart';
 part 'register_state.dart';
@@ -26,6 +30,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final GetPhonesUseCaseContract _phonesUseCase = GetPhonesUseCaseContract.get(); 
   final GetGenreUseCaseContract _genreUseCase = GetGenreUseCaseContract.get();
   final RegisterPatientUseCaseContract _registerPatientUseCase = RegisterPatientUseCaseContract.get();
+  final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
 
 
   //Variables:
@@ -42,6 +47,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   //You have to declare the StateInitial as the first state
   RegisterBloc() : super(RegisterStateInitial()) {
     on<RegisterEventFetchBasicData>(_fetchBasicRegisterDataEventToState);
+    on<RegisterEventNavigateTo>(_navigateToEventToState);
     on<RegisterEventRegisterPatient>(_registerPatientEventToState);
 
   }
@@ -99,6 +105,20 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
 
+  ///This method is called when the event is [RegisterEventNavigateTo]
+  ///It navigates to the specified page.
+  void _navigateToEventToState(RegisterEventNavigateTo event, Emitter<RegisterState> emit) {
+
+    if(event.routeName == '/login') {
+      _navigatorManager.pop(null);
+
+    } else {
+      _navigatorManager.navigateTo(event.routeName);
+    }
+  }
+
+
+
 
   ///This method is called when the event is [RegisterEventRegisterPatient]
   ///It registers the patient.
@@ -108,6 +128,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     if( !_registerPatientValidation(event) ) {
       emit(RegisterStateHideLoading());
+      _loadView();
       return;
     }
 
@@ -116,9 +137,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     
     if (response != null) {
 
+      // ignore: use_build_context_synchronously
       _showDialog(TextConstant.successTitle.text, TextConstant.successRegister.text);
 
       emit(RegisterStateSuccess());
+
+      _navigatorManager.pop(null);
+      _navigatorManager.navigateToWithReplacement('/login');
 
       return;
     }
@@ -149,7 +174,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     }
 
 
-    if(event.signUpPatientDomainModel.password != event.confirmPassword){
+    if(event.signUpPatientDomainModel.createUserDto.password != event.confirmPassword){
       _showDialog(TextConstant.errorTitle.text, TextConstant.passwordNotMatch.text);
       return false;
     }
@@ -178,10 +203,19 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   //To show the dialog:
   void _showDialog(String textTitle, String textQuestion) async {
-    return await AppUtil.showDialogUtil(
-      context: getIt<ContextManager>().context, 
-      title: textTitle, 
-      message: textQuestion);
+
+    var newContext = getIt<ContextManager>().context;
+
+    return showDialog(
+        context: newContext,
+        builder: (BuildContext dialogContext) => Builder(
+          builder: (superContext) {
+            return DialogComponent(
+              textTitle: textTitle,
+              textQuestion: textQuestion,
+            );
+          }
+        ));
 
   }
 
