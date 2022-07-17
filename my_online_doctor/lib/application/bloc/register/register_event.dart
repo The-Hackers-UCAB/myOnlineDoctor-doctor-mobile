@@ -17,5 +17,9 @@ class RegisterEventRegisterPatient extends RegisterEvent {
   final String confirmPassword;
   final bool isFormValidated;
 
-  RegisterEventRegisterPatient(this.signUpPatientDomainModel,this.confirmPassword, this.isFormValidated);
+  RegisterEventRegisterPatient(
+    this.signUpPatientDomainModel,
+    this.confirmPassword, 
+    this.isFormValidated,
+  );
 }

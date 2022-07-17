@@ -25,6 +25,7 @@ class TextFormFieldBaseComponent extends StatefulWidget {
   final bool validateSpaces;
   final bool isUsername;
   final bool isAmount;
+  final bool isDate;
 
   // final bool white;
   final bool isOtp;
@@ -54,6 +55,7 @@ class TextFormFieldBaseComponent extends StatefulWidget {
     this.isOtp = false,
     this.numberWithSpaces = false,
     this.enabled = true,
+    this.isDate = false,
     // this.obscureField,
     // this.hint,
     this.validate = true
@@ -152,7 +154,8 @@ class _TextFormFieldBaseComponentState
           return null;
         }
         if (widget.textEditingController?.text.contains('-') ?? false) {
-          return 'No se aceptan guiones';
+
+          if(!widget.isDate) return 'No se aceptan guiones';
         }
 
 

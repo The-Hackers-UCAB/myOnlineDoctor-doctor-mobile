@@ -1,5 +1,7 @@
 //Package imports:
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 //Project imports:
@@ -11,6 +13,7 @@ import 'package:my_online_doctor/infrastructure/core/constants/text_constants.da
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
 import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
 part 'register_event.dart';
 part 'register_state.dart';
@@ -125,6 +128,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     if( !_registerPatientValidation(event) ) {
       emit(RegisterStateHideLoading());
+      _loadView();
       return;
     }
 
@@ -133,9 +137,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     
     if (response != null) {
 
+      // ignore: use_build_context_synchronously
       _showDialog(TextConstant.successTitle.text, TextConstant.successRegister.text);
 
       emit(RegisterStateSuccess());
+
+      _navigatorManager.pop(null);
+      _navigatorManager.navigateToWithReplacement('/login');
 
       return;
     }
@@ -166,7 +174,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     }
 
 
-    if(event.signUpPatientDomainModel.password != event.confirmPassword){
+    if(event.signUpPatientDomainModel.createUserDto.password != event.confirmPassword){
       _showDialog(TextConstant.errorTitle.text, TextConstant.passwordNotMatch.text);
       return false;
     }
@@ -195,10 +203,19 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   //To show the dialog:
   void _showDialog(String textTitle, String textQuestion) async {
-    return await AppUtil.showDialogUtil(
-      context: getIt<ContextManager>().context, 
-      title: textTitle, 
-      message: textQuestion);
+
+    var newContext = getIt<ContextManager>().context;
+
+    return showDialog(
+        context: newContext,
+        builder: (BuildContext dialogContext) => Builder(
+          builder: (superContext) {
+            return DialogComponent(
+              textTitle: textTitle,
+              textQuestion: textQuestion,
+            );
+          }
+        ));
 
   }
 

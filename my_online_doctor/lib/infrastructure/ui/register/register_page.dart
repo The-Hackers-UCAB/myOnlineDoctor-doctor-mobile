@@ -31,6 +31,7 @@ class RegisterPage extends StatelessWidget {
   //Controllers
 
   final GlobalKey<FormState> _formKey = GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _textEmailController = TextEditingController();
   final TextEditingController _textFirstNameController = TextEditingController();
   final TextEditingController _textSecondNameController = TextEditingController();
@@ -89,7 +90,7 @@ class RegisterPage extends StatelessWidget {
 
     return Stack(
       children: [
-        if(state is RegisterStateDataFetched) _registerStreamBuilder(context),
+        if(state is! RegisterStateInitial) _registerStreamBuilder(context),
         if(state is RegisterStateInitial || state is RegisterStateLoading) const LoadingComponent(),
         // if(state is RegisterStateSuccess) LoginPage(),
       ],
@@ -114,20 +115,20 @@ class RegisterPage extends StatelessWidget {
   //Widget to create the stack of fields
   Widget _registerRenderView(BuildContext context) {
 
-    return Stack(
-      children: [
-        Form(
-          key: _formKey,
-          child: Center(
-            child: SingleChildScrollView(
-              padding: generalMarginView,
-              child: Container(
-                child: _createRegisterFields(context)
+    return  Stack(
+        children: [
+          Form(
+            key: _formKey,
+            child: Center(
+              child: SingleChildScrollView(
+                padding: generalMarginView,
+                child: Container(
+                  child: _createRegisterFields(context)
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
     );
   }
 
@@ -311,7 +312,7 @@ class RegisterPage extends StatelessWidget {
       spaces += ' ';
     }
 
-    _textBirthdayController.text = spaces + DateFormat('dd/MM/yyyy').format(context.read<RegisterBloc>().birthDate);
+    _textBirthdayController.text = spaces + DateFormat('yyyy-MM-dd').format(context.read<RegisterBloc>().birthDate);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -326,7 +327,8 @@ class RegisterPage extends StatelessWidget {
               maxLength: 1,
               textEditingController: _textBirthdayController,
               enabled: false,
-              keyboardType: TextInputType.number
+              keyboardType: TextInputType.number,
+              isDate: true,
               ),
          ),
         Expanded(
@@ -415,10 +417,30 @@ class RegisterPage extends StatelessWidget {
 
   void _registerPatient(BuildContext context){
 
+    getIt<ContextManager>().context = context;
+
     var signUpPatientDomainModel = SignUpPatientDomainModel(
-      email: _textEmailController.text.trim(),
-      password: _textPasswordController.text.trim(),
-      role: 'Paciente',
+      registerPatientApplicationServiceRequest: RegisterPatientApplicationServiceRequest(
+        firstName: _textFirstNameController.text.trim(),
+        middleName: _textSecondNameController.text.trim(),
+        firstSurname: _textFirstLastNameController.text.trim(),
+        secondSurname: _textSecondLastNameController.text.trim(),
+        allergies: 'A la vida',
+        background: 'Falta de sueño por desarrollo',
+        birthdate: DateFormat('yyyy-MM-dd').format(context.read<RegisterBloc>().birthDate),
+        height: '1.85',
+        phoneNumber: '424123',
+        // phoneNumber: context.read<RegisterBloc>().phoneSelected! + _textPhoneController.text,
+        weight: '85',
+        status: 'Activo',
+        surgeries: '3 cirugías',
+        gender: context.read<RegisterBloc>().genreSelected == 'Hombre' ? 'M' : 'F',
+      ),
+      createUserDto: CreateUserDto(
+        email: _textEmailController.text.trim(),
+        password: _textPasswordController.text.trim(),
+      )
+      
     );
 
     getIt<ContextManager>().context = context;
@@ -426,8 +448,8 @@ class RegisterPage extends StatelessWidget {
     context.read<RegisterBloc>().add(RegisterEventRegisterPatient(
       signUpPatientDomainModel, 
       _textConfirmPasswordController.text.trim(),
-     _formKey.currentState?.validate() ?? false)
-    );
+     _formKey.currentState?.validate() ?? false,
+     ));
   }
 
 

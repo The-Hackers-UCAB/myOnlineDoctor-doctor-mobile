@@ -39,7 +39,7 @@ extension RepositoryPathConstantExtension on RepositoryPathConstant {
 
     switch (this) {
       case RepositoryPathConstant.register:
-        return 'api/auth/user/register';
+        return 'api/patient';
 
       case RepositoryPathConstant.login:
         return 'api/auth/login';
