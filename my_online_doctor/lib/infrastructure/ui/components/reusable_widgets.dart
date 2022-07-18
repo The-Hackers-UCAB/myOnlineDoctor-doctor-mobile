@@ -3,11 +3,11 @@ import 'package:my_online_doctor/infrastructure/core/constants/image_constants.d
 
 import 'image_view_component.dart';
 
-Widget renderLogoImageView(BuildContext context) => Container(
-    margin: const EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 10),
-    height: MediaQuery.of(context).size.width * (40 / 100),
+Widget renderLogoImageView(BuildContext context, {bool fullLogo = false}) => Container(
+    margin: EdgeInsets.only(left: 20, top: (fullLogo ? 0 : 10), right: 20, bottom: (fullLogo ? 0 : 10)),
+    height: MediaQuery.of(context).size.width *  (fullLogo ? 0.6 : 0.4),
     width: double.infinity,
-    child: ImageViewComponent(ImagesConstant.logo.image));
+    child: ImageViewComponent(fullLogo ? ImagesConstant.fullLogo.image : ImagesConstant.logo.image));
 
 
 Widget heightSeparator(BuildContext context, double heightPercentage) => SizedBox(

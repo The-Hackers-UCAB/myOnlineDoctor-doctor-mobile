@@ -5,6 +5,7 @@ enum ImagesConstant {
   noInternet,
   noProfilePhoto,
   noDoctorFound,
+  fullLogo,
 }
 
 const imageBase= 'assets/images/';
@@ -26,6 +27,10 @@ extension ImagesConstantExtension on ImagesConstant {
 
       case ImagesConstant.noInternet:
         return '${imageBase}no_internet.jpg';
+
+      case ImagesConstant.fullLogo:
+        return '${imageBase}my_online_doctor_full_logo.png';
+
     }
   }
 }

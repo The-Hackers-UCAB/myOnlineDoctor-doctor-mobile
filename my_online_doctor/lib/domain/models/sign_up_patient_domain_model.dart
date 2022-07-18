@@ -9,29 +9,121 @@ String signUpDomainModelToJson(SignUpPatientDomainModel data) => json.encode(dat
 ///SigUnUpPatientDomainModel: Model for register a Patient
 class SignUpPatientDomainModel {
 
-  String email;
-  String password;
-  String role;
+  RegisterPatientApplicationServiceRequest registerPatientApplicationServiceRequest;
+  CreateUserDto createUserDto;
 
   SignUpPatientDomainModel({
-    required this.email,
-    required this.password,
-    required this.role,
+    required this.registerPatientApplicationServiceRequest,
+    required this.createUserDto,
   });
 
   factory SignUpPatientDomainModel.fromJson(Map<String, dynamic> json) => SignUpPatientDomainModel(
-    email: json["email"],
-    password: json["password"],
-    role: json["role"],
+    registerPatientApplicationServiceRequest: RegisterPatientApplicationServiceRequest.fromJson(json['registerPatientApplicationServiceRequest']),
+    createUserDto: CreateUserDto.fromJson(json['createUserDto']),
+  );
+
+
+  Map<String, dynamic> toJson() => {
+    "registerPatientApplicationServiceRequest": registerPatientApplicationServiceRequest.toJson(),
+    "createUserDto": createUserDto.toJson(),
+  };
+
+}
+
+
+class RegisterPatientApplicationServiceRequest {
+
+  String firstName;
+  String middleName;
+  String firstSurname;
+  String secondSurname;
+  String allergies;
+  String background;
+  String birthdate;
+  String height;
+  String phoneNumber;
+  String status;
+  String weight;
+  String surgeries;
+  String gender;
+
+
+  RegisterPatientApplicationServiceRequest({
+    required this.firstName,
+    required this.middleName,
+    required this.firstSurname,
+    required this.secondSurname,
+    required this.allergies,
+    required this.background,
+    required this.birthdate,
+    required this.height,
+    required this.phoneNumber,
+    required this.status,
+    required this.weight,
+    required this.surgeries,
+    required this.gender,
+  });
+
+
+  factory RegisterPatientApplicationServiceRequest.fromJson(Map<String, dynamic> json) => RegisterPatientApplicationServiceRequest(
+    firstName: json['fisrtName'],
+    middleName: json['middleName'],
+    firstSurname: json['firstSurname'],
+    secondSurname: json['secondSurname'],
+    allergies: json['allergies'],
+    background: json['background'],
+    birthdate: json['birthdate'],
+    height: json['height'],
+    phoneNumber: json['phoneNumber'],
+    status: json['status'],
+    weight: json['weight'],
+    surgeries: json['surgeries'],
+    gender: json['gender'],
+  );
+
+  Map<String, dynamic> toJson() => {
+    'firstName': firstName,
+    'middleName' : middleName,
+    'firstSurname': firstSurname,
+    'secondSurname': secondSurname,
+    'allergies': allergies,
+    'background': background,
+    'birthdate': birthdate,
+    'height': height,
+    'phoneNumber': phoneNumber,
+    'status': status,
+    'weight' : weight,
+    'surgeries': surgeries,
+    'gender': gender,    
+  };
+
+}
+
+
+class CreateUserDto {
+
+  String email;
+  String password;
+
+
+  CreateUserDto({
+    required this.email,
+    required this.password,
+  });
+
+
+  factory CreateUserDto.fromJson(Map<String, dynamic> json) => CreateUserDto(
+    email: json['email'],
+    password: json['password'],
   );
 
 
   Map<String, dynamic> toJson() => {
     "email": email,
     "password": password,
-    "role": role,
   };
 
 
-
 }
+
+
