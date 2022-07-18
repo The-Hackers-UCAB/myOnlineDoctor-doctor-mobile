@@ -12,3 +12,20 @@ class AppointmentEventNavigateTo extends AppointmentEvent {
   AppointmentEventNavigateTo(this.routeName);
 }
 
+class AppointmentEventCreated extends AppointmentEvent {}
+
+class AppointmentEventRated extends AppointmentEvent {}
+
+class AppointmentEventCancelled extends AppointmentEvent {}
+
+class AppointmentEventAccepted extends AppointmentEvent {}
+
+class AppointmentEventRequested extends AppointmentEvent {}
+
+class AppointmentEventRejected extends AppointmentEvent {}
+
+class AppointmentEventStarted extends AppointmentEvent {}
+
+class AppointmentEventFinished extends AppointmentEvent {}
+
+class AppointmentEventNotStarted extends AppointmentEvent {}

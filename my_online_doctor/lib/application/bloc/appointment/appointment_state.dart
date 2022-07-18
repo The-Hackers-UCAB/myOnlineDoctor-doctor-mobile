@@ -10,5 +10,4 @@ class AppointmentStateLoading extends AppointmentState {}
 
 class AppointmentStateHideLoading extends AppointmentState {}
 
-class AppointmentStateSuccess extends AppointmentState {}
 
