@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 const colorPrimary = Color.fromARGB(255, 41, 205, 191);
 const colorSecondary = Color(0xFFcecece);
-const colorActive = Color.fromARGB(255, 4, 159, 255);
+// const colorActive = Color.fromARGB(255, 4, 159, 255);
+const colorActive = Color.fromARGB(255, 92, 190, 251);
 const colorInactive = Color(0xFF7b7c7c);
 const colorError = Color(0xFFC5032B);
 const colorBlack = Color(0xFF000B30);
