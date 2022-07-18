@@ -21,7 +21,7 @@ class RoutesManager {
         return MaterialPageRoute(builder: (context) => RegisterPage());
 
       case LoginPage.routeName:
-        return MaterialPageRoute(builder: (context) => LoginPage());
+        return MaterialPageRoute(builder: ( context) => LoginPage());
 
       case ViewAppointmentsPage.routeName:
         return MaterialPageRoute(builder: (context) => ViewAppointmentsPage());
