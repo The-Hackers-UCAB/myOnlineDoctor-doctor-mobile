@@ -52,6 +52,11 @@ dependencies:
   dio: ^4.0.6
   curved_navigation_bar: ^1.0.3
 
+  #FIREBASE - NOTIFICATIONS
+  firebase_messaging: ^11.4.4
+  firebase_core: ^1.19.1
+  flutter_local_notifications: ^9.7.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
