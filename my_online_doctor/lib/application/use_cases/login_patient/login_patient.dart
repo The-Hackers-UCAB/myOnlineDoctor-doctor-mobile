@@ -1,7 +1,7 @@
 //Project import:
 import 'package:my_online_doctor/domain/models/sign_in_patient_domain_model.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
-import 'package:my_online_doctor/infrastructure/providers/queries/patient_query_provider_contract.dart';
+import 'package:my_online_doctor/infrastructure/providers/queries/patient/patient_query_provider_contract.dart';
 
 enum LoginPatientUseCaseError {patientNotRegistered }
 

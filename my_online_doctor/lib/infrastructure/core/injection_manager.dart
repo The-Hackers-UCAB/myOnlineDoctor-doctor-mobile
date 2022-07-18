@@ -1,5 +1,6 @@
 // Package imports:
 import 'package:get_it/get_it.dart';
+import 'package:my_online_doctor/application/use_cases/appointments/get_appointments_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/getters/get_genres_list_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/getters/get_phones_list_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/login_patient/login_patient.dart';
@@ -28,6 +29,7 @@ class InjectionManager {
     GetGenreUseCaseContract.inject();
     RegisterPatientUseCaseContract.inject();
     LoginPatientUseCaseContract.inject();
+    GetAppointmentsUseCaseContract.inject();
 
   }
 }

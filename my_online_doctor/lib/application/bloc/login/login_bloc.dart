@@ -77,7 +77,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     
     if (response != null) {
 
-      _navigatorManager.navigateToWithReplacement('/view_appointments');
+      _navigatorManager.navigateToWithReplacement('/bottom_menu');
 
       emit(LoginStateSuccess());
 
