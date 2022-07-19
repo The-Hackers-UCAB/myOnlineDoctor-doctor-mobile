@@ -8,8 +8,6 @@ import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/flavor_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/routes_manager.dart';
-import 'package:my_online_doctor/infrastructure/ui/appointment/view_appointments_page.dart';
-import 'package:my_online_doctor/infrastructure/ui/components/bottom_menu_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/login/login_page.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/theme.dart';
@@ -19,8 +17,9 @@ import 'package:my_online_doctor/infrastructure/utils/device_util.dart';
 void main() {
   InjectionManager.setupInjections(); //Here we setup the injections.
 
-  FlavorManager.make(
-      Flavor.PRODUCTION); //Here we set the flavor that we want to use.
+
+  FlavorManager.make(Flavor.PRODUCTION); //Here we set the flavor5 that we want to use.
+
 
   runApp(const MyOnlineDoctorApp()); //Here we run the app.
 }

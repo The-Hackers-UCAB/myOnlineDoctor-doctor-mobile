@@ -5,21 +5,35 @@ import 'dart:io';
 // Package imports:
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:my_online_doctor/infrastructure/core/constants/repository_constants.dart';
-import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
-import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
-
-// Project imports:
+import 'package:flutter/material.dart';
 import 'context_manager.dart';
 import 'flavor_manager.dart';
 import 'injection_manager.dart';
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart' as dioCookieManager;
+
+
+// Project imports:
+import 'package:my_online_doctor/infrastructure/providers/local_storage/local_storage_repository.dart';
+import 'package:my_online_doctor/infrastructure/core/constants/repository_constants.dart';
+import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
+import 'package:my_online_doctor/infrastructure/ui/login/login_page.dart';
+import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:my_online_doctor/infrastructure/model/request_responde_model.dart';
 
 
 ///RepositoryManager: This class is used to manage the repository main connection.
 class RepositoryManager {
-  Future<BaseOptions> _dioBaseOptions(String endpoint) async {
-    var repositoryHeader = <String, dynamic>{};
+
+
+
+  Future<BaseOptions> _dioBaseOptions() async {
+
+    
+
+    var repositoryHeader = <String, dynamic>{}; 
     var url=FlavorManager.baseURL();
     var options = BaseOptions(
         baseUrl: url,
@@ -42,11 +56,25 @@ class RepositoryManager {
 
   Future<String?> request({required String operation, required String endpoint, Map<String,dynamic>? body, bool wompi=false}) async {
     
-    endpoint = FlavorManager.baseURL() + endpoint;
-    
-    var setDioOptions = await _dioBaseOptions(endpoint);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var dio = Dio(setDioOptions);
+    endpoint = FlavorManager.baseURL() + endpoint;
+
+    
+    var setDioOptions = await _dioBaseOptions();
+
+    BaseOptions op = setDioOptions;
+
+    if(prefs.containsKey(RepositoryPathConstant.coookie.path)) {
+
+      op.headers['cookie'] = prefs.getString(RepositoryPathConstant.coookie.path);
+    }
+
+    var dio = Dio(op);
+
+    // var cookieJar = CookieJar();
+    // dio.interceptors.add(dioCookieManager.CookieManager(cookieJar));
+
 
     _validateCertificate(dio);
 
@@ -57,6 +85,11 @@ class RepositoryManager {
         response = await dio.get(endpoint);
       } else if (operation == RepositoryConstant.operationPost.key) {
         response = await dio.post(endpoint, data: body);
+
+        for (var element in response.headers['set-cookie']!) {
+          prefs.setString(RepositoryPathConstant.coookie.path, element);
+        }
+
       } else if (operation == RepositoryConstant.operationPut.key) {
         if (body != null) {
           response = await dio.put(endpoint, data: body);
@@ -81,7 +114,7 @@ class RepositoryManager {
     return null;
   }
 
-  void _errorRequest(DioError e) {
+  void _errorRequest(DioError e) async {
     var error = requestResponseModelFromJson(e.response!.data);
 
     if (DioErrorType.receiveTimeout == e.type || DioErrorType.connectTimeout == e.type) {
@@ -98,6 +131,22 @@ class RepositoryManager {
         case 404:
           AppUtil.showDialogUtil(context: getIt<ContextManager>().context, title: TextConstant.errorTitle.text, message:error.message ?? TextConstant.errorServer.text);
           throw 404;
+
+        case 403:
+          // AppUtil.showDialogUtil(context: getIt<ContextManager>().context, title: TextConstant.sorry.text, message: TextConstant.expiredCookie.text);
+
+          // await showDialog(
+          //   context: getIt<ContextManager>().context,
+          //     builder: (BuildContext superContext) => DialogComponent(
+          //         textTitle: TextConstant.sorry.text,
+          //         textQuestion: TextConstant.expiredCookie.text,
+          //       )
+          //   );
+          // Navigator.of(getIt<ContextManager>().context).pushNamedAndRemoveUntil(LoginPage.routeName, (Route<dynamic> route) => false);
+
+
+          break;
+
         case 500:
         
           AppUtil.showDialogUtil(context: getIt<ContextManager>().context, title: TextConstant.errorTitle.text, message: error.message ?? TextConstant.errorServer.text);
