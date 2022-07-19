@@ -46,7 +46,11 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
     emit(AppointmentStateLoading());
 
-    await _getAppointmentUseCase.run();
+    var response = await _getAppointmentUseCase.run();
+
+    if(response != null){
+      _appointmentStreamController.sink.add(true);
+    }
 
     _loadView();
     emit(AppointmentStateHideLoading());

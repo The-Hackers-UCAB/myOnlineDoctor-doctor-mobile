@@ -9,12 +9,9 @@ import 'package:flutter/material.dart';
 import 'context_manager.dart';
 import 'flavor_manager.dart';
 import 'injection_manager.dart';
-import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart' as dioCookieManager;
 
 
 // Project imports:
-import 'package:my_online_doctor/infrastructure/providers/local_storage/local_storage_repository.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/repository_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
@@ -65,15 +62,13 @@ class RepositoryManager {
 
     BaseOptions op = setDioOptions;
 
-    if(prefs.containsKey(RepositoryPathConstant.coookie.path)) {
+    if(prefs.containsKey(RepositoryPathConstant.cookie.path)) {
 
-      op.headers['cookie'] = prefs.getString(RepositoryPathConstant.coookie.path);
+      op.headers['cookie'] = prefs.getString(RepositoryPathConstant.cookie.path);
     }
 
     var dio = Dio(op);
 
-    // var cookieJar = CookieJar();
-    // dio.interceptors.add(dioCookieManager.CookieManager(cookieJar));
 
 
     _validateCertificate(dio);
@@ -87,7 +82,7 @@ class RepositoryManager {
         response = await dio.post(endpoint, data: body);
 
         for (var element in response.headers['set-cookie']!) {
-          prefs.setString(RepositoryPathConstant.coookie.path, element);
+          prefs.setString(RepositoryPathConstant.cookie.path, element);
         }
 
       } else if (operation == RepositoryConstant.operationPut.key) {

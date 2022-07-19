@@ -60,6 +60,7 @@ class ViewAppointmentsPage extends StatelessWidget{
     builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
 
       if(snapshot.hasData) {
+        return const Center(child: CircularProgressIndicator(color: colorError,));
         // return _loginRenderView(context);
       } 
 
