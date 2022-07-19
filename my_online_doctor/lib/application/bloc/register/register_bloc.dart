@@ -1,6 +1,5 @@
 //Package imports:
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -138,9 +137,18 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (response != null) {
 
       // ignore: use_build_context_synchronously
-      _showDialog(TextConstant.successTitle.text, TextConstant.successRegister.text);
+      // _showDialog(TextConstant.successTitle.text, TextConstant.successRegister.text);
 
-      emit(RegisterStateSuccess());
+       await showDialog(
+        context: getIt<ContextManager>().context,
+          builder: (BuildContext superContext) => DialogComponent(
+              textTitle: TextConstant.successTitle.text,
+              textQuestion: TextConstant.successRegister.text,
+            )
+        );
+      emit(RegisterStateHideLoading());
+      // emit(RegisterStateSuccess());
+      _loadView();
 
       _navigatorManager.pop(null);
       _navigatorManager.navigateToWithReplacement('/login');
@@ -206,7 +214,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     var newContext = getIt<ContextManager>().context;
 
-    return showDialog(
+    return await showDialog(
         context: newContext,
         builder: (BuildContext dialogContext) => Builder(
           builder: (superContext) {

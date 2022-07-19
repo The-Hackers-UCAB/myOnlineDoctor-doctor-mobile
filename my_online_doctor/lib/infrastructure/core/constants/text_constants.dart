@@ -21,6 +21,8 @@ enum TextConstant {
   forgotMyPassword,
   toBeContinued,
   pageInConstruction,
+  sorry,
+  expiredCookie,
 }
 
 extension TextConstantExtension on TextConstant {
@@ -87,6 +89,12 @@ extension TextConstantExtension on TextConstant {
 
       case TextConstant.pageInConstruction:
         return 'Página en construcción';
+
+      case TextConstant.sorry:
+        return 'Lo sentimos';
+
+      case TextConstant.expiredCookie:
+        return 'La sesión ha expirado. Por favor vuelva a ingresar';
 
     }
   }

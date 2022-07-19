@@ -31,6 +31,8 @@ extension RepositoryConstantExtension on RepositoryConstant {
 enum RepositoryPathConstant {
   register,
   login,
+  getAppointments,
+  cookie,
 }
 
 extension RepositoryPathConstantExtension on RepositoryPathConstant {
@@ -43,6 +45,13 @@ extension RepositoryPathConstantExtension on RepositoryPathConstant {
 
       case RepositoryPathConstant.login:
         return 'api/auth/login';
+
+      case RepositoryPathConstant.getAppointments:
+        return 'api/patient/appointments?pageIndex=0&pageSize=5';
+
+      case RepositoryPathConstant.cookie:
+        return 'cookie';
+
     }
   }
 }

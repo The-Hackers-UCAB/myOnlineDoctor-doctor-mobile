@@ -9,29 +9,29 @@ String signUpDomainModelToJson(SignUpPatientDomainModel data) => json.encode(dat
 ///SigUnUpPatientDomainModel: Model for register a Patient
 class SignUpPatientDomainModel {
 
-  RegisterPatientApplicationServiceRequest registerPatientApplicationServiceRequest;
+  Dto dto;
   CreateUserDto createUserDto;
 
   SignUpPatientDomainModel({
-    required this.registerPatientApplicationServiceRequest,
+    required this.dto,
     required this.createUserDto,
   });
 
   factory SignUpPatientDomainModel.fromJson(Map<String, dynamic> json) => SignUpPatientDomainModel(
-    registerPatientApplicationServiceRequest: RegisterPatientApplicationServiceRequest.fromJson(json['registerPatientApplicationServiceRequest']),
+    dto: Dto.fromJson(json['dto']),
     createUserDto: CreateUserDto.fromJson(json['createUserDto']),
   );
 
 
   Map<String, dynamic> toJson() => {
-    "registerPatientApplicationServiceRequest": registerPatientApplicationServiceRequest.toJson(),
+    "dto": dto.toJson(),
     "createUserDto": createUserDto.toJson(),
   };
 
 }
 
 
-class RegisterPatientApplicationServiceRequest {
+class Dto {
 
   String firstName;
   String middleName;
@@ -48,7 +48,7 @@ class RegisterPatientApplicationServiceRequest {
   String gender;
 
 
-  RegisterPatientApplicationServiceRequest({
+  Dto({
     required this.firstName,
     required this.middleName,
     required this.firstSurname,
@@ -65,7 +65,7 @@ class RegisterPatientApplicationServiceRequest {
   });
 
 
-  factory RegisterPatientApplicationServiceRequest.fromJson(Map<String, dynamic> json) => RegisterPatientApplicationServiceRequest(
+  factory Dto.fromJson(Map<String, dynamic> json) => Dto(
     firstName: json['fisrtName'],
     middleName: json['middleName'],
     firstSurname: json['firstSurname'],
