@@ -7,7 +7,7 @@ abstract class PatientQueryProviderContract<T> {
   static PatientQueryProviderContract inject() => _PatientQueryProvider();
 
   Future<void> loginPatient(T patient);
-
+  Future<void> logoutPatient();
 }
 
 enum PatientQueryProviderError {
@@ -16,18 +16,30 @@ enum PatientQueryProviderError {
   patientAlreadyRegistered,
 }
 
-
-class _PatientQueryProvider extends PatientQueryProviderContract<SignInPatientDomainModel> {
-
+class _PatientQueryProvider
+    extends PatientQueryProviderContract<SignInPatientDomainModel> {
   @override
   Future<dynamic> loginPatient(SignInPatientDomainModel patient) async {
-
     final response = await getIt<RepositoryManager>()
-    .request(operation: RepositoryConstant.operationPost.key, endpoint: RepositoryPathConstant.login.path, body: patient.toJson())
-    .catchError((onError) {
-
+        .request(
+            operation: RepositoryConstant.operationPost.key,
+            endpoint: RepositoryPathConstant.login.path,
+            body: patient.toJson())
+        .catchError((onError) {
       return null;
+    });
 
+    return response;
+  }
+
+  @override
+  Future<dynamic> logoutPatient() async {
+    final response = await getIt<RepositoryManager>()
+        .request(
+            operation: RepositoryConstant.operationGet.key,
+            endpoint: RepositoryPathConstant.logout.path)
+        .catchError((onError) {
+      return null;
     });
 
     return response;
