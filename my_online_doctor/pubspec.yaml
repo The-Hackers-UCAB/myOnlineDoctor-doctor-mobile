@@ -56,6 +56,11 @@ dependencies:
   dio_cookie_manager: ^2.0.0
   cookie_jar: ^3.0.1
 
+  #FIREBASE - NOTIFICATIONS
+  firebase_messaging: ^11.4.4
+  firebase_core: ^1.19.1
+  flutter_local_notifications: ^9.7.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
