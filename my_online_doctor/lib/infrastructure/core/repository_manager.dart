@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:my_online_doctor/infrastructure/providers/local_storage/local_storage_provider.dart';
 import 'context_manager.dart';
 import 'flavor_manager.dart';
 import 'injection_manager.dart';
@@ -17,7 +18,6 @@ import 'package:my_online_doctor/infrastructure/core/constants/text_constants.da
 import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/login/login_page.dart';
 import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:my_online_doctor/infrastructure/model/request_responde_model.dart';
 
 
@@ -53,21 +53,14 @@ class RepositoryManager {
 
   Future<String?> request({required String operation, required String endpoint, Map<String,dynamic>? body, bool wompi=false}) async {
     
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     endpoint = FlavorManager.baseURL() + endpoint;
-
     
     var setDioOptions = await _dioBaseOptions();
 
-    BaseOptions op = setDioOptions;
+    setDioOptions.headers['cookie'] = await LocalStorageProvider.readData(RepositoryPathConstant.cookie.path) as String;
 
-    if(prefs.containsKey(RepositoryPathConstant.cookie.path)) {
-
-      op.headers['cookie'] = prefs.getString(RepositoryPathConstant.cookie.path);
-    }
-
-    var dio = Dio(op);
+    var dio = Dio(setDioOptions);
 
 
 
@@ -82,7 +75,7 @@ class RepositoryManager {
         response = await dio.post(endpoint, data: body);
 
         for (var element in response.headers['set-cookie']!) {
-          prefs.setString(RepositoryPathConstant.cookie.path, element);
+          LocalStorageProvider.saveData(RepositoryPathConstant.cookie.path, element);
         }
 
       } else if (operation == RepositoryConstant.operationPut.key) {
