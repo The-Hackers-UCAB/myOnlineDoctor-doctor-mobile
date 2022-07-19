@@ -420,7 +420,7 @@ class RegisterPage extends StatelessWidget {
     getIt<ContextManager>().context = context;
 
     var signUpPatientDomainModel = SignUpPatientDomainModel(
-      registerPatientApplicationServiceRequest: RegisterPatientApplicationServiceRequest(
+      dto: Dto(
         firstName: _textFirstNameController.text.trim(),
         middleName: _textSecondNameController.text.trim(),
         firstSurname: _textFirstLastNameController.text.trim(),
