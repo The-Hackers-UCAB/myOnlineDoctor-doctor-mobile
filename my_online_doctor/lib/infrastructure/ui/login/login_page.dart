@@ -215,6 +215,7 @@ class LoginPage extends StatelessWidget {
     var signInPatientDomainModel = SignInPatientDomainModel(
       email: _textEmailController.text.trim(),
       password: _textPasswordController.text.trim(),
+      firebaseToken: context.read<LoginBloc>().firebaseToken,
     );
 
 

@@ -33,6 +33,7 @@ enum RepositoryPathConstant {
   login,
   getAppointments,
   cookie,
+  firebaseToken,
 }
 
 extension RepositoryPathConstantExtension on RepositoryPathConstant {
@@ -51,6 +52,9 @@ extension RepositoryPathConstantExtension on RepositoryPathConstant {
 
       case RepositoryPathConstant.cookie:
         return 'cookie';
+
+      case RepositoryPathConstant.firebaseToken:
+        return 'firebaseToken';
 
     }
   }
