@@ -1,13 +1,10 @@
 //Package imports:
 import 'dart:async';
-// import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_online_doctor/application/use_cases/logout_patient/logout_patient.dart';
 
 //Project imports
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
-
-// import '../../../infrastructure/ui/components/dialog_component.dart';
 part 'logout_event.dart';
 part 'logout_state.dart';
 
