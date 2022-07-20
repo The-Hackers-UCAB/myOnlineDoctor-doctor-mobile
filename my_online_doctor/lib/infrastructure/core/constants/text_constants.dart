@@ -52,7 +52,7 @@ extension TextConstantExtension on TextConstant {
         return 'Credenciales inválidas';
 
       case TextConstant.profileTitle:
-        return 'Perfil de usuario';
+        return 'Perfil del Paciente';
 
       case TextConstant.retry:
         return 'Intentar de nuevo';
