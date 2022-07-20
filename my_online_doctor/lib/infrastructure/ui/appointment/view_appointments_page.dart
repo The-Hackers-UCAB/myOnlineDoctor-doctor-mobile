@@ -7,6 +7,7 @@ import 'package:my_online_doctor/application/bloc/appointment/appointment_bloc.d
 import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/min_max_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/appointment_detail_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/button_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
@@ -155,29 +156,8 @@ class ViewAppointmentsPage extends StatelessWidget{
 
   Widget _renderAppointmentItem(BuildContext context, RequestAppointmentModel item) {
 
-    late Color statusColor;
+    Color statusColor = _getStatusColor(item.status);
     
-      switch(item.status){
-        case 'COMPLETADA':
-        case 'INICIADA':
-          statusColor = colorGreen;
-          break;
-
-        case 'SOLICITADA':
-        case 'AGENDADA':
-        case 'ACEPTADA':
-          statusColor = colorYellow;
-          break;
-
-        case 'RECHAZADA':
-        case 'CANCELADA':
-          statusColor = colorError;
-          break;
-
-        default:
-          statusColor = colorPrimary;
-          break;
-      }
 
     return Container(
       decoration: BoxDecoration(
@@ -207,25 +187,43 @@ class ViewAppointmentsPage extends StatelessWidget{
           children: [
             ListTile(
               leading: ClipOval(
-                child: Image.asset('assets/images/doctor_logo.png'
-                  , width: 40, height: 40, fit: BoxFit.cover)), 
-
+                child: Image.asset('assets/images/doctor_logo.png', 
+                  width: 40, height: 40, fit: BoxFit.cover)), 
               title: Text(item.specialty.specialty),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                     item.doctor.gender == 'M' ? Text('Dr. ${item.doctor.firstName} ${item.doctor.firstSurname}'): 
                         Text('Dra. ${item.doctor.firstName} ${item.doctor.firstSurname}'),
-                    
                 ],
               ),
-              
               trailing: Text(item.status, style: TextStyle(color: statusColor)),
-            ),
+              onTap: () => context.read<AppointmentBloc>().add(AppointmentEventNavigateTo('/appointment_detail', item)),
+              ),
           ],
         )
       )
     );      
+  }
+
+
+  Color _getStatusColor(String status) {
+
+    switch(status){
+        case 'COMPLETADA':
+        case 'INICIADA':
+          return colorGreen;
+
+        case 'SOLICITADA':
+        case 'AGENDADA':
+        case 'ACEPTADA':
+          return colorYellow;
+
+        case 'RECHAZADA':
+        case 'CANCELADA':
+        default:
+          return colorError;
+      }
   }
 
 

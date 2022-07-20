@@ -42,8 +42,8 @@ class MyOnlineDoctorApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorKey: NavigatorServiceContract.get().navigatorKey,
       theme: mainTheme(),
-      onGenerateRoute: (RouteSettings settings) =>
-          RoutesManager.getOnGenerateRoute(settings),
+      onGenerateRoute: (RouteSettings settings, ) =>
+          RoutesManager.getOnGenerateRoute(settings, model: settings.arguments),
       home: _checkInternet(),
     );
   }

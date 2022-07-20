@@ -1,5 +1,7 @@
 //Package imports:
 import 'package:flutter/material.dart';
+import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
+import 'package:my_online_doctor/infrastructure/ui/appointment/appointment_detail_page.dart';
 import 'package:my_online_doctor/infrastructure/ui/appointment/view_appointments_page.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/bottom_menu_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/doctors/search_doctor_page.dart';
@@ -14,7 +16,7 @@ import 'package:my_online_doctor/infrastructure/ui/video_call/call.dart';
 ///RoutesManager: Class that manages the routes.
 class RoutesManager {
 
-  static Route getOnGenerateRoute(RouteSettings settings) {
+  static Route getOnGenerateRoute(RouteSettings settings, {Object? model}) {
 
     switch (settings.name) {
       
@@ -55,6 +57,9 @@ class RoutesManager {
 
         case CallPage.routeName:
           return MaterialPageRoute(builder: (context) => CallPage());
+
+        case AppointmentDetailPage.routeName:
+          return MaterialPageRoute(builder: (context) => AppointmentDetailPage(appointment: model! as RequestAppointmentModel));
 
       default:
         return MaterialPageRoute(builder: (context) => LoginPage());
