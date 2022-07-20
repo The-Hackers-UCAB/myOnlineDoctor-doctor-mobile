@@ -1,9 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+//Package imports:
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+
+//Project imports:
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_online_doctor/application/bloc/logout/logout_bloc.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
 

@@ -86,8 +86,9 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
         if(widget.appointment.status == 'ACEPTADA')  Container(
             height: MediaQuery.of(context).size.height * 0.10,
             margin: generalMarginView,
-            child:  _appointmentRenderButton(context, false),
-        ),
+            child:  _appointmentRenderButton(context, 
+              ButtonComponentStyle.canceled, TextConstant.cancelAppointment.text, AppointmentEventCancelled()),
+            ),
         if(widget.appointment.status == 'AGENDADA')  Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [ 
@@ -96,16 +97,18 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.10,
                 margin: generalMarginView,
-                child: _appointmentRenderButton(context, false),
-                      ),
+                child: _appointmentRenderButton(context, 
+                  ButtonComponentStyle.canceled, TextConstant.rejectAppointment.text, AppointmentEventRejected()),
+              ),
             ),
             Expanded(
               flex: 1,
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.10,
                 margin: generalMarginView,
-                child: _appointmentRenderButton(context, true),
-                      ),
+                child: _appointmentRenderButton(context, 
+                  ButtonComponentStyle.accepted, TextConstant.acceptAppointment.text, AppointmentEventAccepted()),
+              ),
             ),
           ]
         ),
@@ -217,14 +220,15 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
   );
 
 
-    Widget _appointmentRenderButton(BuildContext context, bool isAccept) => Container(
+    Widget _appointmentRenderButton(BuildContext context, ButtonComponentStyle buttonComponentStyle, String title,
+      AppointmentEvent event) => Container(
       margin: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 25),
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.065,
       child:  ButtonComponent(
-        style: isAccept ? ButtonComponentStyle.accepted : ButtonComponentStyle.canceled,
-        title: isAccept ? TextConstant.acceptAppointment.text : TextConstant.cancelAppointment.text,
-        // actionButton:  () => _signIn(context),
+        style: buttonComponentStyle,
+        title: title,
+        actionButton:  () => context.read<AppointmentBloc>().add(event),
       )
   );
 
