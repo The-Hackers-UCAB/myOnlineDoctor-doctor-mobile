@@ -17,7 +17,7 @@ part 'appointment_state.dart';
 class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
   //Here the StreamController can be a state or a DomainModel
-  final _appointmentStreamController = StreamController<RequestAppointmentValue?>();
+  final _appointmentStreamController = StreamController<List<RequestAppointmentModel>>();
 
   //Instances of use cases:
   final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
@@ -33,7 +33,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
 
   //Getters
-  Stream<RequestAppointmentValue?> get streamAppointment => _appointmentStreamController.stream;
+  Stream<List<RequestAppointmentModel>> get streamAppointment => _appointmentStreamController.stream;
 
 
   //Setters
@@ -49,18 +49,19 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
     var response = await _getAppointmentUseCase.run();
 
-    // var play = response['value'];
+    var decode = requestAppointmentModelFromJson(response);
 
-    // if(response['value'] != []){
+    if(decode.value.isNotEmpty) {
 
-      var decode = requestAppointmentModelFromJson(response);
+      var appointmentList = decode.value.map((e) => e).toList();
 
-      _appointmentStreamController.sink.add(decode);
+      _appointmentStreamController.sink.add(appointmentList);
 
-    // } else {
+    } else {
 
-      _appointmentStreamController.sink.add(null);
-    // }
+      _appointmentStreamController.sink.add([]);
+
+    }
 
     emit(AppointmentStateHideLoading());
   }
@@ -69,7 +70,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   ///This method is called when the event is [AppointmentEventNavigateTo]
   ///It navigates to the specified page.
   void _navigateToEventToState(AppointmentEventNavigateTo event, Emitter<AppointmentState> emit) {
-    _navigatorManager.navigateTo(event.routeName);
+    _navigatorManager.navigateTo(event.routeName, arguments: event.appointment);
   }
 
 

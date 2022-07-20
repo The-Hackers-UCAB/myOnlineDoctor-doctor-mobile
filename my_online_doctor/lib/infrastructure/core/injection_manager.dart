@@ -24,14 +24,14 @@ final getIt = GetIt.instance;
 
 Future<void> backgroundHandler(RemoteMessage message) async {
 
-  var context = getIt<ContextManager>().context;
+    var context = getIt<ContextManager>().context;
 
-      var response = await showDialog(
-          context: context,
-          builder: (BuildContext dialogContext) => const DialogComponent(
-              textTitle: 'Cita médica',
-              textQuestion: 'Desea atenter su llamada?',
-              cancelButton: true));
+        var response = await showDialog(
+            context: context,
+            builder: (BuildContext dialogContext) => const DialogComponent(
+                textTitle: 'Cita médica',
+                textQuestion: 'Desea atenter su llamada?',
+                cancelButton: true));
 
 
       if (response != null && response) {
