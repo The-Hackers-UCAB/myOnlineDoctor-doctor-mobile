@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_online_doctor/application/bloc/appointment/appointment_bloc.dart';
 import 'package:my_online_doctor/application/use_cases/appointments/accept_appointment_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/appointments/cancel_appointment_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/appointments/reject_appointment_use_case.dart';
@@ -13,6 +12,7 @@ import 'package:my_online_doctor/domain/models/appointment/request_appointment_m
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'appointment_detail_event.dart';
 part 'appointment_detail_state.dart';
@@ -21,7 +21,8 @@ part 'appointment_detail_state.dart';
 class AppointmentDetailBloc extends Bloc<AppointmentDetailEvent, AppointmentDetailState> {
 
   //Here the StreamController can be a state or a DomainModel
-  final _appointmentDetailStreamController = StreamController<RequestAppointmentModel>();
+  final StreamController<RequestAppointmentModel> _appointmentDetailStreamController = BehaviorSubject();
+  // final _appointmentDetailStreamController = StreamController<RequestAppointmentModel>();
 
   //Instances of use cases:
   final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();

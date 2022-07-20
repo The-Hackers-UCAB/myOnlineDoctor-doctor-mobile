@@ -3,33 +3,33 @@ import 'dart:convert';
 
 // List<RequestAppointmentModel> requestAppointmentModelFromJson(String str) => List<RequestAppointmentModel>.from(json.decode(str).map((x) => RequestAppointmentModel.fromJson(x)));
 
-RequestAppointmentValue requestAppointmentModelFromJson(String str) => RequestAppointmentValue.fromJson(json.decode(str));
+RequestAppointmentModel requestAppointmentModelFromJson(Map<String, dynamic> data) => RequestAppointmentModel.fromJson(data);
 
-String requestAppointmentModelToJson(List<RequestAppointmentModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+// String requestAppointmentModelToJson(List<RequestAppointmentModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 
 ///RequestAppointmentModel: Model for get the list of Appointments
 
  
-class RequestAppointmentValue {
+// class RequestAppointmentValue {
 
-  List<RequestAppointmentModel> value;
+//   List<RequestAppointmentModel> value;
 
-  RequestAppointmentValue({
-    required this.value,
-  });
+//   RequestAppointmentValue({
+//     required this.value,
+//   });
 
-  factory RequestAppointmentValue.fromJson(Map<String, dynamic> json) => RequestAppointmentValue(
-    value: List<RequestAppointmentModel>.from(json['value'].map((x) => RequestAppointmentModel.fromJson(x))),
-  );
+//   factory RequestAppointmentValue.fromJson(Map<String, dynamic> json) => RequestAppointmentValue(
+//     value: List<RequestAppointmentModel>.from(json['value'].map((x) => RequestAppointmentModel.fromJson(x))),
+//   );
 
-  Map<String, dynamic> toJson() => {
-    "value": value,
-  };
+//   Map<String, dynamic> toJson() => {
+//     "value": value,
+//   };
 
 
 
-}
+// }
 
 class RequestAppointmentModel {
   String id;

@@ -9,6 +9,7 @@ import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
+import 'package:rxdart/rxdart.dart';
 part 'appointment_event.dart';
 part 'appointment_state.dart';
 
@@ -17,7 +18,8 @@ part 'appointment_state.dart';
 class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
   //Here the StreamController can be a state or a DomainModel
-  final _appointmentStreamController = StreamController<List<RequestAppointmentModel>>();
+  final StreamController<List<RequestAppointmentModel>> _appointmentStreamController = BehaviorSubject();
+  // final _appointmentStreamController = StreamController<List<RequestAppointmentModel>>();
 
   //Instances of use cases:
   final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
@@ -50,19 +52,21 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
     var response = await _getAppointmentUseCase.run();
 
-    var decode = requestAppointmentModelFromJson(response);
 
-    if(decode.value.isNotEmpty) {
+    if(response != null) {
 
-      var appointmentList = decode.value.map((e) => e).toList();
+      var appointmentList = response.map((e) => requestAppointmentModelFromJson(e)).toList();
 
-      _appointmentStreamController.sink.add(appointmentList);
+      List<RequestAppointmentModel> appointments = appointmentList.cast<RequestAppointmentModel>();
+
+      _appointmentStreamController.sink.add(appointments);
 
     } else {
 
       _appointmentStreamController.sink.add([]);
 
     }
+
 
 
     emit(AppointmentStateHideLoading());
@@ -72,6 +76,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   ///This method is called when the event is [AppointmentEventNavigateTo]
   ///It navigates to the specified page.
   void _navigateToEventToState(AppointmentEventNavigateTo event, Emitter<AppointmentState> emit) {
+    emit(AppointmentStateInitial());
     _navigatorManager.navigateTo(event.routeName, arguments: event.appointment);
   }
 
