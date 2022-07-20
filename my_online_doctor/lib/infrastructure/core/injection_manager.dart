@@ -8,6 +8,7 @@ import 'package:my_online_doctor/application/use_cases/appointments/cancel_appoi
 
 // Project imports:
 import 'package:my_online_doctor/application/use_cases/appointments/get_appointments_use_case.dart';
+import 'package:my_online_doctor/application/use_cases/appointments/reject_appointment_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/getters/get_genres_list_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/getters/get_phones_list_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/login_patient/login_patient.dart';
@@ -89,6 +90,7 @@ class InjectionManager {
     GetAppointmentsUseCaseContract.inject();
     LogoutPatientUseCaseContract.inject();
     CancelAppointmentsUseCaseContract.inject();
+    RejectAppointmentsUseCaseContract.inject();
 
   }
 }

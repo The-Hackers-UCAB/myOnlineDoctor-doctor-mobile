@@ -1,12 +1,14 @@
 //Package imports:
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 //Project imports:
+import 'package:my_online_doctor/application/use_cases/appointments/cancel_appointment_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/appointments/get_appointments_use_case.dart';
+import 'package:my_online_doctor/application/use_cases/appointments/reject_appointment_use_case.dart';
 import 'package:my_online_doctor/domain/models/appointment/cancel_appointment_model.dart';
+import 'package:my_online_doctor/domain/models/appointment/reject_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
@@ -27,6 +29,8 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   //Instances of use cases:
   final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
   final GetAppointmentsUseCaseContract _getAppointmentUseCase = GetAppointmentsUseCaseContract.get();
+  final CancelAppointmentsUseCaseContract _cancelAppointmentUseCase = CancelAppointmentsUseCaseContract.get();
+  final RejectAppointmentsUseCaseContract _rejectAppointmentUseCase = RejectAppointmentsUseCaseContract.get();
 
 
   //Constructor
@@ -35,6 +39,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     on<AppointmentEventFetchBasicData>(_fetchBasicAppointmentDataEventToState);
     on<AppointmentEventNavigateTo>(_navigateToEventToState);
     on<AppointmentEventCancelled>(_cancelledAppointmentEventToState);
+    on<AppointmentEventRejected>(_rejectedAppointmentEventToState);
   }
 
 
@@ -53,21 +58,23 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
     emit(AppointmentStateLoading());
 
-    var response = await _getAppointmentUseCase.run();
+    // var response = await _getAppointmentUseCase.run();
 
-    var decode = requestAppointmentModelFromJson(response);
+    // var decode = requestAppointmentModelFromJson(response);
 
-    if(decode.value.isNotEmpty) {
+    // if(decode.value.isNotEmpty) {
 
-      var appointmentList = decode.value.map((e) => e).toList();
+    //   var appointmentList = decode.value.map((e) => e).toList();
 
-      _appointmentStreamController.sink.add(appointmentList);
+    //   _appointmentStreamController.sink.add(appointmentList);
 
-    } else {
+    // } else {
 
-      _appointmentStreamController.sink.add([]);
+    //   _appointmentStreamController.sink.add([]);
 
-    }
+    // }
+
+    _appointmentStreamController.sink.add([]);
 
     emit(AppointmentStateHideLoading());
   }
@@ -86,7 +93,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
     emit(AppointmentStateLoading());
 
-    final response = await _getAppointmentUseCase.run();
+    final response = await _cancelAppointmentUseCase.run(event.appointment);
 
     if(response != null) {
 
@@ -94,7 +101,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
         context: getIt<ContextManager>().context,
           builder: (BuildContext superContext) => DialogComponent(
               textTitle: TextConstant.successTitle.text,
-              textQuestion: TextConstant.successRegister.text,
+              textQuestion: TextConstant.successCancelAppointment.text,
             )
         );
 
@@ -104,6 +111,38 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
     emit(AppointmentStateHideLoading());
   }
+
+
+
+  ///This method is called when the event is [AppointmentEventRejected]
+  ///It rejects the appointment.
+  ///It shows a dialog to the user to confirm the rejection.
+  ///If the user confirms, it calls the use case to reject the appointment.
+  ///If the user cancels, it does nothing.
+  ///It also shows a dialog to the user if the appointment is rejected.
+  void _rejectedAppointmentEventToState(AppointmentEventRejected event, Emitter<AppointmentState> emit) async {
+
+    emit(AppointmentStateLoading());
+
+    final response = await _rejectAppointmentUseCase.run(event.appointment);
+
+    if(response != null) {
+
+      await showDialog(
+        context: getIt<ContextManager>().context,
+          builder: (BuildContext superContext) => DialogComponent(
+              textTitle: TextConstant.successTitle.text,
+              textQuestion: TextConstant.successRejectAppointment.text,
+            )
+        );
+
+    }
+
+    emit(AppointmentStateHideLoading());
+  }
+
+
+
 
 
   //Private methods:
