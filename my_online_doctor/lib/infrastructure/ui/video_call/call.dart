@@ -8,6 +8,9 @@ import './settings.dart';
 import 'package:http/http.dart' as http;
 
 class CallPage extends StatefulWidget {
+
+  static const routeName = '/call';
+
   final String? channelName;
   final ClientRole? role;
   const CallPage({Key? key, this.channelName, this.role}) : super(key: key);

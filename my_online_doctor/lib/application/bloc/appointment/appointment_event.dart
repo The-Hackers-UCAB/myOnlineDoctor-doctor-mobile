@@ -9,7 +9,8 @@ class AppointmentEventFetchBasicData extends AppointmentEvent {}
 
 class AppointmentEventNavigateTo extends AppointmentEvent {
   final String routeName;
-  AppointmentEventNavigateTo(this.routeName);
+  final RequestAppointmentModel appointment;
+  AppointmentEventNavigateTo(this.routeName, this.appointment);
 }
 
 class AppointmentEventCreated extends AppointmentEvent {}
