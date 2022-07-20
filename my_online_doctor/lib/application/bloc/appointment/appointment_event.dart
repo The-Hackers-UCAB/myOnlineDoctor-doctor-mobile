@@ -17,7 +17,12 @@ class AppointmentEventCreated extends AppointmentEvent {}
 
 class AppointmentEventRated extends AppointmentEvent {}
 
-class AppointmentEventCancelled extends AppointmentEvent {}
+class AppointmentEventCancelled extends AppointmentEvent {
+  final CancelAppointmentModel appointment;
+  final BuildContext context;
+
+  AppointmentEventCancelled(this.appointment, this.context);
+}
 
 class AppointmentEventAccepted extends AppointmentEvent {}
 

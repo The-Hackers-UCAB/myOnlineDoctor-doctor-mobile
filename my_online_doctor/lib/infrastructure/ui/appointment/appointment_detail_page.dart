@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:my_online_doctor/application/bloc/appointment/appointment_bloc.dart';
+import 'package:my_online_doctor/domain/models/appointment/cancel_appointment_model.dart';
 
 //Project imports:
 import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
@@ -86,8 +87,8 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
         if(widget.appointment.status == 'ACEPTADA')  Container(
             height: MediaQuery.of(context).size.height * 0.10,
             margin: generalMarginView,
-            child:  _appointmentRenderButton(context, 
-              ButtonComponentStyle.canceled, TextConstant.cancelAppointment.text, AppointmentEventCancelled()),
+            child:  _appointmentRenderButton(context, ButtonComponentStyle.canceled, 
+              TextConstant.cancelAppointment.text, AppointmentEventCancelled(CancelAppointmentModel(id: widget.appointment.id), context)),
             ),
         if(widget.appointment.status == 'AGENDADA')  Row(
           mainAxisAlignment: MainAxisAlignment.center,

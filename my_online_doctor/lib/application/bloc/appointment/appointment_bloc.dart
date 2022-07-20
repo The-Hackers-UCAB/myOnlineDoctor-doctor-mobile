@@ -1,13 +1,18 @@
 //Package imports:
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 //Project imports:
 import 'package:my_online_doctor/application/use_cases/appointments/get_appointments_use_case.dart';
+import 'package:my_online_doctor/domain/models/appointment/cancel_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
+import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
 import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
 part 'appointment_event.dart';
 part 'appointment_state.dart';
@@ -29,6 +34,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   AppointmentBloc() : super(AppointmentStateInitial()) {
     on<AppointmentEventFetchBasicData>(_fetchBasicAppointmentDataEventToState);
     on<AppointmentEventNavigateTo>(_navigateToEventToState);
+    on<AppointmentEventCancelled>(_cancelledAppointmentEventToState);
   }
 
 
@@ -71,6 +77,32 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   ///It navigates to the specified page.
   void _navigateToEventToState(AppointmentEventNavigateTo event, Emitter<AppointmentState> emit) {
     _navigatorManager.navigateTo(event.routeName, arguments: event.appointment);
+  }
+
+
+  ///This method is called when the event is [AppointmentEventCancelled]
+  ///It cancels the appointment.
+  void _cancelledAppointmentEventToState(AppointmentEventCancelled event, Emitter<AppointmentState> emit) async {
+
+    emit(AppointmentStateLoading());
+
+    final response = await _getAppointmentUseCase.run();
+
+    if(response != null) {
+
+      await showDialog(
+        context: getIt<ContextManager>().context,
+          builder: (BuildContext superContext) => DialogComponent(
+              textTitle: TextConstant.successTitle.text,
+              textQuestion: TextConstant.successRegister.text,
+            )
+        );
+
+    }
+
+
+
+    emit(AppointmentStateHideLoading());
   }
 
 
