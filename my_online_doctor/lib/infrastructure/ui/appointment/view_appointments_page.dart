@@ -5,13 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 //Project imports:
 import 'package:my_online_doctor/application/bloc/appointment/appointment_bloc.dart';
 import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
+import 'package:my_online_doctor/domain/services/appointment_status_color_service.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/min_max_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
-import 'package:my_online_doctor/infrastructure/ui/components/appointment_detail_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/button_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
-import 'package:my_online_doctor/infrastructure/ui/components/reusable_widgets.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/show_error_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
 
@@ -63,19 +62,6 @@ class ViewAppointmentsPage extends StatelessWidget{
 
   Widget _viewAppointmentsRenderView(context){
 
-    // return Padding(
-    //   padding: EdgeInsets.only(top: 20, bottom: 20),
-    //   child: Column(
-    //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //     mainAxisSize: MainAxisSize.max,
-    //     crossAxisAlignment: CrossAxisAlignment.center,
-    //     children: [
-    //       _appointmentStreamBuilder(context),
-    //       _requestAppointmentRenderButton(context),
-    //     ],
-    //   ),
-    // );
-
     return Stack(
       children: [
         Align(
@@ -94,7 +80,7 @@ class ViewAppointmentsPage extends StatelessWidget{
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.12,
+            height: MediaQuery.of(context).size.height * 0.10,
             margin: generalMarginView,
             child:_requestAppointmentRenderButton(context),
           ) 
@@ -156,9 +142,6 @@ class ViewAppointmentsPage extends StatelessWidget{
 
   Widget _renderAppointmentItem(BuildContext context, RequestAppointmentModel item) {
 
-    Color statusColor = _getStatusColor(item.status);
-    
-
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -197,33 +180,13 @@ class ViewAppointmentsPage extends StatelessWidget{
                         Text('Dra. ${item.doctor.firstName} ${item.doctor.firstSurname}'),
                 ],
               ),
-              trailing: Text(item.status, style: TextStyle(color: statusColor)),
+              trailing: Text(item.status, style: TextStyle(color: AppointmentStatusColorService.getAppointmentStatusColor(item.status))),
               onTap: () => context.read<AppointmentBloc>().add(AppointmentEventNavigateTo('/appointment_detail', item)),
               ),
           ],
         )
       )
     );      
-  }
-
-
-  Color _getStatusColor(String status) {
-
-    switch(status){
-        case 'COMPLETADA':
-        case 'INICIADA':
-          return colorGreen;
-
-        case 'SOLICITADA':
-        case 'AGENDADA':
-        case 'ACEPTADA':
-          return colorYellow;
-
-        case 'RECHAZADA':
-        case 'CANCELADA':
-        default:
-          return colorError;
-      }
   }
 
 
