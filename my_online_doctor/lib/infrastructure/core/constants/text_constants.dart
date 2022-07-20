@@ -29,6 +29,7 @@ enum TextConstant {
   acceptAppointment,
   logoutTitle,
   areYouSure,
+  profileTitle,
 
 }
 
@@ -48,6 +49,9 @@ extension TextConstantExtension on TextConstant {
 
       case TextConstant.errorUnauthorized:
         return 'Credenciales inválidas';
+
+      case TextConstant.profileTitle:
+        return 'Perfil de usuario';
 
       case TextConstant.retry:
         return 'Intentar de nuevo';

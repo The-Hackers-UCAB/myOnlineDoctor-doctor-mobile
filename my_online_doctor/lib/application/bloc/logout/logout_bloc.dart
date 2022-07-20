@@ -5,10 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_online_doctor/application/use_cases/logout_patient/logout_patient.dart';
 
 //Project imports
-import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
-import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
-import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
 
 // import '../../../infrastructure/ui/components/dialog_component.dart';
 part 'logout_event.dart';
