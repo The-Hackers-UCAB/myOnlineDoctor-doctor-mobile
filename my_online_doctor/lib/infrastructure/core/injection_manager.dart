@@ -25,31 +25,36 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 
   var context = getIt<ContextManager>().context;
 
-    var response = await showDialog(
-        context: context,
-        builder: (BuildContext dialogContext) => const DialogComponent(
-            textTitle: 'Cita médica',
-            textQuestion: 'Desea atenter su llamada?',
-            cancelButton: true));
+      var response = await showDialog(
+          context: context,
+          builder: (BuildContext dialogContext) => const DialogComponent(
+              textTitle: 'Cita médica',
+              textQuestion: 'Desea atenter su llamada?',
+              cancelButton: true));
 
 
-    if (response != null && response) {
-      await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (buildContext) => CallPage(
-              channelName: message.data['channelName'],
-              role: ClientRole.Broadcaster,
+      if (response != null && response) {
+
+        await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (buildContext) => CallPage(
+                channelName: message.data['payload']['channelName'],
+                role: ClientRole.Broadcaster,
+              ),
             ),
-          ),
-        );
-    } 
+          );
+      }
+
+ 
 
 
   // final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
   // _navigatorManager.navigateToWithReplacement('/bottom_menu');
+  print('//////////////////////////////////////////////////////////////////////////////////////////////////////');
   print('backgroundHandler: ${message.notification!.title}');
   print('Payload: ${message.data}');
+  print('//////////////////////////////////////////////////////////////////////////////////////////////////////');
 }
 
 ///InjectionManager: Class that manages the injection of dependencies.

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 //Project imports:
 import 'package:my_online_doctor/application/bloc/login/login_bloc.dart';
-import 'package:my_online_doctor/domain/models/sign_in_patient_domain_model.dart';
+import 'package:my_online_doctor/domain/models/patient/sign_in_patient_domain_model.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/min_max_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';

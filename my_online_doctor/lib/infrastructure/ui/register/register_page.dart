@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 //Prokect imports:
 import 'package:my_online_doctor/application/bloc/register/register_bloc.dart';
-import 'package:my_online_doctor/domain/models/sign_up_patient_domain_model.dart';
+import 'package:my_online_doctor/domain/models/patient/sign_up_patient_domain_model.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/min_max_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';

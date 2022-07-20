@@ -1,5 +1,5 @@
 //Project import:
-import 'package:my_online_doctor/domain/models/sign_up_patient_domain_model.dart';
+import 'package:my_online_doctor/domain/models/patient/sign_up_patient_domain_model.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/providers/commands/patient/patient_command_provider_contract.dart';
 
