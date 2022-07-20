@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 //Project imports:
 import 'package:my_online_doctor/application/use_cases/appointments/get_appointments_use_case.dart';
+import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
@@ -16,7 +17,7 @@ part 'appointment_state.dart';
 class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
   //Here the StreamController can be a state or a DomainModel
-  final _appointmentStreamController = StreamController<bool>();
+  final _appointmentStreamController = StreamController<RequestAppointmentValue?>();
 
   //Instances of use cases:
   final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
@@ -32,7 +33,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
 
   //Getters
-  Stream<bool> get streamAppointment => _appointmentStreamController.stream;
+  Stream<RequestAppointmentValue?> get streamAppointment => _appointmentStreamController.stream;
 
 
   //Setters
@@ -48,11 +49,19 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
     var response = await _getAppointmentUseCase.run();
 
-    if(response != null){
-      _appointmentStreamController.sink.add(true);
-    }
+    // var play = response['value'];
 
-    _loadView();
+    // if(response['value'] != []){
+
+      var decode = requestAppointmentModelFromJson(response);
+
+      _appointmentStreamController.sink.add(decode);
+
+    // } else {
+
+      _appointmentStreamController.sink.add(null);
+    // }
+
     emit(AppointmentStateHideLoading());
   }
 
@@ -67,7 +76,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   //Private methods:
 
   //To load the view:
-  void _loadView() => _appointmentStreamController.sink.add(true);
+  // void _loadView() => _appointmentStreamController.sink.add(true);
 
 
   //To show the dialog:
