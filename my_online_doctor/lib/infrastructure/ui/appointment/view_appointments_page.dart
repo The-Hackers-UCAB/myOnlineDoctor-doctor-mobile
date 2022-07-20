@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 //Project imports:
 import 'package:my_online_doctor/application/bloc/appointment/appointment_bloc.dart';
+import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/min_max_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
@@ -79,7 +80,8 @@ class ViewAppointmentsPage extends StatelessWidget{
           alignment: Alignment.center,
           child: SingleChildScrollView(
             padding: generalMarginView,
-            child: Container(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.75,
               child: _appointmentStreamBuilder(context),
             ),
           ),
@@ -87,6 +89,7 @@ class ViewAppointmentsPage extends StatelessWidget{
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
+            height: MediaQuery.of(context).size.height * 0.12,
             margin: generalMarginView,
             child:_requestAppointmentRenderButton(context),
           ) 
@@ -100,9 +103,9 @@ class ViewAppointmentsPage extends StatelessWidget{
   }
 
   //StreamBuilder for the Login Page
-  Widget _appointmentStreamBuilder(BuildContext builderContext) => StreamBuilder<bool>(
+  Widget _appointmentStreamBuilder(BuildContext builderContext) => StreamBuilder<RequestAppointmentValue?>(
     stream: builderContext.read<AppointmentBloc>().streamAppointment,
-    builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+    builder: (BuildContext context, AsyncSnapshot<RequestAppointmentValue?> snapshot) {
 
       if(snapshot.hasData) {
         return const Center(child: CircularProgressIndicator(color: colorError,));
