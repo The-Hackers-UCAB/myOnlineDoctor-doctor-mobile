@@ -81,9 +81,12 @@ class ViewAppointmentsPage extends StatelessWidget{
           alignment: Alignment.center,
           child: SingleChildScrollView(
             padding: generalMarginView,
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.75,
-              child: _appointmentStreamBuilder(context),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.65,
+                child: _appointmentStreamBuilder(context),
+              ),
             ),
           ),
         ),
@@ -110,8 +113,9 @@ class ViewAppointmentsPage extends StatelessWidget{
 
       if(snapshot.hasData) {
         if(snapshot.data!.isNotEmpty) {
-          
-          return const Center(child: CircularProgressIndicator(color: colorError,));
+
+          return _renderMainBody(context, snapshot.data!);
+          // return const Center(child: CircularProgressIndicator(color: colorError,));
 
         } else {
           return Container(
@@ -119,7 +123,6 @@ class ViewAppointmentsPage extends StatelessWidget{
             child: const ShowErrorComponent(errorImagePath:'assets/images/request_your_appointment.png')
           );
         }
-        // return _loginRenderView(context);
       } 
 
       return const LoadingComponent();
@@ -136,7 +139,94 @@ class ViewAppointmentsPage extends StatelessWidget{
       // actionButton:  () => _signIn(context),
     )
   );
-  
+
+
+  Widget _renderMainBody(BuildContext context, List<RequestAppointmentModel> data) => Padding(
+    padding: const EdgeInsets.only(top: 20, bottom: 20),
+    child: ListView.builder(
+      itemCount: data.length,
+      shrinkWrap: true,
+      itemBuilder: (listContext, index) => _renderAppointmentItem(context, data[index]),
+    ),
+    
+  );
+
+
+
+  Widget _renderAppointmentItem(BuildContext context, RequestAppointmentModel item) {
+
+    late Color statusColor;
+    
+      switch(item.status){
+        case 'COMPLETADA':
+        case 'INICIADA':
+          statusColor = colorGreen;
+          break;
+
+        case 'SOLICITADA':
+        case 'AGENDADA':
+        case 'ACEPTADA':
+          statusColor = colorYellow;
+          break;
+
+        case 'RECHAZADA':
+        case 'CANCELADA':
+          statusColor = colorError;
+          break;
+
+        default:
+          statusColor = colorPrimary;
+          break;
+      }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.4),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: const Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      margin:
+          const EdgeInsets.only(left: 10, top: 0, right: 10, bottom: 20),
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ListTile(
+              leading: ClipOval(
+                child: Image.asset('assets/images/doctor_logo.png'
+                  , width: 40, height: 40, fit: BoxFit.cover)), 
+
+              title: Text(item.specialty.specialty),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                    item.doctor.gender == 'M' ? Text('Dr. ${item.doctor.firstName} ${item.doctor.firstSurname}'): 
+                        Text('Dra. ${item.doctor.firstName} ${item.doctor.firstSurname}'),
+                    
+                ],
+              ),
+              
+              trailing: Text(item.status, style: TextStyle(color: statusColor)),
+            ),
+          ],
+        )
+      )
+    );      
+  }
 
 
 }

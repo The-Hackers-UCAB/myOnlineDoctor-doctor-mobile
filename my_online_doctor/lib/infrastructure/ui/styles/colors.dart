@@ -10,3 +10,5 @@ const colorInactive = Color(0xFF7b7c7c);
 const colorError = Color(0xFFC5032B);
 const colorBlack = Color(0xFF000B30);
 const colorWhite = Color(0xFFFFFFFF);
+const colorGreen = Color.fromARGB(255, 16, 250, 16);
+const colorYellow = Color.fromARGB(255, 212, 197, 28);  

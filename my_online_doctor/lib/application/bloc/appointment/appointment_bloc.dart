@@ -49,21 +49,19 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
     var response = await _getAppointmentUseCase.run();
 
-    // var decode = requestAppointmentModelFromJson(response);
+    var decode = requestAppointmentModelFromJson(response);
 
-    // if(decode.value.isNotEmpty) {
+    if(decode.value.isNotEmpty) {
 
-    //   var appointmentList =decode.value.map((e) => e).toList();
+      var appointmentList = decode.value.map((e) => e).toList();
 
-    //   _appointmentStreamController.sink.add(appointmentList);
+      _appointmentStreamController.sink.add(appointmentList);
 
-    // } else {
+    } else {
 
-    //   _appointmentStreamController.sink.add([]);
+      _appointmentStreamController.sink.add([]);
 
-    // }
-
-    _appointmentStreamController.sink.add([]);
+    }
 
     emit(AppointmentStateHideLoading());
   }
