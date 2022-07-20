@@ -5,9 +5,9 @@ part of 'logout_bloc.dart';
 abstract class LogoutEvent {}
 
 
-class LogoutEventNavigateTo extends LogoutEvent {
+class LogoutEventNavigateToWith extends LogoutEvent {
   final String routeName;
-  LogoutEventNavigateTo(this.routeName);
+  LogoutEventNavigateToWith(this.routeName);
 }
 
 class LogoutEventLogoutPatient extends LogoutEvent {}

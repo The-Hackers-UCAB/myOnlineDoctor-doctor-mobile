@@ -42,7 +42,9 @@ class LogoutPage extends StatelessWidget {
       var dialogResponse = await _showDialog(context);
 
       if(dialogResponse != null && dialogResponse){
-          context.read<LogoutBloc>().add(LogoutEventLogoutPatient());
+        context.read<LogoutBloc>().add(LogoutEventLogoutPatient());
+      } else {
+        context.read<LogoutBloc>().add(LogoutEventNavigateToWith('/bottom_menu'));
       }
 
     });

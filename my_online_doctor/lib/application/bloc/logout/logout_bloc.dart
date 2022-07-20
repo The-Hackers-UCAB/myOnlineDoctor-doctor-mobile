@@ -30,7 +30,7 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
  //Constructor
   //You have to declare the StateInitial as the first state
   LogoutBloc() : super(LogoutStateInitial()) {
-    on<LogoutEventNavigateTo>(_navigateToEventToState);
+    on<LogoutEventNavigateToWith>(_navigateToEventToState);
     on<LogoutEventLogoutPatient>(_logoutPatientEventToState);
 
   }
@@ -44,8 +44,8 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
 
   ///This method is called when the event is [LogoutEventNavigateTo]
   ///It navigates to the specified page.
-  void _navigateToEventToState(LogoutEventNavigateTo event, Emitter<LogoutState> emit) {
-    _navigatorManager.navigateTo(event.routeName);
+  void _navigateToEventToState(LogoutEventNavigateToWith event, Emitter<LogoutState> emit) {
+    _navigatorManager.navigateToWithReplacement(event.routeName);
   }
 
 
