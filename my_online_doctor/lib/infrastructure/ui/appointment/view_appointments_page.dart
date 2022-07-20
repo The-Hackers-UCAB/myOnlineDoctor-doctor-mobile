@@ -11,6 +11,7 @@ import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.
 import 'package:my_online_doctor/infrastructure/ui/components/button_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/reusable_widgets.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/show_error_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
 
 class ViewAppointmentsPage extends StatelessWidget{
@@ -103,12 +104,21 @@ class ViewAppointmentsPage extends StatelessWidget{
   }
 
   //StreamBuilder for the Login Page
-  Widget _appointmentStreamBuilder(BuildContext builderContext) => StreamBuilder<RequestAppointmentValue?>(
+  Widget _appointmentStreamBuilder(BuildContext builderContext) => StreamBuilder<List<RequestAppointmentModel>>(
     stream: builderContext.read<AppointmentBloc>().streamAppointment,
-    builder: (BuildContext context, AsyncSnapshot<RequestAppointmentValue?> snapshot) {
+    builder: (BuildContext context, AsyncSnapshot<List<RequestAppointmentModel>> snapshot) {
 
       if(snapshot.hasData) {
-        return const Center(child: CircularProgressIndicator(color: colorError,));
+        if(snapshot.data!.isNotEmpty) {
+          
+          return const Center(child: CircularProgressIndicator(color: colorError,));
+
+        } else {
+          return Container(
+            margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.1),
+            child: const ShowErrorComponent(errorImagePath:'assets/images/request_your_appointment.png')
+          );
+        }
         // return _loginRenderView(context);
       } 
 

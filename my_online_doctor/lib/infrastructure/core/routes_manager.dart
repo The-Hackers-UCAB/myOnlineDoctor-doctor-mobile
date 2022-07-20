@@ -9,6 +9,7 @@ import 'package:my_online_doctor/infrastructure/ui/login/login_page.dart';
 import 'package:my_online_doctor/infrastructure/ui/logout/logout_page.dart';
 import 'package:my_online_doctor/infrastructure/ui/patient_profile/patient_profile_page.dart';
 import 'package:my_online_doctor/infrastructure/ui/register/register_page.dart';
+import 'package:my_online_doctor/infrastructure/ui/video_call/call.dart';
 
 ///RoutesManager: Class that manages the routes.
 class RoutesManager {
@@ -51,6 +52,9 @@ class RoutesManager {
 
         case LogoutPage.routeName:
           return MaterialPageRoute(builder: (context) => LogoutPage());
+
+        case CallPage.routeName:
+          return MaterialPageRoute(builder: (context) => CallPage());
 
       default:
         return MaterialPageRoute(builder: (context) => LoginPage());
