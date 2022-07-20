@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_online_doctor/application/use_cases/login_patient/login_patient.dart';
 
 //Project imports
-import 'package:my_online_doctor/domain/models/sign_in_patient_domain_model.dart';
+import 'package:my_online_doctor/domain/models/patient/sign_in_patient_domain_model.dart';
+import 'package:my_online_doctor/infrastructure/core/constants/repository_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
+import 'package:my_online_doctor/infrastructure/providers/local_storage/local_storage_provider.dart';
 import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
 part 'login_event.dart';
 part 'login_state.dart';
@@ -36,8 +38,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
 
+  //Variables:
+  String _firebaseToken = '';
+
+
   //Getters
   Stream<bool> get streamLogin => _loginStreamController.stream;
+  String get firebaseToken => _firebaseToken;
 
 
   //Setters
@@ -47,9 +54,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   ///This method is called when the event is [LoginEventFetchBasicData]
   ///It fetches the basic data of the Login page.
-  void _fetchBasicLoginDataEventToState(LoginEvent event, Emitter<LoginState> emit) {
+  void _fetchBasicLoginDataEventToState(LoginEvent event, Emitter<LoginState> emit) async {
 
     emit(LoginStateLoading());
+
+    _firebaseToken = await LocalStorageProvider.readData(RepositoryPathConstant.firebaseToken.path);
+
     _loadView();
     emit(LoginStateHideLoading());
   }

@@ -1,13 +1,18 @@
 //Package imports:
 // ignore_for_file: prefer_typing_uninitialized_variables, must_be_immutable
 
+import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/firebase-handler/local_notifications.dart';
+import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
 
 //Project imports:
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
+import 'package:my_online_doctor/infrastructure/ui/video_call/call.dart';
 
 class BottomMenuComponent extends StatefulWidget {
   static const routeName = '/bottom_menu';
@@ -31,7 +36,7 @@ class _BottomMenuComponent extends State<BottomMenuComponent> {
   _BottomMenuComponent();
 
   @override
-  void initState() {
+  void initState()  {
     localNotificationService.initialize();
     super.initState();
     //Terminated state
@@ -39,17 +44,27 @@ class _BottomMenuComponent extends State<BottomMenuComponent> {
       if (message != null) {
         localNotificationService.showNotificationOnForeground(message);
       }
+      print('//////////////////////////////////////////////////////////////////////////////////////////////////////');
       print('getInitialMessage: ${message!.data}');
+      print('//////////////////////////////////////////////////////////////////////////////////////////////////////');
     });
     //Foreground state
-    FirebaseMessaging.onMessage.listen((message) {
+    FirebaseMessaging.onMessage.listen((message) async {
       localNotificationService.showNotificationOnForeground(message);
+
+     
+
+      print('//////////////////////////////////////////////////////////////////////////////////////////////////////');
       print('onMessage: ${message.data['payload']}');
+      print('//////////////////////////////////////////////////////////////////////////////////////////////////////');
     });
     //Background state
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
       localNotificationService.showNotificationOnForeground(message);
-      print('onBackgroundMessage: ${message.data}');
+
+      print('//////////////////////////////////////////////////////////////////////////////////////////////////////');
+      print('onBackgroundMessage: ${message.data['payload']}');
+      print('//////////////////////////////////////////////////////////////////////////////////////////////////////');
     });
   }
 

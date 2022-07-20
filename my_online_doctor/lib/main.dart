@@ -13,13 +13,15 @@ import 'package:my_online_doctor/infrastructure/ui/login/login_page.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/theme.dart';
 import 'package:my_online_doctor/infrastructure/utils/device_util.dart';
 
+import './infrastructure/ui/video_call/index.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 //This the main function of the app.
 void main() {
   InjectionManager.setupInjections(); //Here we setup the injections.
 
-
-  FlavorManager.make(Flavor.PRODUCTION); //Here we set the flavor5 that we want to use.
-
+  FlavorManager.make(
+      Flavor.PRODUCTION); //Here we set the flavor5 that we want to use.
 
   runApp(const MyOnlineDoctorApp()); //Here we run the app.
 }
@@ -40,8 +42,8 @@ class MyOnlineDoctorApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorKey: NavigatorServiceContract.get().navigatorKey,
       theme: mainTheme(),
-      onGenerateRoute: (RouteSettings settings) =>
-          RoutesManager.getOnGenerateRoute(settings),
+      onGenerateRoute: (RouteSettings settings, ) =>
+          RoutesManager.getOnGenerateRoute(settings, model: settings.arguments),
       home: _checkInternet(),
     );
   }
@@ -52,6 +54,7 @@ class MyOnlineDoctorApp extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data!) {
+            _requestCallPermisions();
             return LoginPage();
             //TO DO: Add the home page.
             // return HomePage();
@@ -65,5 +68,15 @@ class MyOnlineDoctorApp extends StatelessWidget {
         }
       },
     );
+  }
+
+  Future _requestCallPermisions() async {
+    await _handleCameraAndMic(Permission.camera);
+    await _handleCameraAndMic(Permission.microphone);
+  }
+
+  Future<void> _handleCameraAndMic(Permission permission) async {
+    final status = await permission.request();
+    print(status.toString());
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 //Project imports:
 import 'package:my_online_doctor/application/use_cases/appointments/get_appointments_use_case.dart';
+import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
@@ -16,7 +17,7 @@ part 'appointment_state.dart';
 class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
   //Here the StreamController can be a state or a DomainModel
-  final _appointmentStreamController = StreamController<bool>();
+  final _appointmentStreamController = StreamController<List<RequestAppointmentModel>>();
 
   //Instances of use cases:
   final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
@@ -32,7 +33,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
 
   //Getters
-  Stream<bool> get streamAppointment => _appointmentStreamController.stream;
+  Stream<List<RequestAppointmentModel>> get streamAppointment => _appointmentStreamController.stream;
 
 
   //Setters
@@ -48,11 +49,20 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
     var response = await _getAppointmentUseCase.run();
 
-    if(response != null){
-      _appointmentStreamController.sink.add(true);
+    var decode = requestAppointmentModelFromJson(response);
+
+    if(decode.value.isNotEmpty) {
+
+      var appointmentList = decode.value.map((e) => e).toList();
+
+      _appointmentStreamController.sink.add(appointmentList);
+
+    } else {
+
+      _appointmentStreamController.sink.add([]);
+
     }
 
-    _loadView();
     emit(AppointmentStateHideLoading());
   }
 
@@ -60,14 +70,14 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   ///This method is called when the event is [AppointmentEventNavigateTo]
   ///It navigates to the specified page.
   void _navigateToEventToState(AppointmentEventNavigateTo event, Emitter<AppointmentState> emit) {
-    _navigatorManager.navigateTo(event.routeName);
+    _navigatorManager.navigateTo(event.routeName, arguments: event.appointment);
   }
 
 
   //Private methods:
 
   //To load the view:
-  void _loadView() => _appointmentStreamController.sink.add(true);
+  // void _loadView() => _appointmentStreamController.sink.add(true);
 
 
   //To show the dialog:

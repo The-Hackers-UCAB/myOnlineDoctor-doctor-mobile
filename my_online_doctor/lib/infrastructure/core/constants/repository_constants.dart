@@ -31,8 +31,10 @@ extension RepositoryConstantExtension on RepositoryConstant {
 enum RepositoryPathConstant {
   register,
   login,
+  logout,
   getAppointments,
   cookie,
+  firebaseToken,
 }
 
 extension RepositoryPathConstantExtension on RepositoryPathConstant {
@@ -46,11 +48,17 @@ extension RepositoryPathConstantExtension on RepositoryPathConstant {
       case RepositoryPathConstant.login:
         return 'api/auth/login';
 
+      case RepositoryPathConstant.logout:
+        return 'api/auth/logout';
+
       case RepositoryPathConstant.getAppointments:
         return 'api/patient/appointments?pageIndex=0&pageSize=5';
 
       case RepositoryPathConstant.cookie:
         return 'cookie';
+
+      case RepositoryPathConstant.firebaseToken:
+        return 'firebaseToken';
 
     }
   }
