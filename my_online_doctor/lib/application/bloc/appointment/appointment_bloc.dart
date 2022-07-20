@@ -70,7 +70,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   ///This method is called when the event is [AppointmentEventNavigateTo]
   ///It navigates to the specified page.
   void _navigateToEventToState(AppointmentEventNavigateTo event, Emitter<AppointmentState> emit) {
-    _navigatorManager.navigateTo(event.routeName, model: event.appointment);
+    _navigatorManager.navigateTo(event.routeName, arguments: event.appointment);
   }
 
 
