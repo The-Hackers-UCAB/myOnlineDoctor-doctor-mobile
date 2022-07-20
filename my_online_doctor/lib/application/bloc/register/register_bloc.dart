@@ -13,7 +13,6 @@ import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
-import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
 part 'register_event.dart';
 part 'register_state.dart';
 
