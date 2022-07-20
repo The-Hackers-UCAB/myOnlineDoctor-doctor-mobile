@@ -51,7 +51,6 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
   void _logoutPatientEventToState(LogoutEventLogoutPatient event, Emitter<LogoutState> emit) async {
 
     emit(LogoutStateLoading());
-    _loadView();
     final response =  await _logoutPatientUseCase.run();
     
     
@@ -64,6 +63,7 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
       return;
     }
     
+    _loadView();
     emit(LogoutStateHideLoading());
   }
 

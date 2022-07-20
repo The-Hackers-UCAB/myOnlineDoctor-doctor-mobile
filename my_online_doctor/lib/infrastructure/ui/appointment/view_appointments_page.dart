@@ -38,7 +38,7 @@ class ViewAppointmentsPage extends StatelessWidget{
   ///Widget AppBar
   PreferredSizeWidget _renderAppBar(BuildContext context) => AppBar( 
     backgroundColor: colorPrimary,
-    title: const Text('Citas Médicas'),
+    title: Text(TextConstant.appointmentTitle.text),
     centerTitle: true,
   );
 

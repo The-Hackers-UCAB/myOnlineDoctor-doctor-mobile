@@ -24,6 +24,7 @@ enum TextConstant {
   sorry,
   expiredCookie,
   requestAppointment,
+  appointmentTitle,
 }
 
 extension TextConstantExtension on TextConstant {
@@ -99,6 +100,9 @@ extension TextConstantExtension on TextConstant {
 
       case TextConstant.requestAppointment:
         return 'Solicitar cita';
+
+      case TextConstant.appointmentTitle:
+        return 'Citas Médica';
 
     }
   }
