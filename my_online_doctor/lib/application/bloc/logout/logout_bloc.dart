@@ -1,5 +1,6 @@
 //Package imports:
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_online_doctor/application/use_cases/logout_patient/logout_patient.dart';
 
@@ -8,6 +9,8 @@ import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
+
+import '../../../infrastructure/ui/components/dialog_component.dart';
 part 'logout_event.dart';
 part 'logout_state.dart';
 
@@ -49,6 +52,18 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
   ///This method is called when the event is [LogoutEventLogoutPatient]
   ///It logs in the patient.
   void _logoutPatientEventToState(LogoutEventLogoutPatient event, Emitter<LogoutState> emit) async {
+
+      var context = getIt<ContextManager>().context;
+
+
+      // mano esto codigo hace que explote el beta 
+
+      // var response2 = await showDialog(
+      //     context: context,
+      //     builder: (BuildContext dialogContext) => const DialogComponent(
+      //         textTitle: 'Cita médica',
+      //         textQuestion: 'Desea atenter su llamada?',
+      //         cancelButton: true));
 
     emit(LogoutStateLoading());
     final response =  await _logoutPatientUseCase.run();
