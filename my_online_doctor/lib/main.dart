@@ -43,7 +43,7 @@ class MyOnlineDoctorApp extends StatelessWidget {
       navigatorKey: NavigatorServiceContract.get().navigatorKey,
       theme: mainTheme(),
       onGenerateRoute: (RouteSettings settings, ) =>
-          RoutesManager.getOnGenerateRoute(settings, model: settings.arguments),
+          RoutesManager.getOnGenerateRoute(settings, arguments: settings.arguments),
       home: _checkInternet(),
     );
   }

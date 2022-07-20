@@ -16,7 +16,7 @@ import 'package:my_online_doctor/infrastructure/ui/video_call/call.dart';
 ///RoutesManager: Class that manages the routes.
 class RoutesManager {
 
-  static Route getOnGenerateRoute(RouteSettings settings, {Object? model}) {
+  static Route getOnGenerateRoute(RouteSettings settings, {Object? arguments}) {
 
     switch (settings.name) {
       
@@ -56,10 +56,10 @@ class RoutesManager {
           return MaterialPageRoute(builder: (context) => LogoutPage());
 
         case CallPage.routeName:
-          return MaterialPageRoute(builder: (context) => CallPage());
+          return MaterialPageRoute(builder: (context) => CallPage(channelName: arguments! as String,));
 
         case AppointmentDetailPage.routeName:
-          return MaterialPageRoute(builder: (context) => AppointmentDetailPage(appointment: model! as RequestAppointmentModel));
+          return MaterialPageRoute(builder: (context) => AppointmentDetailPage(appointment: arguments! as RequestAppointmentModel));
 
       default:
         return MaterialPageRoute(builder: (context) => LoginPage());

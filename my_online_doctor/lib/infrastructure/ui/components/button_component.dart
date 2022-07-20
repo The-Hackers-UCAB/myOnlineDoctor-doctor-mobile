@@ -6,7 +6,7 @@ enum ButtonComponentStyle {
   primary,
   secondary,
   canceled,
-  acepted,
+  accepted,
 }
 
 extension ColorExtension on ButtonComponentStyle {
@@ -18,7 +18,7 @@ extension ColorExtension on ButtonComponentStyle {
         return colorSecondary;
       case ButtonComponentStyle.canceled:
         return colorError;
-      case ButtonComponentStyle.acepted:
+      case ButtonComponentStyle.accepted:
         return colorGreen;
       
     }
