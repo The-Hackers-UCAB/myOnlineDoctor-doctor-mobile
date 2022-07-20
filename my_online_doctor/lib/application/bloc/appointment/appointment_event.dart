@@ -24,28 +24,7 @@ class AppointmentEventCreated extends AppointmentEvent {}
 
 class AppointmentEventRated extends AppointmentEvent {}
 
-class AppointmentEventCancelled extends AppointmentEvent {
-  final CancelAppointmentModel appointment;
-  final BuildContext context;
-
-  AppointmentEventCancelled(this.appointment, this.context);
-}
-
-class AppointmentEventAccepted extends AppointmentEvent {
-  final AcceptAppointmentModel appointment;
-  final BuildContext context;
-
-  AppointmentEventAccepted(this.appointment, this.context);
-}
-
 class AppointmentEventRequested extends AppointmentEvent {}
-
-class AppointmentEventRejected extends AppointmentEvent {
-  final RejectAppointmentModel appointment;
-  final BuildContext context;
-
-  AppointmentEventRejected(this.appointment, this.context);
-}
 
 class AppointmentEventStarted extends AppointmentEvent {}
 

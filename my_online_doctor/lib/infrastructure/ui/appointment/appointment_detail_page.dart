@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:my_online_doctor/application/bloc/appointment/appointment_bloc.dart';
+import 'package:my_online_doctor/application/bloc/appointment_detail/appointment_detail_bloc.dart';
 import 'package:my_online_doctor/domain/models/appointment/accept_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/cancel_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/reject_appointment_model.dart';
@@ -14,6 +14,7 @@ import 'package:my_online_doctor/infrastructure/core/constants/min_max_constants
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/button_component.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/reusable_widgets.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
 
@@ -36,12 +37,12 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       lazy:  false,
-      create: (context) => AppointmentBloc(),
-      child: BlocBuilder<AppointmentBloc, AppointmentState>(
+      create: (context) => AppointmentDetailBloc(),
+      child: BlocBuilder<AppointmentDetailBloc, AppointmentDetailState>(
         builder: (context, state) {
           return BaseUIComponent(
             appBar: _renderAppBar(context),
-            body: _renderBody(context),
+            body: _body(context, state),
             bottomNavigationBar: _renderBottomNavigationBar(context) ,
           );
         },
@@ -63,7 +64,47 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
   Widget _renderBottomNavigationBar(BuildContext context) => 
     Container(width: double.infinity, height: MediaQuery.of(context).size.height * 0.05, color: colorSecondary);
 
-  Widget _renderBody(BuildContext context) => Scaffold(
+
+
+  //Widget Body
+  Widget _body(BuildContext context, AppointmentDetailState state) {
+    
+    if(state is AppointmentDetailStateInitial) {
+      context.read<AppointmentDetailBloc>().add(AppointmentDetailEventFetchBasicData(widget.appointment));
+    }
+
+    return Stack(
+      children: [
+        if(state is! AppointmentDetailStateInitial) _appointmentDetailStreamBuilder(context),
+        if(state is AppointmentDetailStateInitial || state is AppointmentDetailStateLoading) const LoadingComponent(),
+      ],
+    );
+  }
+
+
+
+  //StreamBuilder for the Login Page
+  Widget _appointmentDetailStreamBuilder(BuildContext builderContext) => StreamBuilder<RequestAppointmentModel>(
+    stream: builderContext.read<AppointmentDetailBloc>().streamAppointmentDetail,
+    builder: (BuildContext context, AsyncSnapshot<RequestAppointmentModel> snapshot) {
+
+      if(snapshot.hasData) {
+
+        return _renderAppointmentBody(context);
+        
+      } 
+
+      return const LoadingComponent();
+    }
+  );
+
+
+
+
+
+
+
+  Widget _renderAppointmentBody(BuildContext context) => Scaffold(
     body: ListView(
       physics: const BouncingScrollPhysics(),
       children: [
@@ -90,7 +131,7 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
             height: MediaQuery.of(context).size.height * 0.10,
             margin: generalMarginView,
             child:  _appointmentRenderButton(context, ButtonComponentStyle.canceled, 
-              TextConstant.cancelAppointment.text, AppointmentEventCancelled(CancelAppointmentModel(id: widget.appointment.id), context)),
+              TextConstant.cancelAppointment.text, AppointmentDetailEventCancelled(CancelAppointmentModel(id: widget.appointment.id), context)),
             ),
         if(widget.appointment.status == 'AGENDADA')  Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -101,7 +142,7 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
                 height: MediaQuery.of(context).size.height * 0.10,
                 margin: generalMarginView,
                 child: _appointmentRenderButton(context,ButtonComponentStyle.canceled, 
-                  TextConstant.rejectAppointment.text, AppointmentEventRejected(RejectAppointmentModel(id: widget.appointment.id), context)),
+                  TextConstant.rejectAppointment.text, AppointmentDetailEventRejected(RejectAppointmentModel(id: widget.appointment.id), context)),
               ),
             ),
             Expanded(
@@ -110,7 +151,7 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
                 height: MediaQuery.of(context).size.height * 0.10,
                 margin: generalMarginView,
                 child: _appointmentRenderButton(context,ButtonComponentStyle.accepted, 
-                TextConstant.acceptAppointment.text, AppointmentEventAccepted(AcceptAppointmentModel(id: widget.appointment.id), context)),
+                TextConstant.acceptAppointment.text, AppointmentDetailEventAccepted(AcceptAppointmentModel(id: widget.appointment.id), context)),
               ),
             ),
           ]
@@ -224,14 +265,14 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
 
     Widget _appointmentRenderButton(BuildContext context, ButtonComponentStyle buttonComponentStyle, String title,
-      AppointmentEvent event) => Container(
+      AppointmentDetailEvent event) => Container(
       margin: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 25),
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.065,
       child:  ButtonComponent(
         style: buttonComponentStyle,
         title: title,
-        actionButton:  () => context.read<AppointmentBloc>().add(event),
+        actionButton:  () => context.read<AppointmentDetailBloc>().add(event),
       )
   );
 
