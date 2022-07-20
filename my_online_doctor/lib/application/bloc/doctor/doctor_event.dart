@@ -12,7 +12,7 @@ class DoctorEventNavigateTo extends DoctorEvent {
   DoctorEventNavigateTo(this.routeName);
 }
 
-class DoctorEventSearch extends DoctorEvent {
+class DoctorEventSearchDoctor extends DoctorEvent {
   final String search;
-  DoctorEventSearch(this.search);
+  DoctorEventSearchDoctor(this.search);
 }
