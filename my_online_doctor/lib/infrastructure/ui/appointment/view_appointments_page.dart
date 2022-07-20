@@ -123,7 +123,7 @@ class ViewAppointmentsPage extends StatelessWidget{
     height: MediaQuery.of(context).size.height * 0.065,
     child:  ButtonComponent(
       title: TextConstant.requestAppointment.text,
-      // actionButton:  () => _signIn(context),
+      actionButton:  () => context.read<AppointmentBloc>().add(AppointmentEventNavigateToWith('/bottom_menu',2)),
     )
   );
 

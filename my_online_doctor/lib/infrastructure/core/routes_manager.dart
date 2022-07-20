@@ -49,7 +49,7 @@ class RoutesManager {
             SearchDoctorPage(),
             LogoutPage(),
           ],
-          index: 1,
+          index: arguments != null ? arguments as int : 1,
         ));
 
         case LogoutPage.routeName:

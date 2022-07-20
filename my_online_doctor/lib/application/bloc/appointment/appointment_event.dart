@@ -13,6 +13,13 @@ class AppointmentEventNavigateTo extends AppointmentEvent {
   AppointmentEventNavigateTo(this.routeName, this.appointment);
 }
 
+class AppointmentEventNavigateToWith extends AppointmentEvent {
+  final String routeName;
+  final Object? arguments;
+  AppointmentEventNavigateToWith(this.routeName, this.arguments);
+
+}
+
 class AppointmentEventCreated extends AppointmentEvent {}
 
 class AppointmentEventRated extends AppointmentEvent {}

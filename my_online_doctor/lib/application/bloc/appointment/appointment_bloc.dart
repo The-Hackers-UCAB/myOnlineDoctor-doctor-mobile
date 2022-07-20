@@ -44,6 +44,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     on<AppointmentEventCancelled>(_cancelledAppointmentEventToState);
     on<AppointmentEventRejected>(_rejectedAppointmentEventToState);
     on<AppointmentEventAccepted>(_acceptedAppointmentEventToState);
+    on<AppointmentEventNavigateToWith>(_navigateToWithEventToState);
   }
 
 
@@ -62,23 +63,22 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
     emit(AppointmentStateLoading());
 
-    // var response = await _getAppointmentUseCase.run();
+    var response = await _getAppointmentUseCase.run();
 
-    // var decode = requestAppointmentModelFromJson(response);
+    var decode = requestAppointmentModelFromJson(response);
 
-    // if(decode.value.isNotEmpty) {
+    if(decode.value.isNotEmpty) {
 
-    //   var appointmentList = decode.value.map((e) => e).toList();
+      var appointmentList = decode.value.map((e) => e).toList();
 
-    //   _appointmentStreamController.sink.add(appointmentList);
+      _appointmentStreamController.sink.add(appointmentList);
 
-    // } else {
+    } else {
 
-    //   _appointmentStreamController.sink.add([]);
+      _appointmentStreamController.sink.add([]);
 
-    // }
+    }
 
-    _appointmentStreamController.sink.add([]);
 
     emit(AppointmentStateHideLoading());
   }
@@ -88,6 +88,13 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   ///It navigates to the specified page.
   void _navigateToEventToState(AppointmentEventNavigateTo event, Emitter<AppointmentState> emit) {
     _navigatorManager.navigateTo(event.routeName, arguments: event.appointment);
+  }
+
+
+  ///This method is called when the event is [AppointmentEventNavigateToWith]
+  ///It navigates to the specified page.
+  void _navigateToWithEventToState(AppointmentEventNavigateToWith event, Emitter<AppointmentState> emit) {
+    _navigatorManager.navigateToWithReplacement(event.routeName, arguments: event.arguments);
   }
 
 
@@ -102,7 +109,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     if(response != null) {
 
       await showDialog(
-        context: getIt<ContextManager>().context,
+        context: event.context,
           builder: (BuildContext superContext) => DialogComponent(
               textTitle: TextConstant.successTitle.text,
               textQuestion: TextConstant.successCancelAppointment.text,
@@ -133,7 +140,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     if(response != null) {
 
       await showDialog(
-        context: getIt<ContextManager>().context,
+        context: event.context,
           builder: (BuildContext superContext) => DialogComponent(
               textTitle: TextConstant.successTitle.text,
               textQuestion: TextConstant.successRejectAppointment.text,
@@ -161,7 +168,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     if(response != null) {
 
       await showDialog(
-        context: getIt<ContextManager>().context,
+        context: event.context,
           builder: (BuildContext superContext) => DialogComponent(
               textTitle: TextConstant.successTitle.text,
               textQuestion: TextConstant.successAcceptAppointment.text,
