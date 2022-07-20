@@ -26,6 +26,9 @@ enum TextConstant {
   requestAppointment,
   appointmentTitle,
   cancelAppointment,
+  acceptAppointment,
+  logoutTitle,
+  areYouSure,
 
 }
 
@@ -108,6 +111,15 @@ extension TextConstantExtension on TextConstant {
 
       case TextConstant.cancelAppointment:
         return 'Cancelar cita';
+
+      case TextConstant.acceptAppointment:
+        return 'Aceptar cita';
+
+      case TextConstant.logoutTitle:
+        return 'Cerrar sesión';
+
+      case TextConstant.areYouSure:
+        return '¿Está seguro?';
 
 
     }

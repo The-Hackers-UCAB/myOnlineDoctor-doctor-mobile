@@ -20,8 +20,8 @@ class DialogComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       elevation: 8,
-      child: _dialogContent(context),
       backgroundColor: colorSecondary,
+      child: _dialogContent(context),
     );
   }
 
@@ -49,7 +49,7 @@ class DialogComponent extends StatelessWidget {
       padding: EdgeInsets.only(top: topMargin, right: latMargin, left: latMargin, bottom: topMargin),
       child: Text(
         title ? textTitle! : textQuestion!,
-        style: title ? TextStyle(fontSize: 18, fontWeight: FontWeight.bold) : TextStyle(fontSize: 14),
+        style: title ? const TextStyle(fontSize: 18, fontWeight: FontWeight.bold) : const TextStyle(fontSize: 14),
         // style: title ? Theme.of(context).dialogTheme.titleTextStyle : Theme.of(context).dialogTheme.contentTextStyle,
         textAlign: TextAlign.center,
       ),
@@ -84,7 +84,7 @@ class DialogComponent extends StatelessWidget {
       decoration: BoxDecoration(
           color: cancel ? Colors.white : colorPrimary,
           border: Border.all(
-            color: colorPrimary,
+            color: cancel ? Colors.white : colorPrimary,
           ),
           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(cancel ? 5 : cancelButton ? 0:5), bottomRight: Radius.circular(cancel ? 0 : 5))),
       height: 40,

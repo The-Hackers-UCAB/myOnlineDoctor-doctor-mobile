@@ -81,13 +81,33 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
         _buildAppointmentDuration(context),
         heightSeparator(context, 0.01),
         _buildAppointmentType(context),
-        heightSeparator(context, 0.03),
+        heightSeparator(context, 0.01),
         _buildAppointmentDescription(context),
         if(widget.appointment.status == 'ACEPTADA')  Container(
             height: MediaQuery.of(context).size.height * 0.10,
             margin: generalMarginView,
-            child:_canceledAppointmentRenderButton(context),
-          
+            child:  _appointmentRenderButton(context, false),
+        ),
+        if(widget.appointment.status == 'AGENDADA')  Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [ 
+            Expanded(
+              flex: 1,
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.10,
+                margin: generalMarginView,
+                child: _appointmentRenderButton(context, false),
+                      ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.10,
+                margin: generalMarginView,
+                child: _appointmentRenderButton(context, true),
+                      ),
+            ),
+          ]
         ),
 
 
@@ -98,6 +118,8 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
 
   Widget _buildAppointmentTopInformation(BuildContext context) => Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       Text(widget.appointment.specialty.specialty,
         textAlign: TextAlign.center,
@@ -177,30 +199,37 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
 
   Widget _buildAppointmentDescription(BuildContext context) => Padding(
-    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.05),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Descripción: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
-        Text(widget.appointment.description,
-          style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
-        ),
-      ],
+    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
+    child: SizedBox(
+      height: MediaQuery.of(context).size.height * 0.2,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Motivo de solicitud: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
+          Padding(
+            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
+            child: Text(widget.appointment.description,
+              style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16), maxLines: null, textAlign: TextAlign.justify,
+            ),
+          ),
+        ],
+      ),
     ),
   );
 
 
-    Widget _canceledAppointmentRenderButton(BuildContext context) => Container(
+    Widget _appointmentRenderButton(BuildContext context, bool isAccept) => Container(
       margin: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 25),
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.065,
       child:  ButtonComponent(
-        style: ButtonComponentStyle.canceled,
-        title: TextConstant.cancelAppointment.text,
+        style: isAccept ? ButtonComponentStyle.accepted : ButtonComponentStyle.canceled,
+        title: isAccept ? TextConstant.acceptAppointment.text : TextConstant.cancelAppointment.text,
         // actionButton:  () => _signIn(context),
       )
   );
+
 
 
 }

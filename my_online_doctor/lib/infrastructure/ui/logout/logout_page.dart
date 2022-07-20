@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_online_doctor/application/bloc/logout/logout_bloc.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
-import 'package:my_online_doctor/infrastructure/core/constants/min_max_constants.dart';
 
 class LogoutPage extends StatelessWidget {
   static const routeName = '/logout';
 
   LogoutPage({Key? key}) : super(key: key);
 
-  final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -23,29 +23,48 @@ class LogoutPage extends StatelessWidget {
           return BaseUIComponent(
             appBar: _renderAppBar(context),
             body: _body(context, state),
-            bottomNavigationBar: _renderBottomNavigationBar(context),
           );
         },
       ),
     );
   }
 
-  Widget _renderBottomNavigationBar(BuildContext context) => Container(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.05,
-      color: colorSecondary);
-
   ///Widget AppBar
   PreferredSizeWidget _renderAppBar(BuildContext context) =>
-      AppBar(backgroundColor: colorPrimary);
+      AppBar(backgroundColor: colorPrimary, title: Text(TextConstant.logoutTitle.text), centerTitle: true,);
 
   //Widget Body
   Widget _body(BuildContext context, LogoutState state) {
     if (state is LogoutStateInitial) {
-      context.read<LogoutBloc>().add(LogoutEventLogoutPatient());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+
+      var dialogResponse = await _showDialog(context);
+
+      if(dialogResponse != null && dialogResponse){
+        context.read<LogoutBloc>().add(LogoutEventLogoutPatient());
+      } else {
+        context.read<LogoutBloc>().add(LogoutEventNavigateToWith('/bottom_menu'));
+      }
+
+    });
+
+     
     }
 
-    return Container();
+    return const LoadingComponent();
+  }
+
+
+  dynamic _showDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) => DialogComponent(
+        textTitle: TextConstant.logoutTitle.text,
+        textQuestion: TextConstant.areYouSure.text,
+        cancelButton: true,
+      ),
+    );
   }
 
  
