@@ -1,4 +1,5 @@
 // Package imports:
+import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +16,38 @@ import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/repository_manager.dart';
 import 'package:my_online_doctor/infrastructure/providers/local_storage/local_storage_provider.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
+import 'package:my_online_doctor/infrastructure/ui/video_call/call.dart';
 
 final getIt = GetIt.instance;
 
 Future<void> backgroundHandler(RemoteMessage message) async {
-  final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
-  _navigatorManager.navigateToWithReplacement('/bottom_menu');
+
+  var context = getIt<ContextManager>().context;
+
+    var response = await showDialog(
+        context: context,
+        builder: (BuildContext dialogContext) => const DialogComponent(
+            textTitle: 'Cita médica',
+            textQuestion: 'Desea atenter su llamada?',
+            cancelButton: true));
+
+
+    if (response != null && response) {
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (buildContext) => CallPage(
+              channelName: message.data['channelName'],
+              role: ClientRole.Broadcaster,
+            ),
+          ),
+        );
+    } 
+
+
+  // final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
+  // _navigatorManager.navigateToWithReplacement('/bottom_menu');
   print('backgroundHandler: ${message.notification!.title}');
   print('Payload: ${message.data}');
 }
