@@ -2,11 +2,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_online_doctor/application/use_cases/appointments/accept_appointment_use_case.dart';
 
 //Project imports:
 import 'package:my_online_doctor/application/use_cases/appointments/cancel_appointment_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/appointments/get_appointments_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/appointments/reject_appointment_use_case.dart';
+import 'package:my_online_doctor/domain/models/appointment/accept_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/cancel_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/reject_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
@@ -31,6 +33,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   final GetAppointmentsUseCaseContract _getAppointmentUseCase = GetAppointmentsUseCaseContract.get();
   final CancelAppointmentsUseCaseContract _cancelAppointmentUseCase = CancelAppointmentsUseCaseContract.get();
   final RejectAppointmentsUseCaseContract _rejectAppointmentUseCase = RejectAppointmentsUseCaseContract.get();
+  final AcceptAppointmentsUseCaseContract _acceptAppointmentUseCase = AcceptAppointmentsUseCaseContract.get();
 
 
   //Constructor
@@ -40,6 +43,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     on<AppointmentEventNavigateTo>(_navigateToEventToState);
     on<AppointmentEventCancelled>(_cancelledAppointmentEventToState);
     on<AppointmentEventRejected>(_rejectedAppointmentEventToState);
+    on<AppointmentEventAccepted>(_acceptedAppointmentEventToState);
   }
 
 
@@ -133,6 +137,34 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
           builder: (BuildContext superContext) => DialogComponent(
               textTitle: TextConstant.successTitle.text,
               textQuestion: TextConstant.successRejectAppointment.text,
+            )
+        );
+
+    }
+
+    emit(AppointmentStateHideLoading());
+  }
+
+
+  ///This method is called when the event is [AppointmentEventAccepted]
+  ///It accepts the appointment.
+  ///It shows a dialog to the user to confirm the acceptance.
+  ///If the user confirms, it calls the use case to accept the appointment.
+  ///If the user cancels, it does nothing.
+  ///It also shows a dialog to the user if the appointment is accepted.
+  void _acceptedAppointmentEventToState(AppointmentEventAccepted event, Emitter<AppointmentState> emit) async {
+
+    emit(AppointmentStateLoading());
+
+    final response = await _acceptAppointmentUseCase.run(event.appointment);
+
+    if(response != null) {
+
+      await showDialog(
+        context: getIt<ContextManager>().context,
+          builder: (BuildContext superContext) => DialogComponent(
+              textTitle: TextConstant.successTitle.text,
+              textQuestion: TextConstant.successAcceptAppointment.text,
             )
         );
 

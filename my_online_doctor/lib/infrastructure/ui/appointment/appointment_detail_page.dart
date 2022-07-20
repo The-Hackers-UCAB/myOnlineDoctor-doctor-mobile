@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:my_online_doctor/application/bloc/appointment/appointment_bloc.dart';
+import 'package:my_online_doctor/domain/models/appointment/accept_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/cancel_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/reject_appointment_model.dart';
 
@@ -108,8 +109,8 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.10,
                 margin: generalMarginView,
-                child: _appointmentRenderButton(context, 
-                  ButtonComponentStyle.accepted, TextConstant.acceptAppointment.text, AppointmentEventAccepted()),
+                child: _appointmentRenderButton(context,ButtonComponentStyle.accepted, 
+                TextConstant.acceptAppointment.text, AppointmentEventAccepted(AcceptAppointmentModel(id: widget.appointment.id), context)),
               ),
             ),
           ]

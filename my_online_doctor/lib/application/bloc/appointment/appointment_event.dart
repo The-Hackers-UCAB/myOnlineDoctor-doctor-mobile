@@ -24,7 +24,12 @@ class AppointmentEventCancelled extends AppointmentEvent {
   AppointmentEventCancelled(this.appointment, this.context);
 }
 
-class AppointmentEventAccepted extends AppointmentEvent {}
+class AppointmentEventAccepted extends AppointmentEvent {
+  final AcceptAppointmentModel appointment;
+  final BuildContext context;
+
+  AppointmentEventAccepted(this.appointment, this.context);
+}
 
 class AppointmentEventRequested extends AppointmentEvent {}
 
