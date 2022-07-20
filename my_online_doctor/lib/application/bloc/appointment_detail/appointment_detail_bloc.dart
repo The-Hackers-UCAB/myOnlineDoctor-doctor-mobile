@@ -6,23 +6,21 @@ import 'package:my_online_doctor/application/use_cases/appointments/accept_appoi
 import 'package:my_online_doctor/application/use_cases/appointments/cancel_appointment_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/appointments/reject_appointment_use_case.dart';
 import 'package:my_online_doctor/domain/models/appointment/accept_appointment_model.dart';
+import 'package:my_online_doctor/domain/models/appointment/appointment_detail_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/cancel_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/reject_appointment_model.dart';
-import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
-import 'package:rxdart/rxdart.dart';
-
 part 'appointment_detail_event.dart';
 part 'appointment_detail_state.dart';
 
 ///AppointmentDetailBloc: Here we would have the AppointmentDetailDetail domain logic.
 class AppointmentDetailBloc extends Bloc<AppointmentDetailEvent, AppointmentDetailState> {
 
+
   //Here the StreamController can be a state or a DomainModel
-  final StreamController<RequestAppointmentModel> _appointmentDetailStreamController = BehaviorSubject();
-  // final _appointmentDetailStreamController = StreamController<RequestAppointmentModel>();
+  final _appointmentDetailStreamController = StreamController<AppointmentDetailModel>();
 
   //Instances of use cases:
   final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
@@ -42,8 +40,12 @@ class AppointmentDetailBloc extends Bloc<AppointmentDetailEvent, AppointmentDeta
   }
 
 
+  //Variables
+  late AppointmentDetailModel _appointmentDetailModel;
+
+
    //Getters
-  Stream<RequestAppointmentModel> get streamAppointmentDetail => _appointmentDetailStreamController.stream;
+  Stream<AppointmentDetailModel> get streamAppointmentDetail => _appointmentDetailStreamController.stream;
 
 
   //Setters
@@ -58,6 +60,8 @@ class AppointmentDetailBloc extends Bloc<AppointmentDetailEvent, AppointmentDeta
   void _fetchBasicAppointmentDataEventToState(AppointmentDetailEventFetchBasicData event,  Emitter<AppointmentDetailState> emit) {
     
     emit(AppointmentDetailStateLoading());
+
+    _appointmentDetailModel = event.appointment;
 
     _appointmentDetailStreamController.add(event.appointment);
 
@@ -94,6 +98,8 @@ class AppointmentDetailBloc extends Bloc<AppointmentDetailEvent, AppointmentDeta
 
 
     emit(AppointmentDetailStateHideLoading());
+
+    _appointmentDetailStreamController.add(_appointmentDetailModel);
   }
 
 

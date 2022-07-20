@@ -9,7 +9,6 @@ import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
-import 'package:rxdart/rxdart.dart';
 part 'appointment_event.dart';
 part 'appointment_state.dart';
 
@@ -18,8 +17,7 @@ part 'appointment_state.dart';
 class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
   //Here the StreamController can be a state or a DomainModel
-  final StreamController<List<RequestAppointmentModel>> _appointmentStreamController = BehaviorSubject();
-  // final _appointmentStreamController = StreamController<List<RequestAppointmentModel>>();
+  final _appointmentStreamController = StreamController<List<RequestAppointmentModel>>();
 
   //Instances of use cases:
   final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
@@ -75,7 +73,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
   ///This method is called when the event is [AppointmentEventNavigateTo]
   ///It navigates to the specified page.
-  void _navigateToEventToState(AppointmentEventNavigateTo event, Emitter<AppointmentState> emit) {
+  void _navigateToEventToState(AppointmentEventNavigateTo event, Emitter<AppointmentState> emit) async {
     emit(AppointmentStateInitial());
     _navigatorManager.navigateTo(event.routeName, arguments: event.appointment);
   }
@@ -83,7 +81,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
   ///This method is called when the event is [AppointmentEventNavigateToWith]
   ///It navigates to the specified page.
-  void _navigateToWithEventToState(AppointmentEventNavigateToWith event, Emitter<AppointmentState> emit) {
+  void _navigateToWithEventToState(AppointmentEventNavigateToWith event, Emitter<AppointmentState> emit) async {
     _navigatorManager.navigateToWithReplacement(event.routeName, arguments: event.arguments);
   }
 

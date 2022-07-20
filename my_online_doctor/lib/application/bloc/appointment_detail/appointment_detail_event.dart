@@ -6,7 +6,7 @@ abstract class AppointmentDetailEvent {}
 
 
 class AppointmentDetailEventFetchBasicData extends AppointmentDetailEvent {
-  final RequestAppointmentModel appointment;
+  final AppointmentDetailModel appointment;
   AppointmentDetailEventFetchBasicData(this.appointment);
 }
 

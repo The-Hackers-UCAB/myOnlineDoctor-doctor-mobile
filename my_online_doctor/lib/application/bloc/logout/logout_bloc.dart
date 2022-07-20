@@ -13,7 +13,7 @@ part 'logout_state.dart';
 class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
 
   //Here the StreamController can be a state or a DomainModel
-  final _logoutStreamController = StreamController<bool>();
+  // final _logoutStreamController = StreamController<bool>();
 
   //Instances of use cases:
   final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
@@ -31,7 +31,7 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
 
 
   //Getters
-  Stream<bool> get streamLogin => _logoutStreamController.stream;
+  // Stream<bool> get streamLogin => _logoutStreamController.stream;
 
   //Methods:
 
