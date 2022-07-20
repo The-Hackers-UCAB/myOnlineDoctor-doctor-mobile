@@ -4,7 +4,9 @@ import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
 //Enum for the background color of the button
 enum ButtonComponentStyle {
   primary,
-  secondary
+  secondary,
+  canceled,
+  acepted,
 }
 
 extension ColorExtension on ButtonComponentStyle {
@@ -14,6 +16,11 @@ extension ColorExtension on ButtonComponentStyle {
         return colorPrimary;
       case ButtonComponentStyle.secondary:
         return colorSecondary;
+      case ButtonComponentStyle.canceled:
+        return colorError;
+      case ButtonComponentStyle.acepted:
+        return colorGreen;
+      
     }
   }
 
