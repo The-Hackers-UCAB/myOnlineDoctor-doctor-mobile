@@ -83,12 +83,12 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
         _buildAppointmentType(context),
         heightSeparator(context, 0.01),
         _buildAppointmentDescription(context),
-        if(widget.appointment.status == 'ACEPTADsA')  Container(
+        if(widget.appointment.status == 'ACEPTADA')  Container(
             height: MediaQuery.of(context).size.height * 0.10,
             margin: generalMarginView,
             child:  _appointmentRenderButton(context, false),
         ),
-        if(widget.appointment.status == 'ACEPTADA')  Row(
+        if(widget.appointment.status == 'AGENDADA')  Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [ 
             Expanded(
@@ -118,6 +118,8 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
 
   Widget _buildAppointmentTopInformation(BuildContext context) => Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       Text(widget.appointment.specialty.specialty,
         textAlign: TextAlign.center,
@@ -205,9 +207,12 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Motivo de solicitud: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
-           Text('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico o de moda en demostraciones de tipografías o de borradores de diseño para probar el diseño visual antes de insertar el texto final.',
+          Padding(
+            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
+            child: Text(widget.appointment.description,
               style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16), maxLines: null, textAlign: TextAlign.justify,
             ),
+          ),
         ],
       ),
     ),
