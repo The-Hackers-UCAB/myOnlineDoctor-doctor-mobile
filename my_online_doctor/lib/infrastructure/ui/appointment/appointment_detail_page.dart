@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:my_online_doctor/application/bloc/appointment/appointment_bloc.dart';
+import 'package:my_online_doctor/domain/models/appointment/cancel_appointment_model.dart';
 
 //Project imports:
 import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
@@ -86,8 +87,9 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
         if(widget.appointment.status == 'ACEPTADA')  Container(
             height: MediaQuery.of(context).size.height * 0.10,
             margin: generalMarginView,
-            child:  _appointmentRenderButton(context, false),
-        ),
+            child:  _appointmentRenderButton(context, ButtonComponentStyle.canceled, 
+              TextConstant.cancelAppointment.text, AppointmentEventCancelled(CancelAppointmentModel(id: widget.appointment.id), context)),
+            ),
         if(widget.appointment.status == 'AGENDADA')  Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [ 
@@ -96,16 +98,18 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.10,
                 margin: generalMarginView,
-                child: _appointmentRenderButton(context, false),
-                      ),
+                child: _appointmentRenderButton(context, 
+                  ButtonComponentStyle.canceled, TextConstant.rejectAppointment.text, AppointmentEventRejected()),
+              ),
             ),
             Expanded(
               flex: 1,
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.10,
                 margin: generalMarginView,
-                child: _appointmentRenderButton(context, true),
-                      ),
+                child: _appointmentRenderButton(context, 
+                  ButtonComponentStyle.accepted, TextConstant.acceptAppointment.text, AppointmentEventAccepted()),
+              ),
             ),
           ]
         ),
@@ -134,10 +138,10 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
 
   Widget _buildAppointmentStatus(BuildContext context) => Padding(
-    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.05),
+    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Status actual: ',
           style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),
@@ -152,10 +156,10 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
 
   Widget _buildAppointmentDateTime(BuildContext context) => Padding(
-    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.05),
+    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Fecha y hora: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
         Text(widget.appointment.date != null ? DateFormat('dd/MM/yyyy hh:mm a').format(widget.appointment.date!) : 'Por Definir',
@@ -168,10 +172,10 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
 
   Widget _buildAppointmentDuration(BuildContext context) => Padding(
-    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.05),
+    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Duración: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
         Text(widget.appointment.duration != null ? '${widget.appointment.duration.toString()} horas' : 'Por Definir',
@@ -184,10 +188,10 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
 
   Widget _buildAppointmentType(BuildContext context) => Padding(
-    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.05),
+    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Modalidad: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
         Text(widget.appointment.type,
@@ -204,14 +208,12 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
       height: MediaQuery.of(context).size.height * 0.2,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text('Motivo de solicitud: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
-          Padding(
-            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
-            child: Text(widget.appointment.description,
-              style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16), maxLines: null, textAlign: TextAlign.justify,
-            ),
+          heightSeparator(context, 0.01),
+          Text(widget.appointment.description,
+            style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16), maxLines: null, textAlign: TextAlign.justify,
           ),
         ],
       ),
@@ -219,14 +221,15 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
   );
 
 
-    Widget _appointmentRenderButton(BuildContext context, bool isAccept) => Container(
+    Widget _appointmentRenderButton(BuildContext context, ButtonComponentStyle buttonComponentStyle, String title,
+      AppointmentEvent event) => Container(
       margin: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 25),
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.065,
       child:  ButtonComponent(
-        style: isAccept ? ButtonComponentStyle.accepted : ButtonComponentStyle.canceled,
-        title: isAccept ? TextConstant.acceptAppointment.text : TextConstant.cancelAppointment.text,
-        // actionButton:  () => _signIn(context),
+        style: buttonComponentStyle,
+        title: title,
+        actionButton:  () => context.read<AppointmentBloc>().add(event),
       )
   );
 
