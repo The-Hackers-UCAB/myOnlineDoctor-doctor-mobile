@@ -134,10 +134,10 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
 
   Widget _buildAppointmentStatus(BuildContext context) => Padding(
-    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.05),
+    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Status actual: ',
           style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),
@@ -152,10 +152,10 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
 
   Widget _buildAppointmentDateTime(BuildContext context) => Padding(
-    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.05),
+    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Fecha y hora: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
         Text(widget.appointment.date != null ? DateFormat('dd/MM/yyyy hh:mm a').format(widget.appointment.date!) : 'Por Definir',
@@ -168,10 +168,10 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
 
   Widget _buildAppointmentDuration(BuildContext context) => Padding(
-    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.05),
+    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Duración: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
         Text(widget.appointment.duration != null ? '${widget.appointment.duration.toString()} horas' : 'Por Definir',
@@ -184,10 +184,10 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
 
   Widget _buildAppointmentType(BuildContext context) => Padding(
-    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.05),
+    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Modalidad: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
         Text(widget.appointment.type,
@@ -204,14 +204,12 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
       height: MediaQuery.of(context).size.height * 0.2,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text('Motivo de solicitud: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
-          Padding(
-            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
-            child: Text(widget.appointment.description,
-              style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16), maxLines: null, textAlign: TextAlign.justify,
-            ),
+          heightSeparator(context, 0.01),
+          Text(widget.appointment.description,
+            style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16), maxLines: null, textAlign: TextAlign.justify,
           ),
         ],
       ),
