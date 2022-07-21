@@ -22,8 +22,8 @@ class _DoctorQueryProvider extends DoctorQueryProviderContract {
   Future<dynamic> getDoctors(DoctorRequestModel? doctors) async {
 
     final response = await getIt<RepositoryManager>()
-    .request(operation: RepositoryConstant.operationGet.key, endpoint: RepositoryPathConstant.getDoctors.path,
-        body: doctors?.toJson())
+    .request(operation: RepositoryConstant.operationPost.key, endpoint: RepositoryPathConstant.getDoctors.path,
+        body: doctors == null ? {} : doctors.toJson())
     .catchError((onError) {
 
       return null;

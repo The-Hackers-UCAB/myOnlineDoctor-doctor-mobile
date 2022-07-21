@@ -74,7 +74,7 @@ extension RepositoryPathConstantExtension on RepositoryPathConstant {
         return 'api/appointment/accept/patient';
 
       case RepositoryPathConstant.getDoctors:
-        return 'api/doctor/search?pageIndex=0&pageSize=0';
+        return 'api/doctor/search?pageIndex=0&pageSize=20';
 
     }
   }
