@@ -73,7 +73,7 @@ extension RepositoryPathConstantExtension on RepositoryPathConstant {
         return 'firebaseToken';
 
       case RepositoryPathConstant.cancelAppointment:
-        return 'api/appointment/cancel/patient';
+        return 'api/appointment/cancel/doctor';
 
       case RepositoryPathConstant.rejectAppointment:
         return 'api/appointment/reject/patient';

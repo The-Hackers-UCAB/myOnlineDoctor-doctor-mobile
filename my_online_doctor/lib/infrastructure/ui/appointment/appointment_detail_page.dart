@@ -149,7 +149,7 @@ class AppointmentDetailPage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.10,
                 margin: generalMarginView,
                 child: _appointmentRenderButton(context,ButtonComponentStyle.canceled, 
-                  TextConstant.rejectAppointment.text, AppointmentDetailEventRejected(RejectAppointmentModel(id: appointment.id), context)),
+                  TextConstant.rejectAppointment.text, AppointmentDetailEventCancelled(CancelAppointmentModel(id: appointment.id), context)),
               ),
             ),
             Expanded(

@@ -125,6 +125,11 @@ class AppointmentDetailBloc
               ));
     }
 
+    _dispose();
+    _navigatorManager.navigateToWithReplacement(
+        "/bottom_menu"
+        );
+
     emit(AppointmentDetailStateHideLoading());
 
     _appointmentDetailStreamController.add(_appointmentDetailModel);

@@ -39,7 +39,7 @@ class _AppointmentCommandProvider extends AppointmentCommandProviderContract {
       return null;
 
     });
-
+    print(response);
     return response;
   }
 
