@@ -131,6 +131,11 @@ class ViewAppointmentsPage extends StatelessWidget{
 
   Widget _renderAppointmentItem(BuildContext context, RequestAppointmentModel item) {
 
+    if (item.status == 'AGENDADA') {
+
+      return Container();
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -165,8 +170,8 @@ class ViewAppointmentsPage extends StatelessWidget{
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                    item.doctor.gender == 'M' ? Text('Dr. ${item.doctor.firstName} ${item.doctor.firstSurname}'): 
-                        Text('Dra. ${item.doctor.firstName} ${item.doctor.firstSurname}'),
+                    item.doctor.gender == 'M' ? Text('Paciente: Sr. ${item.patient.firstName} ${item.patient.firstSurname}'): 
+                        Text('Paciente: Sra. ${item.patient.firstName} ${item.patient.firstSurname}'),
                 ],
               ),
               trailing: Text(item.status, style: TextStyle(color: AppointmentStatusColorService.getAppointmentStatusColor(item.status))),

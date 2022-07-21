@@ -37,10 +37,10 @@ enum RepositoryPathConstant {
   firebaseToken,
   cancelAppointment,
   rejectAppointment,
-  acceptAppointment,
   getDoctors,
   getAppointmentsDoctor,
   callPatient,
+  scheduleAppointment,
 }
 
 extension RepositoryPathConstantExtension on RepositoryPathConstant {
@@ -48,6 +48,9 @@ extension RepositoryPathConstantExtension on RepositoryPathConstant {
   String get path {
 
     switch (this) {
+      case RepositoryPathConstant.scheduleAppointment:
+        return 'api/appointment/schedule';
+
       case RepositoryPathConstant.register:
         return 'api/patient';
 
@@ -76,10 +79,7 @@ extension RepositoryPathConstantExtension on RepositoryPathConstant {
         return 'api/appointment/cancel/doctor';
 
       case RepositoryPathConstant.rejectAppointment:
-        return 'api/appointment/reject/patient';
-
-      case RepositoryPathConstant.acceptAppointment:
-        return 'api/appointment/accept/patient';
+        return 'api/appointment/reject/doctor';
 
       case RepositoryPathConstant.getDoctors:
         return 'api/doctor/search?pageIndex=0&pageSize=20';

@@ -36,6 +36,7 @@ enum TextConstant {
   successRejectAppointment,
   doctors,
   callPatient,
+  scheduleAppointment,
 
 }
 
@@ -43,7 +44,9 @@ extension TextConstantExtension on TextConstant {
   String get text {
     switch (this) {
       case TextConstant.callPatient:
-        return 'Llamar al paciente';
+        return 'Llamar';
+      case TextConstant.scheduleAppointment:
+        return 'Agendar cita';
       case TextConstant.appName:
         return 'My Online Doctor';
       case TextConstant.errorTimeoutConnection:

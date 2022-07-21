@@ -18,14 +18,12 @@ class AppointmentDetailEventNavigateToWith extends AppointmentDetailEvent {
 
 }
 
-
 class AppointmentDetailEventCancelled extends AppointmentDetailEvent {
   final CancelAppointmentModel appointment;
   final BuildContext context;
 
   AppointmentDetailEventCancelled(this.appointment, this.context);
 }
-
 class AppointmentDetailEventCalled extends AppointmentDetailEvent {
   final AcceptAppointmentModel appointment;
   final BuildContext context;
@@ -39,6 +37,14 @@ class AppointmentDetailEventAccepted extends AppointmentDetailEvent {
 
   AppointmentDetailEventAccepted(this.appointment, this.context);
 }
+
+class ScheduleAppointmentDetailEventAccepted extends AppointmentDetailEvent {
+  final ScheduleAppointmentModel appointment;
+  final BuildContext context;
+
+  ScheduleAppointmentDetailEventAccepted(this.appointment, this.context);
+}
+
 
 
 class AppointmentDetailEventRejected extends AppointmentDetailEvent {

@@ -1,5 +1,4 @@
 //Project import:
-import 'package:my_online_doctor/domain/models/appointment/accept_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/schedule_appointment_model.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/providers/commands/appointment/appointment_command_provider_contract.dart';
@@ -7,11 +6,11 @@ import 'package:my_online_doctor/infrastructure/providers/commands/appointment/a
 enum AppointmentUseCaseError {noAppointmentsFound }
 
 
-abstract class AcceptAppointmentsUseCaseContract {
-  static inject() => getIt.registerSingleton<AcceptAppointmentsUseCaseContract>(
-      _AcceptAppointmentsUseCase());
+abstract class ScheduleAppointmentsUseCaseContract {
+  static inject() => getIt.registerSingleton<ScheduleAppointmentsUseCaseContract>(
+      _ScheduleAppointmentsUseCase());
 
-  static AcceptAppointmentsUseCaseContract get() => getIt<AcceptAppointmentsUseCaseContract>();
+  static ScheduleAppointmentsUseCaseContract get() => getIt<ScheduleAppointmentsUseCaseContract>();
 
   /// Providers
   AppointmentCommandProviderContract provider = AppointmentCommandProviderContract.inject();
@@ -23,7 +22,7 @@ abstract class AcceptAppointmentsUseCaseContract {
 
 
 
-class _AcceptAppointmentsUseCase extends AcceptAppointmentsUseCaseContract {
+class _ScheduleAppointmentsUseCase extends ScheduleAppointmentsUseCaseContract {
 
   @override
   Future<dynamic> run(ScheduleAppointmentModel appointment) async {

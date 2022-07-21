@@ -7,6 +7,7 @@ import 'package:my_online_doctor/application/use_cases/appointments/accept_appoi
 import 'package:my_online_doctor/application/use_cases/appointments/call_patient_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/appointments/cancel_appointment_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/appointments/reject_appointment_use_case.dart';
+import 'package:my_online_doctor/application/use_cases/appointments/schedule_appointment_use_case.dart';
 import 'package:my_online_doctor/domain/models/appointment/accept_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/appointment_detail_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/cancel_appointment_model.dart';
@@ -15,6 +16,7 @@ import 'package:my_online_doctor/infrastructure/core/constants/text_constants.da
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
 
+import '../../../domain/models/appointment/schedule_appointment_model.dart';
 import '../../../infrastructure/ui/video_call/call.dart';
 part 'appointment_detail_event.dart';
 part 'appointment_detail_state.dart';
@@ -37,6 +39,9 @@ class AppointmentDetailBloc
       AcceptAppointmentsUseCaseContract.get();
   final CallPatientUseCaseContract _callPatientUseCase =
       CallPatientUseCaseContract.get();
+  final ScheduleAppointmentsUseCaseContract _scheduleAppointmentUseCase =
+      ScheduleAppointmentsUseCaseContract.get();
+  
 
   //Constructor
   //You have to declare the StateInitial as the first state
@@ -45,7 +50,7 @@ class AppointmentDetailBloc
         _fetchBasicAppointmentDataEventToState);
     on<AppointmentDetailEventCancelled>(_cancelledAppointmentEventToState);
     on<AppointmentDetailEventRejected>(_rejectedAppointmentEventToState);
-    on<AppointmentDetailEventAccepted>(_acceptedAppointmentEventToState);
+    on<ScheduleAppointmentDetailEventAccepted>(_scheduleAppointmentEventToState);
     on<AppointmentDetailEventNavigateToWith>(_navigateToWithEventToState);
     on<AppointmentDetailEventCalled>(_callPatientEventToState);
   }
@@ -155,6 +160,10 @@ class AppointmentDetailBloc
                 textQuestion: TextConstant.successRejectAppointment.text,
               ));
     }
+    _dispose();
+    _navigatorManager.navigateToWithReplacement(
+        "/bottom_menu"
+        );
 
     emit(AppointmentDetailStateHideLoading());
   }
@@ -165,11 +174,13 @@ class AppointmentDetailBloc
   ///If the user confirms, it calls the use case to accept the appointment.
   ///If the user cancels, it does nothing.
   ///It also shows a dialog to the user if the appointment is accepted.
-  void _acceptedAppointmentEventToState(AppointmentDetailEventAccepted event,
+  void _scheduleAppointmentEventToState(ScheduleAppointmentDetailEventAccepted event,
       Emitter<AppointmentDetailState> emit) async {
     emit(AppointmentDetailStateLoading());
 
-    final response = await _acceptAppointmentUseCase.run(event.appointment);
+    final response = await _scheduleAppointmentUseCase.run(event.appointment);
+
+    print(response);
 
     if (response != null) {
       await showDialog(
@@ -179,6 +190,10 @@ class AppointmentDetailBloc
                 textQuestion: TextConstant.successAcceptAppointment.text,
               ));
     }
+        _dispose();
+    _navigatorManager.navigateToWithReplacement(
+        "/bottom_menu"
+        );
 
     emit(AppointmentDetailStateHideLoading());
   }

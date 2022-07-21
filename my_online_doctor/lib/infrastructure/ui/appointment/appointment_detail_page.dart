@@ -19,6 +19,8 @@ import 'package:my_online_doctor/infrastructure/ui/components/loading_component.
 import 'package:my_online_doctor/infrastructure/ui/components/reusable_widgets.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
 
+import '../../../domain/models/appointment/schedule_appointment_model.dart';
+
 class AppointmentDetailPage extends StatelessWidget {
   static const routeName = '/appointment_detail';
 
@@ -140,7 +142,8 @@ class AppointmentDetailPage extends StatelessWidget {
         _buildAppointmentType(context),
         heightSeparator(context, 0.01),
         _buildAppointmentDescription(context),
-        if(appointment.status == 'ACEPTADA')   Row(
+        if(appointment.status == 'ACEPTADA')   
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [ 
             Expanded(
@@ -149,7 +152,7 @@ class AppointmentDetailPage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.10,
                 margin: generalMarginView,
                 child: _appointmentRenderButton(context,ButtonComponentStyle.canceled, 
-                  TextConstant.rejectAppointment.text, AppointmentDetailEventCancelled(CancelAppointmentModel(id: appointment.id), context)),
+                 TextConstant.cancelAppointment.text, AppointmentDetailEventCancelled(CancelAppointmentModel(id: appointment.id), context)),
               ),
             ),
             Expanded(
@@ -158,12 +161,12 @@ class AppointmentDetailPage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.10,
                 margin: generalMarginView,
                 child: _appointmentRenderButton(context,ButtonComponentStyle.accepted, 
-                'Llamar al paciente', AppointmentDetailEventCalled(AcceptAppointmentModel(id: appointment.id), context)),
+                 TextConstant.callPatient.text, AppointmentDetailEventCalled(AcceptAppointmentModel(id: appointment.id), context)),
               ),
             ),
           ]
         ),
-        if(appointment.status == 'AGENDADA')  Row(
+          if(appointment.status == 'SOLICITADA')   Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [ 
             Expanded(
@@ -175,19 +178,18 @@ class AppointmentDetailPage extends StatelessWidget {
                   TextConstant.rejectAppointment.text, AppointmentDetailEventRejected(RejectAppointmentModel(id: appointment.id), context)),
               ),
             ),
-            Expanded(
+              Expanded(
               flex: 1,
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.10,
                 margin: generalMarginView,
                 child: _appointmentRenderButton(context,ButtonComponentStyle.accepted, 
-                TextConstant.acceptAppointment.text, AppointmentDetailEventAccepted(AcceptAppointmentModel(id: appointment.id), context)),
+                  TextConstant.scheduleAppointment.text, ScheduleAppointmentDetailEventAccepted(ScheduleAppointmentModel(id: appointment.id, date: appointment.date!, duration: appointment.duration!), context)),
               ),
             ),
+
           ]
         ),
-
-
       ],
     ),
   );
@@ -204,8 +206,8 @@ class AppointmentDetailPage extends StatelessWidget {
       ),
       heightSeparator(context, 0.01),
       appointment.doctor.gender == 'M' ? 
-        Text('Dr. ${appointment.doctor.firstName} ${appointment.doctor.firstSurname}', style: const TextStyle(fontSize: 20),): 
-        Text('Dra. ${appointment.doctor.firstName} ${appointment.doctor.firstSurname}', style: const TextStyle(fontSize: 20))
+        Text('Paciente: Sr. ${appointment.patient.firstName} ${appointment.patient.firstSurname}', style: const TextStyle(fontSize: 20),): 
+        Text('Paciente: Sra. ${appointment.patient.firstName} ${appointment.patient.firstSurname}', style: const TextStyle(fontSize: 20))
     ],
   );
 
