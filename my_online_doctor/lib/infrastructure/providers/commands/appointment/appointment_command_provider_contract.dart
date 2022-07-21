@@ -14,6 +14,10 @@ abstract class AppointmentCommandProviderContract {
 
   Future<void> acceptAppointment(AcceptAppointmentModel appointment);
 
+  Future<void> callAppointment(AcceptAppointmentModel appointment);
+  
+
+
 }
 
 enum AppointmentCommandProviderError {
@@ -61,6 +65,21 @@ class _AppointmentCommandProvider extends AppointmentCommandProviderContract {
 
     final response = await getIt<RepositoryManager>()
     .request(operation: RepositoryConstant.operationPost.key, endpoint: RepositoryPathConstant.acceptAppointment.path, 
+    body: appointment.toJson())
+    .catchError((onError) {
+
+      return null;
+
+    });
+
+    return response;
+  }
+
+  @override
+  Future<dynamic> callAppointment(AcceptAppointmentModel appointment) async {
+
+    final response = await getIt<RepositoryManager>()
+    .request(operation: RepositoryConstant.operationPost.key, endpoint: RepositoryPathConstant.callPatient.path, 
     body: appointment.toJson())
     .catchError((onError) {
 

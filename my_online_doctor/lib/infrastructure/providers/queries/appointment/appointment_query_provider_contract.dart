@@ -22,7 +22,7 @@ class _AppointmentQueryProvider extends AppointmentQueryProviderContract {
   Future<dynamic> getAppointments() async {
 
     final response = await getIt<RepositoryManager>()
-    .request(operation: RepositoryConstant.operationGet.key, endpoint: RepositoryPathConstant.getAppointments.path, )
+    .request(operation: RepositoryConstant.operationGet.key, endpoint: RepositoryPathConstant.getAppointmentsDoctor.path, )
     .catchError((onError) {
 
       return null;

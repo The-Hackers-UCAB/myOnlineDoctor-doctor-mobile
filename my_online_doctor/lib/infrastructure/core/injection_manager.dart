@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_online_doctor/application/use_cases/appointments/accept_appointment_use_case.dart';
+import 'package:my_online_doctor/application/use_cases/appointments/call_patient_use_case.dart';
 import 'package:my_online_doctor/application/use_cases/appointments/cancel_appointment_use_case.dart';
 
 // Project imports:
@@ -95,6 +96,7 @@ class InjectionManager {
     RejectAppointmentsUseCaseContract.inject();
     AcceptAppointmentsUseCaseContract.inject();
     GetDoctorsUseCaseContract.inject();
+    CallPatientUseCaseContract.inject();
 
   }
 }

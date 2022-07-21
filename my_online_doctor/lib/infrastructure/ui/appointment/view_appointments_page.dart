@@ -77,17 +77,6 @@ class ViewAppointmentsPage extends StatelessWidget{
             ),
           ),
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.10,
-            margin: generalMarginView,
-            child:_requestAppointmentRenderButton(context),
-          ) 
-        ),
-        
-        // heightSeparator(context, 0.05),
-        // _requestAppointmentRenderButton(context)
       ],
     );
 

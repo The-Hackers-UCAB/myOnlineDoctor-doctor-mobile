@@ -140,12 +140,29 @@ class AppointmentDetailPage extends StatelessWidget {
         _buildAppointmentType(context),
         heightSeparator(context, 0.01),
         _buildAppointmentDescription(context),
-        if(appointment.status == 'ACEPTADA')  Container(
-            height: MediaQuery.of(context).size.height * 0.10,
-            margin: generalMarginView,
-            child:  _appointmentRenderButton(context, ButtonComponentStyle.canceled, 
-              TextConstant.cancelAppointment.text, AppointmentDetailEventCancelled(CancelAppointmentModel(id: appointment.id), context)),
+        if(appointment.status == 'ACEPTADA')   Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [ 
+            Expanded(
+              flex: 1,
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.10,
+                margin: generalMarginView,
+                child: _appointmentRenderButton(context,ButtonComponentStyle.canceled, 
+                  TextConstant.rejectAppointment.text, AppointmentDetailEventRejected(RejectAppointmentModel(id: appointment.id), context)),
+              ),
             ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.10,
+                margin: generalMarginView,
+                child: _appointmentRenderButton(context,ButtonComponentStyle.accepted, 
+                'Llamar al paciente', AppointmentDetailEventCalled(AcceptAppointmentModel(id: appointment.id), context)),
+              ),
+            ),
+          ]
+        ),
         if(appointment.status == 'AGENDADA')  Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [ 
