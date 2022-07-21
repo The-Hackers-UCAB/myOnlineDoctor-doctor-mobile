@@ -1,6 +1,7 @@
 //Package imports:
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_online_doctor/domain/models/doctor/doctor_request_model.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 
 //Project imports:
@@ -11,7 +12,7 @@ part 'doctor_state.dart';
 class DoctorBloc extends Bloc<DoctorEvent, DoctorState> {
 
   //Here the StreamController can be a state or a DomainModel
-  final _doctorStreamController = StreamController<List<bool>>();
+  final _doctorStreamController = StreamController<List<DoctorRequestModel>>();
 
   //Instances of use cases:
   final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
@@ -25,7 +26,7 @@ class DoctorBloc extends Bloc<DoctorEvent, DoctorState> {
 
 
   //Getters
-  Stream<List<bool>> get streamDoctor => _doctorStreamController.stream;
+  Stream<List<DoctorRequestModel>> get streamDoctor => _doctorStreamController.stream;
 
   //Methods:
 

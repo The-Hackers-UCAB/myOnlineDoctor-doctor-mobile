@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_online_doctor/application/bloc/doctor/doctor_bloc.dart';
+import 'package:my_online_doctor/domain/models/doctor/doctor_request_model.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
@@ -95,9 +96,9 @@ class SearchDoctorPage extends StatelessWidget{
 
 
   //StreamBuilder for the Login Page
-  Widget _doctorStreamBuilder(BuildContext builderContext) => StreamBuilder<List<bool>>(
+  Widget _doctorStreamBuilder(BuildContext builderContext) => StreamBuilder<List<DoctorRequestModel>>(
     stream: builderContext.read<DoctorBloc>().streamDoctor,
-    builder: (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
+    builder: (BuildContext context, AsyncSnapshot<List<DoctorRequestModel>> snapshot) {
 
       if(snapshot.hasData) {
         if(snapshot.data!.isNotEmpty) {
