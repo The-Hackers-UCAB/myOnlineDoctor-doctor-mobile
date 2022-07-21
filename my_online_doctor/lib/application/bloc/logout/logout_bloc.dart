@@ -39,6 +39,8 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
   ///This method is called when the event is [LogoutEventNavigateTo]
   ///It navigates to the specified page.
   void _navigateToWithEventToState(LogoutEventNavigateToWith event, Emitter<LogoutState> emit) {
+
+    _dispose();
     _navigatorManager.navigateToWithReplacement(event.routeName);
   }
 
@@ -50,20 +52,19 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
     emit(LogoutStateLoading());
     await _logoutPatientUseCase.run();
 
-    _navigatorManager.navigateToWithReplacement('/login');
+    _dispose();
 
-    return;
-  
-    
-    // _loadView();
-    // emit(LogoutStateHideLoading());
+    _navigatorManager.navigateToWithReplacement('/login');
 
   }
 
 
 
   //Private methods:
-
+  
+  void _dispose() {
+    _logoutStreamController.close();
+  }
 
 
 }

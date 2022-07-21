@@ -7,28 +7,18 @@ abstract class AppointmentEvent {}
 
 class AppointmentEventFetchBasicData extends AppointmentEvent {}
 
-class AppointmentEventNavigateTo extends AppointmentEvent {
+class AppointmentEventNavigateToWith extends AppointmentEvent {
   final String routeName;
-  final RequestAppointmentModel appointment;
-  AppointmentEventNavigateTo(this.routeName, this.appointment);
+  final Object? arguments;
+  AppointmentEventNavigateToWith(this.routeName, this.arguments);
+
 }
 
 class AppointmentEventCreated extends AppointmentEvent {}
 
 class AppointmentEventRated extends AppointmentEvent {}
 
-class AppointmentEventCancelled extends AppointmentEvent {
-  final CancelAppointmentModel appointment;
-  final BuildContext context;
-
-  AppointmentEventCancelled(this.appointment, this.context);
-}
-
-class AppointmentEventAccepted extends AppointmentEvent {}
-
 class AppointmentEventRequested extends AppointmentEvent {}
-
-class AppointmentEventRejected extends AppointmentEvent {}
 
 class AppointmentEventStarted extends AppointmentEvent {}
 

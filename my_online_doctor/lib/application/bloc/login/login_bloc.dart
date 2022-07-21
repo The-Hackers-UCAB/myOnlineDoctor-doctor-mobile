@@ -68,6 +68,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ///This method is called when the event is [LoginEventNavigateTo]
   ///It navigates to the specified page.
   void _navigateToEventToState(LoginEventNavigateTo event, Emitter<LoginState> emit) {
+    _dispose();
     _navigatorManager.navigateTo(event.routeName);
   }
 
@@ -87,11 +88,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     
     if (response != null) {
 
+      _dispose();
       _navigatorManager.navigateToWithReplacement('/bottom_menu');
-
-      emit(LoginStateSuccess());
-
-      return;
     }
 
     emit(LoginStateHideLoading());
@@ -126,6 +124,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       title: textTitle, 
       message: textQuestion);
 
+  }
+
+
+  //To dispose the stream:
+  void _dispose() {
+    _loginStreamController.close();
   }
 
 

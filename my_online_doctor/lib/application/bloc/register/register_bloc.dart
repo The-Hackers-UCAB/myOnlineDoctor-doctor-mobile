@@ -13,7 +13,6 @@ import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
-import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
 part 'register_event.dart';
 part 'register_state.dart';
 
@@ -108,6 +107,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   ///It navigates to the specified page.
   void _navigateToEventToState(RegisterEventNavigateTo event, Emitter<RegisterState> emit) {
 
+    _dispose();
+
     if(event.routeName == '/login') {
       _navigatorManager.pop(null);
 
@@ -150,13 +151,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       // emit(RegisterStateSuccess());
       _loadView();
 
+      _dispose();
+
       _navigatorManager.pop(null);
       _navigatorManager.navigateToWithReplacement('/login');
 
-      return;
     }
-
-    emit(RegisterStateHideLoading());
 
 
   }
@@ -225,6 +225,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           }
         ));
 
+  }
+
+
+  void _dispose() {
+    _registerStreamController.close();
   }
 
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_online_doctor/application/bloc/patient_profile/profile_bloc.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
 
-import '../../../application/bloc/pacient_profile/profile_bloc.dart';
 import '../../core/constants/text_constants.dart';
 import '../components/dialog_component.dart';
 import '../components/loading_component.dart';

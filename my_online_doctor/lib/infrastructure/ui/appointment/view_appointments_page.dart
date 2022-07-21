@@ -118,18 +118,18 @@ class ViewAppointmentsPage extends StatelessWidget{
 
 
   Widget _requestAppointmentRenderButton(BuildContext context) => Container(
-    margin: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 25),
+    margin: const EdgeInsets.only(left: 10, top: 0, right: 10, bottom: 25),
     width: double.infinity,
     height: MediaQuery.of(context).size.height * 0.065,
     child:  ButtonComponent(
       title: TextConstant.requestAppointment.text,
-      // actionButton:  () => _signIn(context),
+      actionButton:  () => context.read<AppointmentBloc>().add(AppointmentEventNavigateToWith('/bottom_menu',2),),
     )
   );
 
 
   Widget _renderMainBody(BuildContext context, List<RequestAppointmentModel> data) => Padding(
-    padding: const EdgeInsets.only(top: 20, bottom: 20),
+    padding: const EdgeInsets.only(top: 0, bottom: 20),
     child: ListView.builder(
       itemCount: data.length,
       shrinkWrap: true,
@@ -181,7 +181,7 @@ class ViewAppointmentsPage extends StatelessWidget{
                 ],
               ),
               trailing: Text(item.status, style: TextStyle(color: AppointmentStatusColorService.getAppointmentStatusColor(item.status))),
-              onTap: () => context.read<AppointmentBloc>().add(AppointmentEventNavigateTo('/appointment_detail', item)),
+              onTap: () => context.read<AppointmentBloc>().add(AppointmentEventNavigateToWith('/appointment_detail', item)),
               ),
           ],
         )

@@ -2,20 +2,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:my_online_doctor/application/bloc/appointment/appointment_bloc.dart';
-import 'package:my_online_doctor/domain/models/appointment/cancel_appointment_model.dart';
 
 //Project imports:
+import 'package:my_online_doctor/application/bloc/appointment_detail/appointment_detail_bloc.dart';
+import 'package:my_online_doctor/domain/models/appointment/accept_appointment_model.dart';
+import 'package:my_online_doctor/domain/models/appointment/appointment_detail_model.dart';
+import 'package:my_online_doctor/domain/models/appointment/cancel_appointment_model.dart';
+import 'package:my_online_doctor/domain/models/appointment/reject_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
 import 'package:my_online_doctor/domain/services/appointment_status_color_service.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/min_max_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/base_ui_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/button_component.dart';
+import 'package:my_online_doctor/infrastructure/ui/components/loading_component.dart';
 import 'package:my_online_doctor/infrastructure/ui/components/reusable_widgets.dart';
 import 'package:my_online_doctor/infrastructure/ui/styles/colors.dart';
 
-class AppointmentDetailPage extends StatefulWidget {
+class AppointmentDetailPage extends StatelessWidget {
   static const routeName = '/appointment_detail';
 
   final RequestAppointmentModel appointment;
@@ -25,21 +29,17 @@ class AppointmentDetailPage extends StatefulWidget {
     required this.appointment,
   }) : super(key: key);
 
-  _AppointmentDetailPageState createState() => _AppointmentDetailPageState();
-}
-
-class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       lazy:  false,
-      create: (context) => AppointmentBloc(),
-      child: BlocBuilder<AppointmentBloc, AppointmentState>(
+      create: (context) => AppointmentDetailBloc(),
+      child: BlocBuilder<AppointmentDetailBloc, AppointmentDetailState>(
         builder: (context, state) {
           return BaseUIComponent(
             appBar: _renderAppBar(context),
-            body: _renderBody(context),
+            body: _body(context, state),
             bottomNavigationBar: _renderBottomNavigationBar(context) ,
           );
         },
@@ -52,7 +52,7 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
       backgroundColor: colorPrimary,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () => context.read<AppointmentDetailBloc>().add(AppointmentDetailEventNavigateToWith('/bottom_menu')),
       )
     );
 
@@ -61,7 +61,63 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
   Widget _renderBottomNavigationBar(BuildContext context) => 
     Container(width: double.infinity, height: MediaQuery.of(context).size.height * 0.05, color: colorSecondary);
 
-  Widget _renderBody(BuildContext context) => Scaffold(
+
+
+  //Widget Body
+  Widget _body(BuildContext context, AppointmentDetailState state) {
+    
+    if(state is AppointmentDetailStateInitial) {
+      //Esto que voy a hacer es horrible, lo sé, pero no se como hacerlo mejor xd
+
+
+      context.read<AppointmentDetailBloc>().add(AppointmentDetailEventFetchBasicData(
+        AppointmentDetailModel(
+          id: appointment.id,
+          date: appointment.date,
+          description: appointment.description,
+          duration: appointment.duration,
+          status: appointment.status,
+          type: appointment.type,
+          patient: appointment.patient,
+          doctor: appointment.doctor,
+          specialty: appointment.specialty,
+        ),
+
+        ));
+    }
+
+    return Stack(
+      children: [
+        if(state is! AppointmentDetailStateInitial) _appointmentDetailStreamBuilder(context),
+        if(state is AppointmentDetailStateInitial || state is AppointmentDetailStateLoading) const LoadingComponent(),
+      ],
+    );
+  }
+
+
+
+  //StreamBuilder for the Login Page
+  Widget _appointmentDetailStreamBuilder(BuildContext builderContext) => StreamBuilder<AppointmentDetailModel>(
+    stream: builderContext.read<AppointmentDetailBloc>().streamAppointmentDetail,
+    builder: (BuildContext context, AsyncSnapshot<AppointmentDetailModel> snapshot) {
+
+      if(snapshot.hasData) {
+
+        return _renderAppointmentBody(context);
+        
+      } 
+
+      return const LoadingComponent();
+    }
+  );
+
+
+
+
+
+
+
+  Widget _renderAppointmentBody(BuildContext context) => Scaffold(
     body: ListView(
       physics: const BouncingScrollPhysics(),
       children: [
@@ -84,13 +140,13 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
         _buildAppointmentType(context),
         heightSeparator(context, 0.01),
         _buildAppointmentDescription(context),
-        if(widget.appointment.status == 'ACEPTADA')  Container(
+        if(appointment.status == 'ACEPTADA')  Container(
             height: MediaQuery.of(context).size.height * 0.10,
             margin: generalMarginView,
             child:  _appointmentRenderButton(context, ButtonComponentStyle.canceled, 
-              TextConstant.cancelAppointment.text, AppointmentEventCancelled(CancelAppointmentModel(id: widget.appointment.id), context)),
+              TextConstant.cancelAppointment.text, AppointmentDetailEventCancelled(CancelAppointmentModel(id: appointment.id), context)),
             ),
-        if(widget.appointment.status == 'AGENDADA')  Row(
+        if(appointment.status == 'AGENDADA')  Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [ 
             Expanded(
@@ -98,8 +154,8 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.10,
                 margin: generalMarginView,
-                child: _appointmentRenderButton(context, 
-                  ButtonComponentStyle.canceled, TextConstant.rejectAppointment.text, AppointmentEventRejected()),
+                child: _appointmentRenderButton(context,ButtonComponentStyle.canceled, 
+                  TextConstant.rejectAppointment.text, AppointmentDetailEventRejected(RejectAppointmentModel(id: appointment.id), context)),
               ),
             ),
             Expanded(
@@ -107,8 +163,8 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.10,
                 margin: generalMarginView,
-                child: _appointmentRenderButton(context, 
-                  ButtonComponentStyle.accepted, TextConstant.acceptAppointment.text, AppointmentEventAccepted()),
+                child: _appointmentRenderButton(context,ButtonComponentStyle.accepted, 
+                TextConstant.acceptAppointment.text, AppointmentDetailEventAccepted(AcceptAppointmentModel(id: appointment.id), context)),
               ),
             ),
           ]
@@ -125,14 +181,14 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      Text(widget.appointment.specialty.specialty,
+      Text(appointment.specialty.specialty,
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 30, color: colorPrimary),
       ),
       heightSeparator(context, 0.01),
-      widget.appointment.doctor.gender == 'M' ? 
-        Text('Dr. ${widget.appointment.doctor.firstName} ${widget.appointment.doctor.firstSurname}', style: const TextStyle(fontSize: 20),): 
-        Text('Dra. ${widget.appointment.doctor.firstName} ${widget.appointment.doctor.firstSurname}', style: const TextStyle(fontSize: 20))
+      appointment.doctor.gender == 'M' ? 
+        Text('Dr. ${appointment.doctor.firstName} ${appointment.doctor.firstSurname}', style: const TextStyle(fontSize: 20),): 
+        Text('Dra. ${appointment.doctor.firstName} ${appointment.doctor.firstSurname}', style: const TextStyle(fontSize: 20))
     ],
   );
 
@@ -146,9 +202,9 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
         Text('Status actual: ',
           style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),
         ),
-        Text(widget.appointment.status,
+        Text(appointment.status,
           style: Theme.of(context).textTheme.bodyText2!.copyWith(
-            fontSize: 16, color: AppointmentStatusColorService.getAppointmentStatusColor(widget.appointment.status)),
+            fontSize: 16, color: AppointmentStatusColorService.getAppointmentStatusColor(appointment.status)),
         ),
       ],
     ),
@@ -162,7 +218,7 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Fecha y hora: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
-        Text(widget.appointment.date != null ? DateFormat('dd/MM/yyyy hh:mm a').format(widget.appointment.date!) : 'Por Definir',
+        Text(appointment.date != null ? DateFormat('dd/MM/yyyy hh:mm a').format(appointment.date!) : 'Por Definir',
           style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
         ),
       ],
@@ -178,7 +234,7 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Duración: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
-        Text(widget.appointment.duration != null ? '${widget.appointment.duration.toString()} horas' : 'Por Definir',
+        Text(appointment.duration != null ? '${appointment.duration.toString()} horas' : 'Por Definir',
           style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
         ),
       ],
@@ -194,7 +250,7 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Modalidad: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
-        Text(widget.appointment.type,
+        Text(appointment.type,
           style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
         ),
       ],
@@ -212,7 +268,7 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
         children: [
           Text('Motivo de solicitud: ', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),),
           heightSeparator(context, 0.01),
-          Text(widget.appointment.description,
+          Text(appointment.description,
             style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16), maxLines: null, textAlign: TextAlign.justify,
           ),
         ],
@@ -222,14 +278,14 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
 
     Widget _appointmentRenderButton(BuildContext context, ButtonComponentStyle buttonComponentStyle, String title,
-      AppointmentEvent event) => Container(
+      AppointmentDetailEvent event) => Container(
       margin: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 25),
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.065,
       child:  ButtonComponent(
         style: buttonComponentStyle,
         title: title,
-        actionButton:  () => context.read<AppointmentBloc>().add(event),
+        actionButton:  () => context.read<AppointmentDetailBloc>().add(event),
       )
   );
 

@@ -1,18 +1,13 @@
 //Package imports:
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 //Project imports:
 import 'package:my_online_doctor/application/use_cases/appointments/get_appointments_use_case.dart';
-import 'package:my_online_doctor/domain/models/appointment/cancel_appointment_model.dart';
 import 'package:my_online_doctor/domain/models/appointment/request_appointment_model.dart';
-import 'package:my_online_doctor/infrastructure/core/constants/text_constants.dart';
 import 'package:my_online_doctor/infrastructure/core/context_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/injection_manager.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
-import 'package:my_online_doctor/infrastructure/ui/components/dialog_component.dart';
 import 'package:my_online_doctor/infrastructure/utils/app_util.dart';
 part 'appointment_event.dart';
 part 'appointment_state.dart';
@@ -33,8 +28,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   //You have to declare the StateInitial as the first state
   AppointmentBloc() : super(AppointmentStateInitial()) {
     on<AppointmentEventFetchBasicData>(_fetchBasicAppointmentDataEventToState);
-    on<AppointmentEventNavigateTo>(_navigateToEventToState);
-    on<AppointmentEventCancelled>(_cancelledAppointmentEventToState);
+    on<AppointmentEventNavigateToWith>(_navigateToWithEventToState);
   }
 
 
@@ -55,13 +49,14 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
     var response = await _getAppointmentUseCase.run();
 
-    var decode = requestAppointmentModelFromJson(response);
 
-    if(decode.value.isNotEmpty) {
+    if(response != null) {
 
-      var appointmentList = decode.value.map((e) => e).toList();
+      var appointmentList = response.map((e) => requestAppointmentModelFromJson(e)).toList();
 
-      _appointmentStreamController.sink.add(appointmentList);
+      List<RequestAppointmentModel> appointments = appointmentList.cast<RequestAppointmentModel>();
+
+      _appointmentStreamController.sink.add(appointments);
 
     } else {
 
@@ -69,41 +64,25 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
     }
 
+
+
     emit(AppointmentStateHideLoading());
   }
 
 
-  ///This method is called when the event is [AppointmentEventNavigateTo]
+
+  ///This method is called when the event is [AppointmentEventNavigateToWith]
   ///It navigates to the specified page.
-  void _navigateToEventToState(AppointmentEventNavigateTo event, Emitter<AppointmentState> emit) {
-    _navigatorManager.navigateTo(event.routeName, arguments: event.appointment);
+  void _navigateToWithEventToState(AppointmentEventNavigateToWith event, Emitter<AppointmentState> emit) async {
+    _dispose();
+    _navigatorManager.navigateToWithReplacement(event.routeName, arguments: event.arguments);
   }
 
 
-  ///This method is called when the event is [AppointmentEventCancelled]
-  ///It cancels the appointment.
-  void _cancelledAppointmentEventToState(AppointmentEventCancelled event, Emitter<AppointmentState> emit) async {
-
-    emit(AppointmentStateLoading());
-
-    final response = await _getAppointmentUseCase.run();
-
-    if(response != null) {
-
-      await showDialog(
-        context: getIt<ContextManager>().context,
-          builder: (BuildContext superContext) => DialogComponent(
-              textTitle: TextConstant.successTitle.text,
-              textQuestion: TextConstant.successRegister.text,
-            )
-        );
-
-    }
 
 
 
-    emit(AppointmentStateHideLoading());
-  }
+
 
 
   //Private methods:
@@ -119,6 +98,11 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
       title: textTitle, 
       message: textQuestion);
 
+  }
+
+
+  void _dispose(){
+    _appointmentStreamController.close();
   }
 
 

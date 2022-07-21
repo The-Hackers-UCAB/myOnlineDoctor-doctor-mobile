@@ -14,7 +14,7 @@ part 'profile_state.dart';
 ///LoginBloc: Here we would have the Login domain logic.
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
-  //Here the StreamController can be a state or a DomainModel
+  // Here the StreamController can be a state or a DomainModel
   final _profileStreamController = StreamController<bool>();
 
   //Instances of use cases:
@@ -33,7 +33,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ///This method is called when the event is [ProfileEventNavigateToWith]
   ///It navigates to the specified page.
   void _navigateToWithEventToState(ProfileEventNavigateToWith event, Emitter<ProfileState> emit) {
+
+    _dispose();
     _navigatorManager.navigateToWithReplacement(event.routeName);
+  }
+
+
+  //Private methods:
+
+  void _dispose() {
+    _profileStreamController.close();
   }
 
 }
