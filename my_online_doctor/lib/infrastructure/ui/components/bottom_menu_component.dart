@@ -133,7 +133,7 @@ class _BottomMenuComponent extends State<BottomMenuComponent> {
     FirebaseMessaging.onMessage.listen((message) async {
       // FirebaseMessaging.onBackgroundMessage(backgroundHandler);
       globalMessage = message;
-
+      localNotificationService.showNotificationOnForeground(message);
       var payload = message.data['payload'];
       if (!json.decode(payload).containsKey('channelName')) {
         isVideoCall = false;
