@@ -52,7 +52,7 @@ class AppointmentDetailPage extends StatelessWidget {
       backgroundColor: colorPrimary,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
-        onPressed: () => context.read<AppointmentDetailBloc>().add(AppointmentDetailEventNavigateToWith('/view_appointments')),
+        onPressed: () => context.read<AppointmentDetailBloc>().add(AppointmentDetailEventNavigateToWith('/bottom_menu')),
       )
     );
 

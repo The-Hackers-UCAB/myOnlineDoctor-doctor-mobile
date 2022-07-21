@@ -99,8 +99,6 @@ class RepositoryManager {
 
       var data = requestValueResponseModelFromJson(response?.data);
 
-      print('hola');
-
 
       return data;
       // return response?.data;
