@@ -14,7 +14,7 @@ class AppointmentDetailEventFetchBasicData extends AppointmentDetailEvent {
 class AppointmentDetailEventNavigateToWith extends AppointmentDetailEvent {
   final String routeName;
   final Object? arguments;
-  AppointmentDetailEventNavigateToWith(this.routeName, this.arguments);
+  AppointmentDetailEventNavigateToWith(this.routeName, {this.arguments});
 
 }
 

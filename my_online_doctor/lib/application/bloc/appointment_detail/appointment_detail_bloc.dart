@@ -72,6 +72,7 @@ class AppointmentDetailBloc extends Bloc<AppointmentDetailEvent, AppointmentDeta
   ///This method is called when the event is [AppointmentEventDetailNavigateToWith]
   ///It navigates to the specified page.
   void _navigateToWithEventToState(AppointmentDetailEventNavigateToWith event, Emitter<AppointmentDetailState> emit) {
+    _dispose();
     _navigatorManager.navigateToWithReplacement(event.routeName, arguments: event.arguments);
   }
 
@@ -157,6 +158,14 @@ class AppointmentDetailBloc extends Bloc<AppointmentDetailEvent, AppointmentDeta
     }
 
     emit(AppointmentDetailStateHideLoading());
+  }
+
+
+
+  //Private methods
+
+  void _dispose(){
+    _appointmentDetailStreamController.close();
   }
 
 

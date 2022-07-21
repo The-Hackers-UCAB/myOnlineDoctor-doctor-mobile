@@ -13,7 +13,7 @@ part 'logout_state.dart';
 class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
 
   //Here the StreamController can be a state or a DomainModel
-  // final _logoutStreamController = StreamController<bool>();
+  final _logoutStreamController = StreamController<bool>();
 
   //Instances of use cases:
   final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
@@ -31,7 +31,7 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
 
 
   //Getters
-  // Stream<bool> get streamLogin => _logoutStreamController.stream;
+  Stream<bool> get streamLogin => _logoutStreamController.stream;
 
   //Methods:
 
@@ -39,6 +39,8 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
   ///This method is called when the event is [LogoutEventNavigateTo]
   ///It navigates to the specified page.
   void _navigateToWithEventToState(LogoutEventNavigateToWith event, Emitter<LogoutState> emit) {
+
+    _dispose();
     _navigatorManager.navigateToWithReplacement(event.routeName);
   }
 
@@ -50,20 +52,19 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
     emit(LogoutStateLoading());
     await _logoutPatientUseCase.run();
 
-    _navigatorManager.navigateToWithReplacement('/login');
+    _dispose();
 
-    return;
-  
-    
-    // _loadView();
-    // emit(LogoutStateHideLoading());
+    _navigatorManager.navigateToWithReplacement('/login');
 
   }
 
 
 
   //Private methods:
-
+  
+  void _dispose() {
+    _logoutStreamController.close();
+  }
 
 
 }

@@ -28,7 +28,6 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   //You have to declare the StateInitial as the first state
   AppointmentBloc() : super(AppointmentStateInitial()) {
     on<AppointmentEventFetchBasicData>(_fetchBasicAppointmentDataEventToState);
-    on<AppointmentEventNavigateTo>(_navigateToEventToState);
     on<AppointmentEventNavigateToWith>(_navigateToWithEventToState);
   }
 
@@ -71,17 +70,11 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   }
 
 
-  ///This method is called when the event is [AppointmentEventNavigateTo]
-  ///It navigates to the specified page.
-  void _navigateToEventToState(AppointmentEventNavigateTo event, Emitter<AppointmentState> emit) async {
-    emit(AppointmentStateInitial());
-    _navigatorManager.navigateTo(event.routeName, arguments: event.appointment);
-  }
-
 
   ///This method is called when the event is [AppointmentEventNavigateToWith]
   ///It navigates to the specified page.
   void _navigateToWithEventToState(AppointmentEventNavigateToWith event, Emitter<AppointmentState> emit) async {
+    _dispose();
     _navigatorManager.navigateToWithReplacement(event.routeName, arguments: event.arguments);
   }
 
@@ -105,6 +98,11 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
       title: textTitle, 
       message: textQuestion);
 
+  }
+
+
+  void _dispose(){
+    _appointmentStreamController.close();
   }
 
 

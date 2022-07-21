@@ -107,6 +107,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   ///It navigates to the specified page.
   void _navigateToEventToState(RegisterEventNavigateTo event, Emitter<RegisterState> emit) {
 
+    _dispose();
+
     if(event.routeName == '/login') {
       _navigatorManager.pop(null);
 
@@ -149,13 +151,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       // emit(RegisterStateSuccess());
       _loadView();
 
+      _dispose();
+
       _navigatorManager.pop(null);
       _navigatorManager.navigateToWithReplacement('/login');
 
-      return;
     }
-
-    emit(RegisterStateHideLoading());
 
 
   }
@@ -224,6 +225,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           }
         ));
 
+  }
+
+
+  void _dispose() {
+    _registerStreamController.close();
   }
 
 }

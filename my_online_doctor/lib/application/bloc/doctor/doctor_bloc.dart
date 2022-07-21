@@ -1,6 +1,7 @@
 //Package imports:
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_online_doctor/application/use_cases/doctors/get_doctors_use_case.dart';
 import 'package:my_online_doctor/domain/models/doctor/doctor_request_model.dart';
 import 'package:my_online_doctor/infrastructure/core/navigator_manager.dart';
 
@@ -16,6 +17,7 @@ class DoctorBloc extends Bloc<DoctorEvent, DoctorState> {
 
   //Instances of use cases:
   final NavigatorServiceContract _navigatorManager = NavigatorServiceContract.get();
+  final GetDoctorsUseCaseContract _getDoctorsUseCase = GetDoctorsUseCaseContract.get();
 
 
   DoctorBloc(): super(DoctorStateInitial()){
@@ -32,11 +34,28 @@ class DoctorBloc extends Bloc<DoctorEvent, DoctorState> {
 
   ///This method is called when the event is [DoctorEventFetchBasicData]
   ///It fetches the basic data of the doctor.
-  void _fetchBasicDataEventToState(DoctorEventFetchBasicData event, Emitter<DoctorState> emit) {
+  void _fetchBasicDataEventToState(DoctorEventFetchBasicData event, Emitter<DoctorState> emit)  async {
 
     emit(DoctorStateLoading());
 
-    //TODO: Here we would have the domain logic.
+
+    var response = await _getDoctorsUseCase.run(null);
+
+
+    if(response != null) {
+
+      var doctorsList = response.map((e) => doctorRequestModelFromJson(e)).toList();
+
+      List<DoctorRequestModel> doctors = doctorsList.cast<DoctorRequestModel>();
+
+      _doctorStreamController.sink.add(doctors);
+
+    } else {
+
+      _doctorStreamController.sink.add([]);
+
+    }
+
 
     emit(DoctorStateHideLoading());
   }
@@ -47,6 +66,7 @@ class DoctorBloc extends Bloc<DoctorEvent, DoctorState> {
   void _navigateToEventToState(DoctorEventNavigateTo event, Emitter<DoctorState> emit) {
 
     emit(DoctorStateLoading());
+    _dispose();
     _navigatorManager.navigateTo(event.routeName); 
 
   }
@@ -67,13 +87,14 @@ class DoctorBloc extends Bloc<DoctorEvent, DoctorState> {
 
 
 
+  //Private methods:
 
+  void _dispose(){
+    _doctorStreamController.close();
+  }
 
 
 
 
 
 }
-
-
-  //Instances of use cases:

@@ -41,7 +41,7 @@ class SearchDoctorPage extends StatelessWidget{
     ///Widget AppBar
   PreferredSizeWidget _renderAppBar(BuildContext context) => AppBar( 
     backgroundColor: colorPrimary,
-    title: Text(TextConstant.searchDoctors.text),
+    title: Text(TextConstant.doctors.text),
     centerTitle: true,
   );
 

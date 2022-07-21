@@ -23,7 +23,7 @@ class _DoctorQueryProvider extends DoctorQueryProviderContract {
 
     final response = await getIt<RepositoryManager>()
     .request(operation: RepositoryConstant.operationGet.key, endpoint: RepositoryPathConstant.getDoctors.path,
-        body: doctors!.toJson())
+        body: doctors?.toJson())
     .catchError((onError) {
 
       return null;
